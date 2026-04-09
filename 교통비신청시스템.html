@@ -1,0 +1,1897 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>교통비 신청 시스템</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif; background: #f0f4ff; color: #222; min-height: 100vh; }
+
+/* ===== HEADER ===== */
+.app-header {
+  background: linear-gradient(135deg, #1a73e8, #0d47a1);
+  color: #fff;
+  padding: 14px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 200;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.app-header h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; }
+.month-wrap { display: flex; align-items: center; gap: 6px; }
+.month-wrap input[type="month"] {
+  background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);
+  color: #fff; font-size: 14px; padding: 5px 8px; border-radius: 8px; outline: none;
+}
+.month-wrap input[type="month"]::-webkit-calendar-picker-indicator { filter: invert(1); }
+
+/* ===== TABS ===== */
+.tabs {
+  display: flex; background: #fff;
+  border-bottom: 2px solid #e0e0e0;
+  overflow-x: auto; position: sticky; top: 56px; z-index: 199;
+  scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex: none; min-width: 72px; padding: 11px 10px;
+  border: none; background: none; font-size: 13px; color: #888;
+  cursor: pointer; white-space: nowrap;
+  border-bottom: 3px solid transparent; margin-bottom: -2px;
+  font-weight: 500; transition: all .15s;
+}
+.tab-btn.active { color: #1a73e8; border-bottom-color: #1a73e8; font-weight: 700; }
+
+/* ===== CONTENT ===== */
+.tab-content { display: none; padding: 16px; max-width: 640px; margin: 0 auto; }
+.tab-content.active { display: block; }
+
+/* ===== CARDS ===== */
+.card {
+  background: #fff; border-radius: 14px; padding: 16px;
+  margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.card-title {
+  font-size: 14px; font-weight: 700; color: #1a73e8;
+  margin-bottom: 14px; display: flex; align-items: center; gap: 6px;
+}
+
+/* ===== FORMS ===== */
+.form-group { margin-bottom: 12px; }
+.form-group label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; font-weight: 500; }
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%; padding: 10px 12px;
+  border: 1.5px solid #e0e0e0; border-radius: 9px;
+  font-size: 14px; outline: none; transition: border-color .2s;
+  font-family: inherit;
+}
+.form-group input:focus, .form-group select:focus { border-color: #1a73e8; }
+.input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.input-row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+.radio-group { display: flex; gap: 8px; }
+.radio-opt {
+  flex: 1; padding: 10px 8px; border: 2px solid #e0e0e0;
+  border-radius: 9px; text-align: center; cursor: pointer;
+  font-size: 13px; font-weight: 500; color: #666; transition: all .15s;
+  user-select: none;
+}
+.radio-opt.sel { border-color: #1a73e8; background: #e8f0fe; color: #1a73e8; }
+
+/* ===== BUTTONS ===== */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 10px 16px; border: none; border-radius: 9px;
+  font-size: 14px; font-weight: 600; cursor: pointer; transition: all .15s;
+  font-family: inherit;
+}
+.btn-primary { background: #1a73e8; color: #fff; }
+.btn-primary:hover { background: #1557b0; }
+.btn-success { background: #0f9d58; color: #fff; }
+.btn-success:hover { background: #0b8043; }
+.btn-danger { background: #d93025; color: #fff; }
+.btn-danger:hover { background: #b71c1c; }
+.btn-outline { background: none; border: 1.5px solid #1a73e8; color: #1a73e8; }
+.btn-outline:hover { background: #e8f0fe; }
+.btn-gray { background: #f5f5f5; color: #333; }
+.btn-gray:hover { background: #e0e0e0; }
+.btn-sm { padding: 6px 10px; font-size: 12px; }
+.btn-full { width: 100%; }
+
+/* ===== CAPTURE ===== */
+.capture-zone {
+  border: 2.5px dashed #1a73e8; border-radius: 14px; padding: 28px 16px;
+  text-align: center; cursor: pointer; background: #f8f9ff;
+  transition: background .15s;
+}
+.capture-zone:hover { background: #e8f0fe; }
+.capture-icon { font-size: 44px; margin-bottom: 8px; }
+.capture-label { color: #555; font-size: 14px; margin-bottom: 6px; font-weight: 500; }
+.capture-sub { color: #999; font-size: 12px; }
+input[type="file"] { display: none; }
+
+/* ===== RECEIPT LIST ===== */
+.receipt-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px; border: 1.5px solid #e8f0fe;
+  border-radius: 10px; margin-bottom: 8px; background: #fafcff;
+}
+.receipt-thumb {
+  width: 52px; height: 52px; border-radius: 8px; object-fit: cover;
+  background: #e0e0e0; flex-shrink: 0;
+  cursor: pointer;
+}
+.receipt-thumb-placeholder {
+  width: 52px; height: 52px; border-radius: 8px;
+  background: #e8f0fe; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+}
+.receipt-info { flex: 1; min-width: 0; }
+.receipt-date { font-size: 12px; color: #999; margin-bottom: 2px; }
+.receipt-amount { font-size: 16px; font-weight: 700; color: #222; }
+.receipt-qty { font-size: 12px; color: #666; margin-top: 2px; }
+.receipt-actions { display: flex; gap: 6px; }
+
+/* ===== TRIP ITEMS ===== */
+.trip-item {
+  border: 1.5px solid #e0e0e0; border-radius: 12px;
+  padding: 14px; margin-bottom: 12px; background: #fff;
+}
+.trip-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.trip-round { font-size: 15px; font-weight: 700; color: #1a73e8; }
+.trip-calc {
+  background: #f8f9ff; border-radius: 8px; padding: 10px 12px; margin-top: 10px;
+}
+.calc-row { display: flex; justify-content: space-between; font-size: 13px; padding: 3px 0; }
+.calc-row .lbl { color: #777; }
+.calc-row .val { font-weight: 600; }
+.calc-row.total-row { border-top: 1px solid #e0e0e0; margin-top: 4px; padding-top: 6px; font-size: 14px; color: #1a73e8; font-weight: 700; }
+.calc-row.req-row { color: #0f9d58; font-weight: 700; }
+.calc-row.warn-row { color: #d93025; font-weight: 700; }
+
+/* ===== SUMMARY ===== */
+.summary-row { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+.summary-row:last-child { border-bottom: none; }
+.summary-row.subtotal { font-weight: 600; }
+.summary-row.grand { font-size: 16px; font-weight: 700; color: #1a73e8; border-top: 2px solid #1a73e8; padding-top: 10px; }
+.summary-row.over { color: #d93025; }
+
+.limit-bar { margin-top: 10px; }
+.limit-bar-track { height: 10px; background: #e0e0e0; border-radius: 5px; overflow: hidden; margin-top: 6px; }
+.limit-bar-fill { height: 100%; border-radius: 5px; transition: width .4s; background: #1a73e8; }
+.limit-bar-fill.over { background: #d93025; }
+
+/* ===== OCR LOADING ===== */
+.ocr-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+  z-index: 500; align-items: center; justify-content: center; flex-direction: column;
+}
+.ocr-overlay.show { display: flex; }
+.ocr-box { background: #fff; border-radius: 16px; padding: 32px 40px; text-align: center; }
+.spinner {
+  width: 44px; height: 44px; border: 4px solid #e0e0e0;
+  border-top-color: #1a73e8; border-radius: 50%;
+  animation: spin .8s linear infinite; margin: 0 auto 16px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ===== ALERTS ===== */
+.alert {
+  padding: 11px 14px; border-radius: 9px; font-size: 13px;
+  margin-bottom: 12px; line-height: 1.5;
+}
+.alert-info { background: #e8f0fe; color: #1557b0; border-left: 3px solid #1a73e8; }
+.alert-warn { background: #fff8e1; color: #e65100; border-left: 3px solid #fb8c00; }
+.alert-danger { background: #fde8e8; color: #b71c1c; border-left: 3px solid #d93025; }
+.alert-success { background: #e6f4ea; color: #1b5e20; border-left: 3px solid #0f9d58; }
+
+/* ===== ADD BUTTON ===== */
+.add-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 13px; border: 2px dashed #1a73e8;
+  border-radius: 10px; background: none; color: #1a73e8;
+  font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 4px;
+  font-family: inherit;
+}
+.add-btn:hover { background: #e8f0fe; }
+
+/* ===== BIG EXPORT ===== */
+.export-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; padding: 20px;
+  background: linear-gradient(135deg, #0f9d58, #0b8043);
+  color: #fff; border: none; border-radius: 14px;
+  font-size: 18px; font-weight: 700; cursor: pointer;
+  box-shadow: 0 4px 12px rgba(15,157,88,0.35);
+  margin-top: 8px; font-family: inherit;
+}
+.export-btn:hover { background: linear-gradient(135deg, #0b8043, #087434); }
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  z-index: 300; align-items: center; justify-content: center; padding: 16px;
+}
+.modal-overlay.show { display: flex; }
+.modal-box {
+  background: #fff; border-radius: 16px; padding: 20px;
+  width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto;
+}
+.modal-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; color: #222; }
+.modal-footer { display: flex; gap: 10px; margin-top: 16px; }
+.modal-footer .btn { flex: 1; }
+
+/* ===== IMAGE VIEWER ===== */
+.img-viewer-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+  z-index: 400; align-items: center; justify-content: center;
+}
+.img-viewer-overlay.show { display: flex; }
+.img-viewer-overlay img { max-width: 95vw; max-height: 90vh; border-radius: 8px; }
+.img-viewer-close {
+  position: fixed; top: 16px; right: 16px; background: rgba(255,255,255,0.2);
+  border: none; color: #fff; font-size: 28px; cursor: pointer; border-radius: 50%;
+  width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+}
+
+/* ===== STAT ROW ===== */
+.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.stat-box { background: #f8f9ff; border-radius: 10px; padding: 12px; text-align: center; }
+.stat-label { font-size: 11px; color: #888; margin-bottom: 4px; }
+.stat-value { font-size: 18px; font-weight: 700; color: #1a73e8; }
+.stat-unit { font-size: 12px; color: #888; font-weight: 400; }
+
+/* ===== DIVIDER ===== */
+.divider { height: 1px; background: #f0f0f0; margin: 12px 0; }
+
+/* Section label */
+.sec-label { font-size: 12px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; margin-top: 4px; }
+
+/* Empty state */
+.empty-state { text-align: center; padding: 32px 16px; color: #bbb; }
+.empty-icon { font-size: 48px; margin-bottom: 10px; }
+.empty-text { font-size: 14px; }
+
+/* number input right-aligned */
+input[type="number"] { text-align: right; }
+
+/* Highlight adjusted cell */
+.adjusted { color: #d93025; }
+</style>
+</head>
+<body>
+
+<!-- OCR Loading Overlay -->
+<div class="ocr-overlay" id="ocrOverlay">
+  <div class="ocr-box">
+    <div class="spinner"></div>
+    <div style="font-size:15px;font-weight:600;color:#333;">영수증 분석 중...</div>
+    <div style="font-size:13px;color:#888;margin-top:6px;" id="ocrStatus">Claude AI가 영수증을 읽고 있습니다</div>
+  </div>
+</div>
+
+<!-- Image Viewer -->
+<div class="img-viewer-overlay" id="imgViewer" onclick="closeImgViewer()">
+  <button class="img-viewer-close" onclick="closeImgViewer()">✕</button>
+  <img id="imgViewerSrc" src="" alt="영수증">
+</div>
+
+<!-- Fuel Receipt Modal -->
+<div class="modal-overlay" id="fuelModal">
+  <div class="modal-box">
+    <div class="modal-title">⛽ 주유/충전 영수증 입력</div>
+    <div id="fuelModalPreview"></div>
+    <div class="form-group">
+      <label>주유/충전일</label>
+      <input type="date" id="fm_date">
+    </div>
+    <div class="input-row">
+      <div class="form-group">
+        <label id="fm_qty_label">주유량 (L)</label>
+        <input type="number" id="fm_qty" step="0.001" placeholder="0.000">
+      </div>
+      <div class="form-group">
+        <label>결제금액 (원)</label>
+        <input type="number" id="fm_amount" step="1" placeholder="0">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-gray" onclick="closeFuelModal()">취소</button>
+      <button class="btn btn-primary" onclick="saveFuelReceipt()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- Transit Receipt Modal -->
+<div class="modal-overlay" id="transitModal">
+  <div class="modal-box">
+    <div class="modal-title">🚌 대중교통 영수증 입력</div>
+    <div id="transitModalPreview"></div>
+    <div class="form-group">
+      <label>이용일</label>
+      <input type="date" id="trm_date">
+    </div>
+    <div class="form-group">
+      <label>금액 (원)</label>
+      <input type="number" id="trm_amount" step="1" placeholder="0">
+    </div>
+    <div class="form-group">
+      <label>교통 유형</label>
+      <div class="radio-group">
+        <div class="radio-opt" id="trm_express" onclick="setTransitType('express')">시외 (급행)</div>
+        <div class="radio-opt" id="trm_local" onclick="setTransitType('local')">시내 (완행)</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>해당 회차 연결</label>
+      <select id="trm_trip"></select>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-gray" onclick="closeTransitModal()">취소</button>
+      <button class="btn btn-primary" onclick="saveTransitReceipt()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toll Receipt Modal -->
+<div class="modal-overlay" id="tollModal">
+  <div class="modal-box">
+    <div class="modal-title">🛣️ 통행료 영수증 입력</div>
+    <div id="tollModalPreview"></div>
+    <div class="form-group">
+      <label>납부일</label>
+      <input type="date" id="tm_date">
+    </div>
+    <div class="form-group">
+      <label>통행료 금액 (원)</label>
+      <input type="number" id="tm_amount" step="1" placeholder="0">
+    </div>
+    <div class="form-group">
+      <label>해당 회차 연결</label>
+      <select id="tm_trip"></select>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-gray" onclick="closeTollModal()">취소</button>
+      <button class="btn btn-primary" onclick="saveTollReceipt()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- App Header -->
+<div class="app-header">
+  <h1>🚗 교통비 신청 시스템</h1>
+  <div class="month-wrap">
+    <input type="month" id="monthPicker" onchange="changeMonth(this.value)">
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('settings')">⚙️ 설정</button>
+  <button class="tab-btn" onclick="showTab('fuel')">⛽ 주유/충전</button>
+  <button class="tab-btn" onclick="showTab('trips')">📅 회차신청</button>
+  <button class="tab-btn" onclick="showTab('summary')">📊 정산요약</button>
+  <button class="tab-btn" onclick="showTab('export')">📥 내보내기</button>
+</div>
+
+<!-- ==================== SETTINGS TAB ==================== -->
+<div class="tab-content active" id="tab-settings">
+  <div class="card">
+    <div class="card-title">👤 신청자 정보</div>
+    <div class="input-row">
+      <div class="form-group">
+        <label>성명</label>
+        <input type="text" id="s_name" placeholder="홍길동" oninput="saveSetting('name',this.value)">
+      </div>
+      <div class="form-group">
+        <label>소속 부서</label>
+        <input type="text" id="s_dept" placeholder="현장팀" oninput="saveSetting('department',this.value)">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>근무 유형</label>
+      <div class="radio-group">
+        <div class="radio-opt" id="wt_field" onclick="setWorkerType('field')">현장근무자</div>
+        <div class="radio-opt" id="wt_home" onclick="setWorkerType('home')">자택출근자</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🚗 이동수단 &amp; 유종</div>
+    <div class="form-group">
+      <label>이동수단</label>
+      <div class="radio-group">
+        <div class="radio-opt" id="vt_car" onclick="setVehicleType('car')">자차</div>
+        <div class="radio-opt" id="vt_transit" onclick="setVehicleType('transit')">대중교통</div>
+      </div>
+    </div>
+    <div id="fuelTypeSection">
+      <div class="form-group">
+        <label>유종</label>
+        <div class="radio-group">
+          <div class="radio-opt" id="ft_fuel" onclick="setFuelType('fuel')">유류</div>
+          <div class="radio-opt" id="ft_electric" onclick="setFuelType('electric')">전기</div>
+          <div class="radio-opt" id="ft_hydrogen" onclick="setFuelType('hydrogen')">수소</div>
+        </div>
+      </div>
+      <div class="alert alert-info" id="efficiencyInfo"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📍 주소 정보</div>
+    <div class="form-group">
+      <label>자택 주소</label>
+      <input type="text" id="s_homeAddr" placeholder="경기도 고양시 덕양구 덕수천 1로 59" oninput="saveSetting('homeAddress',this.value)">
+    </div>
+    <div class="form-group">
+      <label>자택 단축주소 (시/군/구)</label>
+      <input type="text" id="s_homeShort" placeholder="고양시" oninput="saveSetting('homeShortAddress',this.value)">
+    </div>
+    <div id="siteAddrSection">
+      <div class="form-group">
+        <label>현장 주소</label>
+        <input type="text" id="s_siteAddr" placeholder="경기도 이천시 부발읍 아미리 701-2" oninput="saveSetting('siteAddress',this.value)">
+      </div>
+      <div class="form-group">
+        <label>현장 단축주소 (시/군/구)</label>
+        <input type="text" id="s_siteShort" placeholder="이천시" oninput="saveSetting('siteShortAddress',this.value)">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>편도 거리 (km)</label>
+      <input type="number" id="s_dist" placeholder="86" step="0.1" oninput="saveSetting('oneWayDistance',parseFloat(this.value)||0); updateDistInfo()">
+    </div>
+    <div class="alert alert-info" id="distInfo"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🤖 Claude AI OCR 설정 <span style="font-size:11px;font-weight:400;color:#888;">(영수증 자동인식)</span></div>
+    <div class="alert alert-warn">
+      ⚠️ API 키는 이 기기의 브라우저에만 저장됩니다. 공용 기기에서는 사용을 주의하세요.
+    </div>
+    <div class="form-group">
+      <label>Anthropic API 키 (선택사항)</label>
+      <input type="password" id="s_apiKey" placeholder="sk-ant-..." oninput="saveSetting('apiKey',this.value)">
+    </div>
+    <div class="alert alert-info">
+      API 키 없이도 수동으로 영수증 정보를 입력할 수 있습니다.<br>
+      API 키 발급: <a href="https://console.anthropic.com" target="_blank" style="color:#1a73e8;">console.anthropic.com</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🗑️ 데이터 관리</div>
+    <div class="input-row">
+      <button class="btn btn-gray btn-full" onclick="exportJSON()">💾 백업 저장</button>
+      <button class="btn btn-gray btn-full" onclick="importJSON()">📂 백업 불러오기</button>
+    </div>
+    <input type="file" id="importFile" accept=".json" onchange="handleImport(this)">
+    <button class="btn btn-danger btn-full" style="margin-top:10px;" onclick="resetMonthData()">🗑️ 이번 달 데이터 초기화</button>
+  </div>
+</div>
+
+<!-- ==================== FUEL TAB ==================== -->
+<div class="tab-content" id="tab-fuel">
+  <div class="card">
+    <div class="card-title">⛽ 주유/충전 영수증</div>
+    <div class="alert alert-info">
+      영수증을 촬영하거나 업로드하면 Claude AI가 자동으로 날짜/금액/주유량을 읽어옵니다.
+    </div>
+
+    <div class="capture-zone" onclick="document.getElementById('fuelFileInput').click()">
+      <div class="capture-icon">📷</div>
+      <div class="capture-label">영수증 촬영 / 업로드</div>
+      <div class="capture-sub">카메라로 찍거나 파일을 선택하세요</div>
+    </div>
+    <input type="file" id="fuelFileInput" accept="image/*" capture="environment" onchange="handleFuelImage(this)">
+
+    <button class="add-btn" onclick="openFuelManual()" style="margin-top:10px;">
+      ✏️ 수동 입력
+    </button>
+  </div>
+
+  <div class="card" id="fuelStatsCard" style="display:none;">
+    <div class="card-title">📊 주유 현황</div>
+    <div class="stat-grid">
+      <div class="stat-box">
+        <div class="stat-label">총 주유/충전량</div>
+        <div class="stat-value" id="totalQty">0<span class="stat-unit" id="totalQtyUnit">L</span></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">총 주유금액</div>
+        <div class="stat-value" id="totalFuelAmt">0<span class="stat-unit">원</span></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">평균단가</div>
+        <div class="stat-value" id="avgPrice">0<span class="stat-unit">원</span></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">회당 주유비</div>
+        <div class="stat-value" id="perTripFuel">0<span class="stat-unit">원</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="fuelList">
+    <div class="empty-state" id="fuelEmpty">
+      <div class="empty-icon">🪣</div>
+      <div class="empty-text">등록된 영수증이 없습니다</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TRIPS TAB ==================== -->
+<div class="tab-content" id="tab-trips">
+  <div class="card">
+    <div class="card-title">📅 회차별 신청</div>
+    <div id="homeCommuteSection" style="display:none;">
+      <div class="alert alert-info">
+        자택출근자는 매월 1회 신청하며 출퇴근일수를 입력합니다.
+      </div>
+      <div class="form-group">
+        <label>월 출퇴근일수</label>
+        <input type="number" id="commuteDays" placeholder="20" min="1" max="31" oninput="saveCommuteDays(this.value)">
+      </div>
+    </div>
+    <div id="fieldTripSection">
+      <div class="alert alert-info">
+        현장 복귀 또는 자택 방문마다 회차를 추가하세요. 왕복 기준으로 계산됩니다.
+      </div>
+    </div>
+  </div>
+
+  <!-- Transit receipts (for transit vehicle type) -->
+  <div class="card" id="transitCard" style="display:none;">
+    <div class="card-title">🚌 대중교통 영수증</div>
+    <div class="capture-zone" onclick="document.getElementById('transitFileInput').click()">
+      <div class="capture-icon">📷</div>
+      <div class="capture-label">교통비 영수증 촬영 / 업로드</div>
+      <div class="capture-sub">버스/기차/택시 영수증</div>
+    </div>
+    <input type="file" id="transitFileInput" accept="image/*" capture="environment" onchange="handleTransitImage(this)">
+    <button class="add-btn" onclick="openTransitManual()" style="margin-top:10px;">
+      ✏️ 수동 입력
+    </button>
+    <div id="transitList" style="margin-top:10px;"></div>
+  </div>
+
+  <!-- Toll receipts (for car vehicle type) -->
+  <div class="card" id="tollCard">
+    <div class="card-title">🛣️ 통행료 영수증</div>
+    <div class="capture-zone" onclick="document.getElementById('tollFileInput').click()">
+      <div class="capture-icon">📷</div>
+      <div class="capture-label">통행료 영수증 촬영 / 업로드</div>
+      <div class="capture-sub">하이패스/톨게이트 영수증</div>
+    </div>
+    <input type="file" id="tollFileInput" accept="image/*" capture="environment" onchange="handleTollImage(this)">
+    <button class="add-btn" onclick="openTollManual()" style="margin-top:10px;">
+      ✏️ 수동 입력
+    </button>
+    <div id="tollList" style="margin-top:10px;"></div>
+  </div>
+
+  <div id="tripList"></div>
+
+  <div id="fieldAddBtn">
+    <button class="add-btn" onclick="addTrip()">+ 회차 추가</button>
+  </div>
+</div>
+
+<!-- ==================== SUMMARY TAB ==================== -->
+<div class="tab-content" id="tab-summary">
+  <div class="card">
+    <div class="card-title">📊 월별 정산 요약</div>
+    <div id="summaryContent">
+      <div class="empty-state">
+        <div class="empty-icon">📋</div>
+        <div class="empty-text">회차 데이터를 입력하면 정산 내역이 표시됩니다</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="limitCard">
+    <div class="card-title">💰 한도 현황</div>
+    <div id="limitContent"></div>
+  </div>
+</div>
+
+<!-- ==================== EXPORT TAB ==================== -->
+<div class="tab-content" id="tab-export">
+  <div class="card">
+    <div class="card-title">📥 엑셀 파일 내보내기</div>
+    <div class="alert alert-info">
+      작성된 교통비 신청 내역을 원본 엑셀 양식과 동일한 형식으로 내보냅니다.<br>
+      통상 <strong>매월 마지막 주</strong>에 결제 시스템에 제출하세요.
+    </div>
+    <div id="exportPreview" class="export-summary"></div>
+    <button class="export-btn" onclick="exportToExcel()">
+      📊 엑셀 파일 다운로드
+    </button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📋 제출 체크리스트</div>
+    <div id="checklistContent"></div>
+  </div>
+</div>
+
+<script>
+// ==================== CONSTANTS ====================
+const FUEL_EFFICIENCY = { fuel: 7, electric: 3.5, hydrogen: 65.8 };
+const FUEL_UNIT_LABEL = { fuel: 'L', electric: 'kWh', hydrogen: 'kg' };
+const FUEL_TYPE_LABEL = { fuel: '유류', electric: '전기', hydrogen: '수소' };
+const VEHICLE_TYPE_LABEL = { car: '자차', transit: '대중교통' };
+const MONTHLY_LIMIT = 250000;
+
+// ==================== STATE ====================
+let state = {
+  settings: {
+    name: '', department: '',
+    workerType: 'field',
+    vehicleType: 'car',
+    fuelType: 'fuel',
+    homeAddress: '', homeShortAddress: '',
+    siteAddress: '', siteShortAddress: '',
+    oneWayDistance: 86,
+    apiKey: ''
+  },
+  month: new Date().toISOString().slice(0, 7),
+  fuelReceipts: [],   // {id, date, quantity, amount, imageData}
+  tollReceipts: [],   // {id, date, amount, tripId, imageData}
+  transitReceipts: [],// {id, date, amount, type, tripId, imageData}
+  trips: [],          // {id, startDate, endDate, commuteDays, vehicleType}
+  commuteDays: 0
+};
+
+let editingFuelId = null;
+let editingTollId = null;
+let editingTransitId = null;
+let pendingFuelImageData = null;
+let pendingTollImageData = null;
+let pendingTransitImageData = null;
+let currentTransitType = 'express';
+
+// ==================== PERSISTENCE ====================
+function getStorageKey() { return 'transport_' + state.month; }
+
+function loadState() {
+  const base = localStorage.getItem('transport_settings');
+  if (base) {
+    const saved = JSON.parse(base);
+    state.settings = { ...state.settings, ...saved };
+  }
+  const monthKey = getStorageKey();
+  const monthData = localStorage.getItem(monthKey);
+  if (monthData) {
+    const md = JSON.parse(monthData);
+    state.fuelReceipts = md.fuelReceipts || [];
+    state.tollReceipts = md.tollReceipts || [];
+    state.transitReceipts = md.transitReceipts || [];
+    state.trips = md.trips || [];
+    state.commuteDays = md.commuteDays || 0;
+  } else {
+    state.fuelReceipts = [];
+    state.tollReceipts = [];
+    state.transitReceipts = [];
+    state.trips = [];
+    state.commuteDays = 0;
+  }
+}
+
+function saveState() {
+  localStorage.setItem('transport_settings', JSON.stringify(state.settings));
+  const monthKey = getStorageKey();
+  localStorage.setItem(monthKey, JSON.stringify({
+    fuelReceipts: state.fuelReceipts,
+    tollReceipts: state.tollReceipts,
+    transitReceipts: state.transitReceipts,
+    trips: state.trips,
+    commuteDays: state.commuteDays
+  }));
+}
+
+// ==================== UTILS ====================
+function uuid() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2);
+}
+function fmt(n) {
+  return Math.round(n).toLocaleString('ko-KR');
+}
+function fmtDate(d) {
+  if (!d) return '';
+  return new Date(d).toLocaleDateString('ko-KR', {month:'2-digit', day:'2-digit'}).replace('. ', '/').replace('.', '');
+}
+function todayStr() {
+  return new Date().toISOString().slice(0, 10);
+}
+function monthStart() {
+  return state.month + '-01';
+}
+function monthEnd() {
+  const [y, m] = state.month.split('-').map(Number);
+  return new Date(y, m, 0).toISOString().slice(0, 10);
+}
+function roundTripDistance() {
+  return (state.settings.oneWayDistance || 0) * 2;
+}
+
+// ==================== CALCULATIONS ====================
+function getTotalQty() {
+  return state.fuelReceipts.reduce((s, r) => s + (r.quantity || 0), 0);
+}
+function getTotalFuelAmt() {
+  return state.fuelReceipts.reduce((s, r) => s + (r.amount || 0), 0);
+}
+function getAvgPrice() {
+  const qty = getTotalQty();
+  if (qty <= 0) return 0;
+  return getTotalFuelAmt() / qty;
+}
+function getFuelEfficiency() {
+  return FUEL_EFFICIENCY[state.settings.fuelType] || 7;
+}
+function calcFuelCostForDistance(distance) {
+  const avg = getAvgPrice();
+  if (avg <= 0 || distance <= 0) return 0;
+  return avg * distance / getFuelEfficiency();
+}
+function calcPerTripFuelCost() {
+  return calcFuelCostForDistance(roundTripDistance());
+}
+
+function calcTrips() {
+  const trips = state.trips;
+  if (!trips.length) return [];
+
+  const result = trips.map(trip => {
+    let distance = 0, fuelCost = 0, tollFee = 0, transitExpress = 0, transitLocal = 0;
+
+    if (state.settings.workerType === 'home') {
+      const days = trip.commuteDays || state.commuteDays || 0;
+      distance = roundTripDistance() * days;
+    } else {
+      distance = roundTripDistance();
+    }
+
+    if (state.settings.vehicleType === 'car') {
+      fuelCost = calcFuelCostForDistance(distance);
+      const tripTolls = state.tollReceipts.filter(t => t.tripId === trip.id);
+      tollFee = tripTolls.reduce((s, t) => s + (t.amount || 0), 0);
+    } else {
+      // transit
+      const express = state.transitReceipts.filter(t => t.tripId === trip.id && t.type === 'express');
+      const local = state.transitReceipts.filter(t => t.tripId === trip.id && t.type === 'local');
+      transitExpress = express.reduce((s, t) => s + (t.amount || 0), 0);
+      transitLocal = local.reduce((s, t) => s + (t.amount || 0), 0);
+    }
+
+    const calculated = fuelCost + tollFee + transitExpress + transitLocal;
+    return { ...trip, distance, fuelCost, tollFee, transitExpress, transitLocal, calculated, requested: calculated };
+  });
+
+  // Apply limit adjustment on last trip
+  const totalCalc = result.reduce((s, t) => s + t.calculated, 0);
+  if (totalCalc > MONTHLY_LIMIT && result.length > 0) {
+    const excess = totalCalc - MONTHLY_LIMIT;
+    result[result.length - 1].requested = Math.max(0, result[result.length - 1].calculated - excess);
+    result[result.length - 1].adjusted = true;
+  }
+
+  return result;
+}
+
+// ==================== SETTINGS HELPERS ====================
+function saveSetting(key, value) {
+  state.settings[key] = value;
+  saveState();
+}
+
+function setWorkerType(type) {
+  state.settings.workerType = type;
+  saveState();
+  document.getElementById('wt_field').classList.toggle('sel', type === 'field');
+  document.getElementById('wt_home').classList.toggle('sel', type === 'home');
+  document.getElementById('siteAddrSection').style.display = type === 'field' ? '' : 'none';
+  document.getElementById('homeCommuteSection').style.display = type === 'home' ? '' : 'none';
+  document.getElementById('fieldTripSection').style.display = type === 'field' ? '' : 'none';
+  document.getElementById('fieldAddBtn').style.display = type === 'field' ? '' : 'none';
+  updateDistInfo();
+}
+
+function setVehicleType(type) {
+  state.settings.vehicleType = type;
+  saveState();
+  document.getElementById('vt_car').classList.toggle('sel', type === 'car');
+  document.getElementById('vt_transit').classList.toggle('sel', type === 'transit');
+  document.getElementById('fuelTypeSection').style.display = type === 'car' ? '' : 'none';
+  document.getElementById('tollCard').style.display = type === 'car' ? '' : 'none';
+  document.getElementById('transitCard').style.display = type === 'transit' ? '' : 'none';
+  renderAll();
+}
+
+function setFuelType(type) {
+  state.settings.fuelType = type;
+  saveState();
+  ['fuel','electric','hydrogen'].forEach(t => {
+    document.getElementById('ft_' + t).classList.toggle('sel', t === type);
+  });
+  updateEfficiencyInfo();
+  renderAll();
+}
+
+function updateEfficiencyInfo() {
+  const ft = state.settings.fuelType;
+  const eff = FUEL_EFFICIENCY[ft];
+  const unit = FUEL_UNIT_LABEL[ft];
+  document.getElementById('efficiencyInfo').textContent =
+    `환산연비: ${eff} km/${unit} (${FUEL_TYPE_LABEL[ft]})`;
+}
+
+function updateDistInfo() {
+  const dist = state.settings.oneWayDistance || 0;
+  document.getElementById('distInfo').textContent =
+    `편도 ${dist}km → 왕복 ${dist * 2}km`;
+}
+
+// ==================== OCR ====================
+async function ocrReceipt(imageData, type) {
+  const apiKey = state.settings.apiKey;
+  if (!apiKey) return null;
+
+  showOCR();
+  try {
+    const base64 = imageData.split(',')[1];
+    const mimeMatch = imageData.match(/data:([^;]+);/);
+    const mime = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+
+    let prompt = '';
+    if (type === 'fuel') {
+      prompt = `이 주유/충전 영수증에서 다음 정보를 JSON으로 추출하세요:
+- date: 주유일 (YYYY-MM-DD)
+- quantity: 주유량 또는 충전량 (숫자만, L 또는 kWh)
+- amount: 결제금액 (숫자만, 원)
+주유량이 없으면 null. JSON만 출력하세요. 예: {"date":"2026-03-06","quantity":55.384,"amount":108000}`;
+    } else if (type === 'toll') {
+      prompt = `이 통행료 영수증에서 다음 정보를 JSON으로 추출하세요:
+- date: 납부일 (YYYY-MM-DD)
+- amount: 통행료 금액 (숫자만, 원)
+JSON만 출력하세요. 예: {"date":"2026-03-06","amount":13600}`;
+    } else {
+      prompt = `이 교통비 영수증에서 다음 정보를 JSON으로 추출하세요:
+- date: 이용일 (YYYY-MM-DD)
+- amount: 금액 (숫자만, 원)
+JSON만 출력하세요. 예: {"date":"2026-03-06","amount":15000}`;
+    }
+
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'content-type': 'application/json',
+        'anthropic-dangerous-allow-browser': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 256,
+        messages: [{
+          role: 'user',
+          content: [
+            { type: 'image', source: { type: 'base64', media_type: mime, data: base64 } },
+            { type: 'text', text: prompt }
+          ]
+        }]
+      })
+    });
+
+    if (!resp.ok) throw new Error('API Error: ' + resp.status);
+    const data = await resp.json();
+    const text = data.content[0].text.trim();
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (jsonMatch) return JSON.parse(jsonMatch[0]);
+    return null;
+  } catch (e) {
+    console.error('OCR Error:', e);
+    return null;
+  } finally {
+    hideOCR();
+  }
+}
+
+function showOCR() { document.getElementById('ocrOverlay').classList.add('show'); }
+function hideOCR() { document.getElementById('ocrOverlay').classList.remove('show'); }
+
+// ==================== IMAGE HANDLING ====================
+function readImageFile(file) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = e => resolve(e.target.result);
+    reader.readAsDataURL(file);
+  });
+}
+
+async function handleFuelImage(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const imageData = await readImageFile(file);
+  input.value = '';
+
+  pendingFuelImageData = imageData;
+  editingFuelId = null;
+
+  let extracted = null;
+  if (state.settings.apiKey) {
+    extracted = await ocrReceipt(imageData, 'fuel');
+  }
+
+  openFuelModal(extracted, imageData);
+}
+
+async function handleTollImage(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const imageData = await readImageFile(file);
+  input.value = '';
+
+  pendingTollImageData = imageData;
+  editingTollId = null;
+
+  let extracted = null;
+  if (state.settings.apiKey) {
+    extracted = await ocrReceipt(imageData, 'toll');
+  }
+
+  openTollModal(extracted, imageData);
+}
+
+async function handleTransitImage(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const imageData = await readImageFile(file);
+  input.value = '';
+
+  pendingTransitImageData = imageData;
+  editingTransitId = null;
+
+  let extracted = null;
+  if (state.settings.apiKey) {
+    extracted = await ocrReceipt(imageData, 'transit');
+  }
+
+  openTransitModal(extracted, imageData);
+}
+
+// ==================== FUEL MODAL ====================
+function openFuelManual() {
+  pendingFuelImageData = null;
+  editingFuelId = null;
+  openFuelModal(null, null);
+}
+
+function openFuelModal(extracted, imageData) {
+  document.getElementById('fm_date').value = (extracted && extracted.date) || todayStr();
+  document.getElementById('fm_qty').value = (extracted && extracted.quantity) ? extracted.quantity : '';
+  document.getElementById('fm_amount').value = (extracted && extracted.amount) ? extracted.amount : '';
+
+  const unit = FUEL_UNIT_LABEL[state.settings.fuelType];
+  document.getElementById('fm_qty_label').textContent = `주유/충전량 (${unit})`;
+
+  const preview = document.getElementById('fuelModalPreview');
+  if (imageData) {
+    preview.innerHTML = `<img src="${imageData}" style="width:100%;max-height:160px;object-fit:contain;border-radius:8px;margin-bottom:12px;">`;
+  } else {
+    preview.innerHTML = '';
+  }
+
+  document.getElementById('fuelModal').classList.add('show');
+}
+
+function closeFuelModal() {
+  document.getElementById('fuelModal').classList.remove('show');
+  pendingFuelImageData = null;
+  editingFuelId = null;
+}
+
+function saveFuelReceipt() {
+  const date = document.getElementById('fm_date').value;
+  const qty = parseFloat(document.getElementById('fm_qty').value) || 0;
+  const amount = parseInt(document.getElementById('fm_amount').value) || 0;
+
+  if (!date || amount <= 0) {
+    alert('날짜와 금액을 입력해주세요.');
+    return;
+  }
+  if (qty <= 0) {
+    alert('주유/충전량을 입력해주세요.');
+    return;
+  }
+
+  if (editingFuelId) {
+    const idx = state.fuelReceipts.findIndex(r => r.id === editingFuelId);
+    if (idx >= 0) {
+      state.fuelReceipts[idx] = { ...state.fuelReceipts[idx], date, quantity: qty, amount };
+    }
+  } else {
+    state.fuelReceipts.push({
+      id: uuid(), date, quantity: qty, amount,
+      imageData: pendingFuelImageData
+    });
+  }
+
+  saveState();
+  closeFuelModal();
+  renderFuelList();
+  renderSummary();
+  renderExportPreview();
+}
+
+function editFuelReceipt(id) {
+  const r = state.fuelReceipts.find(r => r.id === id);
+  if (!r) return;
+  editingFuelId = id;
+  pendingFuelImageData = r.imageData;
+  openFuelModal({ date: r.date, quantity: r.quantity, amount: r.amount }, r.imageData);
+}
+
+function deleteFuelReceipt(id) {
+  if (!confirm('이 영수증을 삭제하시겠습니까?')) return;
+  state.fuelReceipts = state.fuelReceipts.filter(r => r.id !== id);
+  saveState();
+  renderFuelList();
+  renderSummary();
+  renderExportPreview();
+}
+
+// ==================== TOLL MODAL ====================
+function openTollManual() {
+  pendingTollImageData = null;
+  editingTollId = null;
+  openTollModal(null, null);
+}
+
+function openTollModal(extracted, imageData) {
+  document.getElementById('tm_date').value = (extracted && extracted.date) || todayStr();
+  document.getElementById('tm_amount').value = (extracted && extracted.amount) ? extracted.amount : '';
+
+  // Populate trip selector
+  const sel = document.getElementById('tm_trip');
+  sel.innerHTML = '<option value="">-- 회차 선택 --</option>' +
+    state.trips.map((t, i) => `<option value="${t.id}">${i+1}회차 (${fmtDate(t.startDate)} ~ ${fmtDate(t.endDate)})</option>`).join('');
+
+  const preview = document.getElementById('tollModalPreview');
+  if (imageData) {
+    preview.innerHTML = `<img src="${imageData}" style="width:100%;max-height:160px;object-fit:contain;border-radius:8px;margin-bottom:12px;">`;
+  } else {
+    preview.innerHTML = '';
+  }
+
+  document.getElementById('tollModal').classList.add('show');
+}
+
+function closeTollModal() {
+  document.getElementById('tollModal').classList.remove('show');
+  pendingTollImageData = null;
+  editingTollId = null;
+}
+
+function saveTollReceipt() {
+  const date = document.getElementById('tm_date').value;
+  const amount = parseInt(document.getElementById('tm_amount').value) || 0;
+  const tripId = document.getElementById('tm_trip').value;
+
+  if (!date || amount <= 0) {
+    alert('날짜와 금액을 입력해주세요.');
+    return;
+  }
+
+  if (editingTollId) {
+    const idx = state.tollReceipts.findIndex(r => r.id === editingTollId);
+    if (idx >= 0) {
+      state.tollReceipts[idx] = { ...state.tollReceipts[idx], date, amount, tripId };
+    }
+  } else {
+    state.tollReceipts.push({
+      id: uuid(), date, amount, tripId,
+      imageData: pendingTollImageData
+    });
+  }
+
+  saveState();
+  closeTollModal();
+  renderTollList();
+  renderTripList();
+  renderSummary();
+  renderExportPreview();
+}
+
+function editTollReceipt(id) {
+  const r = state.tollReceipts.find(r => r.id === id);
+  if (!r) return;
+  editingTollId = id;
+  pendingTollImageData = r.imageData;
+  openTollModal({ date: r.date, amount: r.amount }, r.imageData);
+  const sel = document.getElementById('tm_trip');
+  for (const opt of sel.options) { if (opt.value === r.tripId) { opt.selected = true; break; } }
+}
+
+function deleteTollReceipt(id) {
+  if (!confirm('이 통행료 영수증을 삭제하시겠습니까?')) return;
+  state.tollReceipts = state.tollReceipts.filter(r => r.id !== id);
+  saveState();
+  renderTollList();
+  renderTripList();
+  renderSummary();
+}
+
+// ==================== TRIPS ====================
+function addTrip() {
+  const trips = state.trips;
+  let startDate = monthStart();
+  if (trips.length > 0) {
+    const lastEnd = trips[trips.length - 1].endDate;
+    const nextDay = new Date(lastEnd);
+    nextDay.setDate(nextDay.getDate() + 1);
+    startDate = nextDay.toISOString().slice(0, 10);
+  }
+  const endDate = startDate;
+
+  state.trips.push({
+    id: uuid(),
+    startDate, endDate,
+    commuteDays: 0
+  });
+
+  saveState();
+  renderTripList();
+  renderSummary();
+}
+
+function updateTrip(id, field, value) {
+  const trip = state.trips.find(t => t.id === id);
+  if (!trip) return;
+  trip[field] = value;
+  saveState();
+  renderTripList();
+  renderSummary();
+  renderExportPreview();
+}
+
+function deleteTrip(id) {
+  if (!confirm('이 회차를 삭제하시겠습니까?')) return;
+  state.trips = state.trips.filter(t => t.id !== id);
+  saveState();
+  renderTripList();
+  renderSummary();
+  renderExportPreview();
+}
+
+function saveCommuteDays(val) {
+  state.commuteDays = parseInt(val) || 0;
+  saveState();
+  renderTripList();
+  renderSummary();
+}
+
+// ==================== RENDER FUNCTIONS ====================
+function renderFuelList() {
+  const receipts = state.fuelReceipts.sort((a, b) => a.date.localeCompare(b.date));
+  const container = document.getElementById('fuelList');
+  const empty = document.getElementById('fuelEmpty');
+  const statsCard = document.getElementById('fuelStatsCard');
+
+  if (receipts.length === 0) {
+    empty.style.display = '';
+    statsCard.style.display = 'none';
+    container.innerHTML = '';
+    container.appendChild(empty);
+    return;
+  }
+
+  empty.style.display = 'none';
+  statsCard.style.display = '';
+
+  // Stats
+  const totalQty = getTotalQty();
+  const totalAmt = getTotalFuelAmt();
+  const avgPrice = getAvgPrice();
+  const perTrip = calcPerTripFuelCost();
+  const unit = FUEL_UNIT_LABEL[state.settings.fuelType];
+
+  document.getElementById('totalQty').innerHTML = totalQty.toFixed(3) + `<span class="stat-unit">${unit}</span>`;
+  document.getElementById('totalFuelAmt').innerHTML = fmt(totalAmt) + '<span class="stat-unit">원</span>';
+  document.getElementById('avgPrice').innerHTML = fmt(avgPrice) + '<span class="stat-unit">원</span>';
+  document.getElementById('perTripFuel').innerHTML = fmt(perTrip) + '<span class="stat-unit">원</span>';
+
+  // List
+  let html = '';
+  receipts.forEach(r => {
+    const thumb = r.imageData
+      ? `<img class="receipt-thumb" src="${r.imageData}" alt="영수증" onclick="viewImage('${r.id}','fuel')">`
+      : `<div class="receipt-thumb-placeholder">🧾</div>`;
+    html += `
+    <div class="receipt-item">
+      ${thumb}
+      <div class="receipt-info">
+        <div class="receipt-date">${r.date}</div>
+        <div class="receipt-amount">${fmt(r.amount)}원</div>
+        <div class="receipt-qty">${r.quantity ? r.quantity.toFixed(3) + unit : '수량 미입력'}</div>
+      </div>
+      <div class="receipt-actions">
+        <button class="btn btn-gray btn-sm" onclick="editFuelReceipt('${r.id}')">수정</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteFuelReceipt('${r.id}')">삭제</button>
+      </div>
+    </div>`;
+  });
+  container.innerHTML = html;
+}
+
+function renderTransitList() {
+  const container = document.getElementById('transitList');
+  if (!container) return;
+  const receipts = state.transitReceipts.sort((a, b) => a.date.localeCompare(b.date));
+
+  if (receipts.length === 0) {
+    container.innerHTML = '<div style="color:#bbb;font-size:13px;text-align:center;padding:10px;">등록된 교통비 없음</div>';
+    return;
+  }
+
+  let html = '';
+  receipts.forEach(r => {
+    const tripIdx = state.trips.findIndex(tr => tr.id === r.tripId);
+    const tripLabel = tripIdx >= 0 ? `${tripIdx + 1}회차` : '미분류';
+    const typeLabel = r.type === 'local' ? '시내' : '시외';
+    const thumb = r.imageData
+      ? `<img class="receipt-thumb" src="${r.imageData}" alt="영수증">`
+      : `<div class="receipt-thumb-placeholder" style="width:40px;height:40px;font-size:18px;">🚌</div>`;
+    html += `
+    <div class="receipt-item" style="padding:10px;">
+      ${thumb}
+      <div class="receipt-info">
+        <div class="receipt-date">${r.date} · ${tripLabel} · ${typeLabel}</div>
+        <div class="receipt-amount">${fmt(r.amount)}원</div>
+      </div>
+      <div class="receipt-actions">
+        <button class="btn btn-gray btn-sm" onclick="editTransitReceipt('${r.id}')">수정</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteTransitReceipt('${r.id}')">삭제</button>
+      </div>
+    </div>`;
+  });
+  container.innerHTML = html;
+}
+
+function renderTollList() {
+  const container = document.getElementById('tollList');
+  const tolls = state.tollReceipts.sort((a, b) => a.date.localeCompare(b.date));
+
+  if (tolls.length === 0) {
+    container.innerHTML = '<div style="color:#bbb;font-size:13px;text-align:center;padding:10px;">등록된 통행료 없음</div>';
+    return;
+  }
+
+  let html = '';
+  tolls.forEach(t => {
+    const tripIdx = state.trips.findIndex(tr => tr.id === t.tripId);
+    const tripLabel = tripIdx >= 0 ? `${tripIdx + 1}회차` : '미분류';
+    html += `
+    <div class="receipt-item" style="padding:10px;">
+      <div class="receipt-thumb-placeholder" style="width:40px;height:40px;font-size:18px;">🛣️</div>
+      <div class="receipt-info">
+        <div class="receipt-date">${t.date} · ${tripLabel}</div>
+        <div class="receipt-amount">${fmt(t.amount)}원</div>
+      </div>
+      <div class="receipt-actions">
+        <button class="btn btn-gray btn-sm" onclick="editTollReceipt('${t.id}')">수정</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteTollReceipt('${t.id}')">삭제</button>
+      </div>
+    </div>`;
+  });
+  container.innerHTML = html;
+}
+
+function renderTripList() {
+  const computed = calcTrips();
+  const container = document.getElementById('tripList');
+
+  if (state.settings.workerType === 'home') {
+    // Home commuter: single entry
+    if (state.trips.length === 0) {
+      state.trips.push({ id: uuid(), startDate: monthStart(), endDate: monthEnd(), commuteDays: state.commuteDays });
+      saveState();
+    }
+    const trip = computed[0];
+    if (!trip) return;
+
+    document.getElementById('commuteDays').value = state.commuteDays || '';
+
+    const fuelCostStr = state.settings.vehicleType === 'car'
+      ? `<div class="calc-row"><span class="lbl">주유비정산</span><span class="val">${fmt(trip.fuelCost)}원</span></div>` : '';
+    const tollStr = state.settings.vehicleType === 'car'
+      ? `<div class="calc-row"><span class="lbl">통행료</span><span class="val">${fmt(trip.tollFee)}원</span></div>` : '';
+    const distStr = `<div class="calc-row"><span class="lbl">이동거리</span><span class="val">${trip.distance.toFixed(0)}km</span></div>`;
+
+    container.innerHTML = `
+    <div class="trip-item">
+      <div class="trip-header">
+        <div class="trip-round">📅 이번 달 출퇴근</div>
+      </div>
+      <div class="input-row">
+        <div class="form-group">
+          <label>시작일</label>
+          <input type="date" value="${trip.startDate}" onchange="updateTrip('${trip.id}','startDate',this.value)">
+        </div>
+        <div class="form-group">
+          <label>종료일</label>
+          <input type="date" value="${trip.endDate}" onchange="updateTrip('${trip.id}','endDate',this.value)">
+        </div>
+      </div>
+      <div class="trip-calc">
+        ${distStr}
+        ${fuelCostStr}
+        ${tollStr}
+        <div class="calc-row total-row"><span class="lbl">산출금액</span><span class="val">${fmt(trip.calculated)}원</span></div>
+        <div class="calc-row ${trip.adjusted ? 'warn-row' : 'req-row'}">
+          <span class="lbl">신청금액 ${trip.adjusted ? '(한도조정)' : ''}</span>
+          <span class="val">${fmt(trip.requested)}원</span>
+        </div>
+      </div>
+    </div>`;
+    return;
+  }
+
+  // Field worker: multiple trips
+  if (state.trips.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">📅</div><div class="empty-text">회차를 추가하세요</div></div>';
+    return;
+  }
+
+  let html = '';
+  computed.forEach((trip, idx) => {
+    const tripObj = state.trips.find(t => t.id === trip.id);
+    const tollsForTrip = state.tollReceipts.filter(t => t.tripId === trip.id);
+    const tollCount = tollsForTrip.length;
+
+    const fuelRow = state.settings.vehicleType === 'car'
+      ? `<div class="calc-row"><span class="lbl">주유비 (평균단가 × ${roundTripDistance()}km ÷ 연비)</span><span class="val">${fmt(trip.fuelCost)}원</span></div>` : '';
+    const tollRow = state.settings.vehicleType === 'car'
+      ? `<div class="calc-row"><span class="lbl">통행료 (${tollCount}건)</span><span class="val">${fmt(trip.tollFee)}원</span></div>` : '';
+    const transitRow = state.settings.vehicleType === 'transit'
+      ? `<div class="calc-row"><span class="lbl">시외 교통비</span><span class="val">${fmt(trip.transitExpress)}원</span></div>
+         <div class="calc-row"><span class="lbl">시내 교통비</span><span class="val">${fmt(trip.transitLocal)}원</span></div>` : '';
+
+    html += `
+    <div class="trip-item">
+      <div class="trip-header">
+        <div class="trip-round">${idx + 1}회차</div>
+        <button class="btn btn-danger btn-sm" onclick="deleteTrip('${trip.id}')">삭제</button>
+      </div>
+      <div class="input-row">
+        <div class="form-group">
+          <label>출발일 (현장출발)</label>
+          <input type="date" value="${trip.startDate}" onchange="updateTrip('${trip.id}','startDate',this.value)">
+        </div>
+        <div class="form-group">
+          <label>복귀일 (현장복귀)</label>
+          <input type="date" value="${trip.endDate}" onchange="updateTrip('${trip.id}','endDate',this.value)">
+        </div>
+      </div>
+      <div class="trip-calc">
+        ${fuelRow}
+        ${tollRow}
+        ${transitRow}
+        <div class="calc-row total-row"><span class="lbl">산출금액</span><span class="val">${fmt(trip.calculated)}원</span></div>
+        <div class="calc-row ${trip.adjusted ? 'warn-row' : 'req-row'}">
+          <span class="lbl">신청금액${trip.adjusted ? ' ⚠️한도조정' : ''}</span>
+          <span class="val">${fmt(trip.requested)}원</span>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  container.innerHTML = html;
+}
+
+function renderSummary() {
+  const computed = calcTrips();
+  const totalCalc = computed.reduce((s, t) => s + t.calculated, 0);
+  const totalReq = computed.reduce((s, t) => s + t.requested, 0);
+  const over = totalCalc > MONTHLY_LIMIT;
+  const pct = Math.min(100, (totalReq / MONTHLY_LIMIT) * 100);
+
+  let html = '';
+  if (computed.length === 0) {
+    document.getElementById('summaryContent').innerHTML = `
+    <div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">회차 데이터를 입력하면 표시됩니다</div></div>`;
+  } else {
+    computed.forEach((t, i) => {
+      html += `
+      <div class="summary-row">
+        <span>${i + 1}회차 (${fmtDate(t.startDate)} ~ ${fmtDate(t.endDate)})</span>
+        <span class="summary-row ${t.adjusted ? 'over' : ''}">${fmt(t.requested)}원</span>
+      </div>`;
+    });
+    html += `<div class="summary-row grand"><span>총 신청금액</span><span>${fmt(totalReq)}원</span></div>`;
+    if (over) {
+      html += `<div class="alert alert-warn" style="margin-top:10px;">⚠️ 한도(${fmt(MONTHLY_LIMIT)}원) 초과! 마지막 회차에서 자동 조정됩니다.</div>`;
+    }
+    document.getElementById('summaryContent').innerHTML = html;
+  }
+
+  // Limit bar
+  document.getElementById('limitContent').innerHTML = `
+  <div class="summary-row"><span>총 산출금액</span><span>${fmt(totalCalc)}원</span></div>
+  <div class="summary-row"><span>월 한도</span><span>${fmt(MONTHLY_LIMIT)}원</span></div>
+  <div class="summary-row ${over ? 'over' : ''}"><span>잔여 한도</span><span>${fmt(MONTHLY_LIMIT - totalReq)}원</span></div>
+  <div class="limit-bar">
+    <div style="font-size:12px;color:#888;">한도 사용 ${pct.toFixed(1)}%</div>
+    <div class="limit-bar-track">
+      <div class="limit-bar-fill ${over ? 'over' : ''}" style="width:${pct}%;"></div>
+    </div>
+  </div>`;
+
+  renderExportPreview();
+}
+
+function renderExportPreview() {
+  const computed = calcTrips();
+  const totalReq = computed.reduce((s, t) => s + t.requested, 0);
+  const [y, m] = state.month.split('-');
+  const monthLabel = `${y}년 ${parseInt(m)}월`;
+
+  document.getElementById('exportPreview').innerHTML = `
+  <div class="summary-row"><span>신청자</span><span>${state.settings.name || '미입력'}</span></div>
+  <div class="summary-row"><span>신청월</span><span>${monthLabel}</span></div>
+  <div class="summary-row"><span>총 회차</span><span>${computed.length}회</span></div>
+  <div class="summary-row subtotal"><span>총 신청금액</span><span>${fmt(totalReq)}원</span></div>
+  `;
+
+  // Checklist
+  const checks = [];
+  if (!state.settings.name) checks.push({ ok: false, label: '신청자 이름 미입력' });
+  else checks.push({ ok: true, label: `신청자: ${state.settings.name}` });
+
+  if (!state.settings.homeAddress) checks.push({ ok: false, label: '자택 주소 미입력' });
+  else checks.push({ ok: true, label: '자택 주소 입력됨' });
+
+  if (state.settings.vehicleType === 'car' && state.fuelReceipts.length === 0)
+    checks.push({ ok: false, label: '주유/충전 영수증 없음' });
+  else if (state.settings.vehicleType === 'car')
+    checks.push({ ok: true, label: `주유 영수증 ${state.fuelReceipts.length}건` });
+
+  if (computed.length === 0) checks.push({ ok: false, label: '회차 미입력' });
+  else checks.push({ ok: true, label: `회차 ${computed.length}건 입력됨` });
+
+  if (state.settings.vehicleType === 'car' && state.tollReceipts.length === 0)
+    checks.push({ ok: null, label: '통행료 영수증 없음 (해당 없으면 정상)' });
+  else if (state.settings.vehicleType === 'car')
+    checks.push({ ok: true, label: `통행료 영수증 ${state.tollReceipts.length}건` });
+
+  let cl = '';
+  checks.forEach(c => {
+    const icon = c.ok === true ? '✅' : c.ok === false ? '❌' : '⚪';
+    cl += `<div style="padding:7px 0;border-bottom:1px solid #f0f0f0;font-size:14px;">${icon} ${c.label}</div>`;
+  });
+  document.getElementById('checklistContent').innerHTML = cl;
+}
+
+// ==================== IMAGE VIEWER ====================
+function viewImage(id, type) {
+  let receipt = null;
+  if (type === 'fuel') receipt = state.fuelReceipts.find(r => r.id === id);
+  else if (type === 'toll') receipt = state.tollReceipts.find(r => r.id === id);
+  if (!receipt || !receipt.imageData) return;
+  document.getElementById('imgViewerSrc').src = receipt.imageData;
+  document.getElementById('imgViewer').classList.add('show');
+}
+function closeImgViewer() {
+  document.getElementById('imgViewer').classList.remove('show');
+}
+
+// ==================== EXCEL EXPORT ====================
+function exportToExcel() {
+  if (!state.settings.name) {
+    alert('설정에서 신청자 이름을 입력해주세요.');
+    showTab('settings');
+    return;
+  }
+
+  const wb = XLSX.utils.book_new();
+  const computed = calcTrips();
+  const [yr, mo] = state.month.split('-').map(Number);
+  const avgPrice = Math.round(getAvgPrice());
+  const totalQty = getTotalQty();
+  const totalFuelAmt = getTotalFuelAmt();
+  const eff = getFuelEfficiency();
+  const rt = roundTripDistance();
+  const ft = FUEL_TYPE_LABEL[state.settings.fuelType];
+  const effVal = eff;
+
+  // ===== Sheet: 규정요약 =====
+  const ws1 = XLSX.utils.aoa_to_sheet([
+    [],
+    [],
+    [,,,,,,,,,,,,'※ 국내 교통비 지원 규정 상세 내용은 국내교통비신청메뉴얼을 참조하시고, 문의는 관리팀 담당자']
+  ]);
+  XLSX.utils.book_append_sheet(wb, ws1, '규정요약');
+
+  // ===== Sheet: 거리산정기준 =====
+  const distRows = [
+    [],
+    [,'■ 거리산정 기준'],
+    [],
+    [,'▶ 자차 이용', ,,,,,,,,,,,,,,,,'▶대중교통이용'],
+    [,'- 네이버 or 티맵상 거리 캡쳐 : 현장(or숙소) <> 자택',,,,,,,,,,,,,,,,,,'- 시외/고속버스, 기차'],
+    [,,,,,,,,,,,,,'상세주소',,,,,'단축주소'],
+    [,,,,,,,,,,,'출발지 주소', state.settings.siteAddress || '', ,,,, 1,,'출발터미널(역)'],
+    [,,,,,,,,,,,'도착지 주소', state.settings.homeAddress || '', ,,,, 2,,'도착터미널(역)'],
+    [],
+    [,,,,,,,,,,,'편도거리(km)', state.settings.oneWayDistance || 0],
+    [,,,,,,,,,,,'왕복거리(km)', rt],
+    [],
+    [],
+    [,,,,,,,,,,,'▶ 비고'],
+    [,,,,,,,,,,,'1. e-HR 등록지 변경 전, 자차 이동거리 및 출도착터미널(역)은 매회차 동일'],
+    [,,,,,,,,,,,'- 자택기준 : e-HR 등록 주소지 (기혼 : 가족 거주지, 미혼 : 부모 거주지)'],
+    [,,,,,,,,,,,'- 출발지 : 현장 (or 숙소) / 도착지 : 자택'],
+    [,,,,,,,,,,,'2. 자차 이용 시, 차종 변경 전까지 유종은 동일 (유류(경유, 휘발유, 고급유, LPG), 전기차, 수소차), 해당 유종 증빙만 가능'],
+    [,,,,,,,,,,,'3. 단축주소는 시/군/구'],
+    [,,,,,,,,,,,'4. 대중교통 이용시, 현장<> 출발터미널(역), 자택 <> 도착터미널(역) 이동간 택시비/시내버스/지하철 비용도 포함'],
+    [,,,,,,,,,,,'5. 대중교통이 시내/광역버스/택시/지하철만 해당될 경우, 출도착터미널(역) 미기입'],
+  ];
+  const ws2 = XLSX.utils.aoa_to_sheet(distRows);
+  XLSX.utils.book_append_sheet(wb, ws2, '거리산정기준');
+
+  // ===== Sheet: 회차별신청및증빙 (현장근무자) =====
+  const fuelRows = state.fuelReceipts.sort((a, b) => a.date.localeCompare(b.date));
+  const dataRows = [];
+
+  // Header section
+  dataRows.push([]); // row 1
+  dataRows.push([,'▶ 자차 이용 시,  유종별 평균단가 산정',,,,,,,,'▶ Index']); // row 2
+  dataRows.push([]); // row 3
+  dataRows.push([,'유종선택','유류', 7, ,'※ 유종별 환산 연비',,,'선택']); // row 4
+
+  // Fuel type efficiency table header
+  dataRows.push([,'주유일','주유/충전량','주유금액', ,'유종','환산연비',,,'입력']); // row 5
+
+  // Fuel receipt rows (rows 6~)
+  const fuelDataStart = 6;
+  fuelRows.forEach((r, i) => {
+    if (i === 0) {
+      dataRows.push([, new Date(r.date), r.quantity, r.amount, ,'유류', effVal,,,'자동']);
+    } else {
+      dataRows.push([, new Date(r.date), r.quantity, r.amount]);
+    }
+  });
+  // Efficiency for electric/hydrogen
+  if (fuelRows.length === 0) {
+    dataRows.push([,,,,,'유류', FUEL_EFFICIENCY.fuel,,,'자동']);
+  }
+
+  // Add blank rows to get to row 17 (주유합계)
+  while (dataRows.length < 16) dataRows.push([]);
+  dataRows.push([,'주유합계', totalQty, totalFuelAmt]); // row 17
+  dataRows.push([,'평균단가',, avgPrice]); // row 18
+  dataRows.push([]); // row 19
+
+  // Main header
+  dataRows.push([,'■ 회차별 정산 (e-HR 국내교통비 신청 시스템 입력 항목)']); // row 20
+  dataRows.push([]); // row 21
+
+  // Column headers
+  dataRows.push([,'회차','시작일','종료일','이동수단','출발지','도착지','유류단가','이동거리','주유비정산','통행료','교통비(시외)','교통비(시내)','산출금액','신청금액']); // row 22
+
+  // Trip rows
+  const tripStart = dataRows.length + 1;
+  const siteShort = state.settings.siteShortAddress || state.settings.siteAddress || '현장';
+  const homeShort = state.settings.homeShortAddress || state.settings.homeAddress || '자택';
+
+  computed.forEach((t, i) => {
+    dataRows.push([,
+      `${i+1}회차`,
+      new Date(t.startDate),
+      new Date(t.endDate),
+      VEHICLE_TYPE_LABEL[state.settings.vehicleType],
+      siteShort, homeShort,
+      state.settings.vehicleType === 'car' ? avgPrice : null,
+      rt,
+      state.settings.vehicleType === 'car' ? Math.round(t.fuelCost) : null,
+      state.settings.vehicleType === 'car' ? t.tollFee : null,
+      state.settings.vehicleType === 'transit' ? t.transitExpress : null,
+      state.settings.vehicleType === 'transit' ? t.transitLocal : null,
+      Math.round(t.calculated),
+      Math.round(t.requested)
+    ]);
+  });
+
+  // Fill blanks to row 27
+  while (dataRows.length < 27) dataRows.push([]);
+
+  const totalCalc = computed.reduce((s, t) => s + t.calculated, 0);
+  const totalReq = computed.reduce((s, t) => s + t.requested, 0);
+
+  dataRows.push([,'합계',,,,,,,,,,,,Math.round(totalCalc), Math.round(totalReq)]); // row 28
+  dataRows.push([,'한도',,,,,,,,,,,,MONTHLY_LIMIT, MONTHLY_LIMIT]); // row 29
+  dataRows.push([,'한도잔액',,,,,,,,,,,,MONTHLY_LIMIT - Math.round(totalReq), MONTHLY_LIMIT - Math.round(totalReq)]); // row 30
+  dataRows.push([,,,,,,,,,, '※ 산출금액 합계가 한도를 초과할 경우, 한도 초과 금액을 마지막 회차에서 조정하여 마지막 회차산출금액을 조정함']); // row 31
+  dataRows.push([]);
+  dataRows.push([,'▶ 주유/톨비/주차장 증빙 (캡쳐) ↓',,,'※ 캡쳐사진은 내용을 확인할 수 있는 수준',,,,,'▶ 대중교통이용증빙 (캡쳐) ↓']); // row 33
+
+  const ws3 = XLSX.utils.aoa_to_sheet(dataRows);
+
+  // Format date cells
+  const dateFormat = 'YYYY-MM-DD';
+  if (ws3['!ref']) {
+    for (const addr in ws3) {
+      if (addr[0] === '!') continue;
+      const cell = ws3[addr];
+      if (cell.v instanceof Date) {
+        cell.t = 'd';
+        cell.z = 'YYYY-MM-DD';
+      }
+    }
+  }
+
+  XLSX.utils.book_append_sheet(wb, ws3, '회차별신청및증빙');
+
+  // ===== Sheet: 자택출근자 =====
+  const homeRows = [
+    [],
+    [,'▶ 자차 이용 시,  유종별 평균단가 산정',,,,,,,,,'▶ Index'],
+    [],
+    [,'유종선택','유류', 7, ,'※ 유종별 환산 연비',,,,,'선택'],
+    [,'주유일','주유/충전량','주유금액', ,'유종','환산연비',,,,,'입력'],
+    [,,,,,'유류', FUEL_EFFICIENCY.fuel,,,,,'자동'],
+    [,,,,,'전기', FUEL_EFFICIENCY.electric],
+    [,,,,,'수소', FUEL_EFFICIENCY.hydrogen],
+    [],[], [],[], [],[], [],[], [],
+    [,'주유합계', 0, 0],
+    [,'평균단가'],
+    [],
+    [,'■ 회차별 정산 (e-HR 국내교통비 신청 시스템 입력 항목)'],
+    [],
+    [,'회차','시작일','종료일','이동수단','출발지','도착지','유류단가','출퇴근일수','이동거리','주유비정산','통행료','교통비(시외)','교통비(시내)','산출금액','신청금액'],
+    [,'1회차', new Date(yr, mo-1, 1), new Date(yr, mo, 0), '자차', state.settings.homeShortAddress||'자택', '현장', avgPrice||null, state.commuteDays||0, rt * (state.commuteDays||0),'','','','',0,0],
+    [,,'매월 1일입력','매월 말일입력'],
+    [],[], [],[], [],[], [],
+    [,'▶ 주유/톨비/주차장 증빙 (캡쳐) ↓',,,'※ 캡쳐사진은 내용을 확인할 수 있는 수준',,,,,'▶ 대중교통이용증빙 (캡쳐) ↓'],
+  ];
+  const ws4 = XLSX.utils.aoa_to_sheet(homeRows);
+  XLSX.utils.book_append_sheet(wb, ws4, '자택출근자');
+
+  // ===== Sheet: 항목 =====
+  const itemRows = [
+    [],
+    [,'이동수단',,'유종선택',,'한도조정',,'유종별환산연비'],
+    [,'자차',,'유류',,'자동',, FUEL_EFFICIENCY.fuel],
+    [,'대중교통',,'전기',,'조정',, FUEL_EFFICIENCY.electric],
+    [,,,,'수소',,, FUEL_EFFICIENCY.hydrogen],
+  ];
+  // Fix - shift columns
+  const ws5Data = [
+    [],
+    [null,'이동수단',null,'유종선택',null,'한도조정',null,'유종별환산연비'],
+    [null,'자차',null,'유류',null,'자동',null, FUEL_EFFICIENCY.fuel],
+    [null,'대중교통',null,'전기',null,'조정',null, FUEL_EFFICIENCY.electric],
+    [null,null,null,'수소',null,null,null, FUEL_EFFICIENCY.hydrogen],
+  ];
+  const ws5 = XLSX.utils.aoa_to_sheet(ws5Data);
+  XLSX.utils.book_append_sheet(wb, ws5, '항목');
+
+  // Write file
+  const [y2, m2] = state.month.split('-');
+  const fileName = `국내교통비신청양식_${state.settings.name || '신청자'}_${m2}월.xlsx`;
+  XLSX.writeFile(wb, fileName);
+}
+
+// ==================== TAB MANAGEMENT ====================
+function showTab(name) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  const idx = ['settings','fuel','trips','summary','export'].indexOf(name);
+  document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+
+  if (name === 'summary') renderSummary();
+  if (name === 'export') renderExportPreview();
+}
+
+// ==================== MONTH CHANGE ====================
+function changeMonth(val) {
+  state.month = val;
+  loadState();
+  renderAll();
+}
+
+// ==================== TRANSIT MODAL ====================
+function openTransitManual() {
+  pendingTransitImageData = null;
+  editingTransitId = null;
+  openTransitModal(null, null);
+}
+
+function openTransitModal(extracted, imageData) {
+  document.getElementById('trm_date').value = (extracted && extracted.date) || todayStr();
+  document.getElementById('trm_amount').value = (extracted && extracted.amount) ? extracted.amount : '';
+
+  const sel = document.getElementById('trm_trip');
+  sel.innerHTML = '<option value="">-- 회차 선택 --</option>' +
+    state.trips.map((t, i) => `<option value="${t.id}">${i+1}회차 (${fmtDate(t.startDate)} ~ ${fmtDate(t.endDate)})</option>`).join('');
+
+  const preview = document.getElementById('transitModalPreview');
+  if (imageData) {
+    preview.innerHTML = `<img src="${imageData}" style="width:100%;max-height:160px;object-fit:contain;border-radius:8px;margin-bottom:12px;">`;
+  } else {
+    preview.innerHTML = '';
+  }
+
+  setTransitType(currentTransitType);
+  document.getElementById('transitModal').classList.add('show');
+}
+
+function setTransitType(type) {
+  currentTransitType = type;
+  document.getElementById('trm_express').classList.toggle('sel', type === 'express');
+  document.getElementById('trm_local').classList.toggle('sel', type === 'local');
+}
+
+function closeTransitModal() {
+  document.getElementById('transitModal').classList.remove('show');
+  pendingTransitImageData = null;
+  editingTransitId = null;
+}
+
+function saveTransitReceipt() {
+  const date = document.getElementById('trm_date').value;
+  const amount = parseInt(document.getElementById('trm_amount').value) || 0;
+  const tripId = document.getElementById('trm_trip').value;
+  const type = currentTransitType;
+
+  if (!date || amount <= 0) {
+    alert('날짜와 금액을 입력해주세요.');
+    return;
+  }
+
+  if (editingTransitId) {
+    const idx = state.transitReceipts.findIndex(r => r.id === editingTransitId);
+    if (idx >= 0) {
+      state.transitReceipts[idx] = { ...state.transitReceipts[idx], date, amount, type, tripId };
+    }
+  } else {
+    state.transitReceipts.push({
+      id: uuid(), date, amount, type, tripId,
+      imageData: pendingTransitImageData
+    });
+  }
+
+  saveState();
+  closeTransitModal();
+  renderTransitList();
+  renderTripList();
+  renderSummary();
+  renderExportPreview();
+}
+
+function editTransitReceipt(id) {
+  const r = state.transitReceipts.find(r => r.id === id);
+  if (!r) return;
+  editingTransitId = id;
+  pendingTransitImageData = r.imageData;
+  currentTransitType = r.type || 'express';
+  openTransitModal({ date: r.date, amount: r.amount }, r.imageData);
+  const sel = document.getElementById('trm_trip');
+  for (const opt of sel.options) { if (opt.value === r.tripId) { opt.selected = true; break; } }
+}
+
+function deleteTransitReceipt(id) {
+  if (!confirm('이 교통비 영수증을 삭제하시겠습니까?')) return;
+  state.transitReceipts = state.transitReceipts.filter(r => r.id !== id);
+  saveState();
+  renderTransitList();
+  renderTripList();
+  renderSummary();
+  renderExportPreview();
+}
+
+// ==================== BACKUP / RESTORE ====================
+function exportJSON() {
+  const data = JSON.stringify({ settings: state.settings, month: state.month, monthData: {
+    fuelReceipts: state.fuelReceipts.map(r => ({ ...r, imageData: null })),
+    tollReceipts: state.tollReceipts.map(r => ({ ...r, imageData: null })),
+    transitReceipts: state.transitReceipts.map(r => ({ ...r, imageData: null })),
+    trips: state.trips, commuteDays: state.commuteDays
+  }}, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `교통비백업_${state.month}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importJSON() {
+  document.getElementById('importFile').click();
+}
+
+function handleImport(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (data.settings) state.settings = { ...state.settings, ...data.settings };
+      if (data.monthData) {
+        state.fuelReceipts = data.monthData.fuelReceipts || [];
+        state.tollReceipts = data.monthData.tollReceipts || [];
+        state.transitReceipts = data.monthData.transitReceipts || [];
+        state.trips = data.monthData.trips || [];
+        state.commuteDays = data.monthData.commuteDays || 0;
+      }
+      saveState();
+      renderAll();
+      alert('백업 파일을 불러왔습니다.');
+    } catch(err) {
+      alert('파일을 읽을 수 없습니다: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  input.value = '';
+}
+
+function resetMonthData() {
+  if (!confirm(`${state.month} 데이터를 모두 삭제하시겠습니까? 설정은 유지됩니다.`)) return;
+  state.fuelReceipts = [];
+  state.tollReceipts = [];
+  state.transitReceipts = [];
+  state.trips = [];
+  state.commuteDays = 0;
+  saveState();
+  renderAll();
+}
+
+// ==================== INIT UI ====================
+function initSettingsUI() {
+  const s = state.settings;
+  document.getElementById('s_name').value = s.name || '';
+  document.getElementById('s_dept').value = s.department || '';
+  document.getElementById('s_homeAddr').value = s.homeAddress || '';
+  document.getElementById('s_homeShort').value = s.homeShortAddress || '';
+  document.getElementById('s_siteAddr').value = s.siteAddress || '';
+  document.getElementById('s_siteShort').value = s.siteShortAddress || '';
+  document.getElementById('s_dist').value = s.oneWayDistance || '';
+  document.getElementById('s_apiKey').value = s.apiKey || '';
+
+  setWorkerType(s.workerType || 'field');
+  setVehicleType(s.vehicleType || 'car');
+  setFuelType(s.fuelType || 'fuel');
+  updateDistInfo();
+  updateEfficiencyInfo();
+}
+
+function renderAll() {
+  initSettingsUI();
+  renderFuelList();
+  renderTollList();
+  renderTransitList();
+  renderTripList();
+  renderSummary();
+  renderExportPreview();
+}
+
+// ==================== STARTUP ====================
+window.addEventListener('load', () => {
+  const today = new Date();
+  state.month = today.toISOString().slice(0, 7);
+  document.getElementById('monthPicker').value = state.month;
+
+  loadState();
+  renderAll();
+});
+</script>
+</body>
+</html>
