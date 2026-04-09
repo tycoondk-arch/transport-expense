@@ -1647,7 +1647,6 @@ function exportToExcel() {
   const ws3 = XLSX.utils.aoa_to_sheet(dataRows);
 
   // Format date cells
-  const dateFormat = 'YYYY-MM-DD';
   if (ws3['!ref']) {
     for (const addr in ws3) {
       if (addr[0] === '!') continue;
@@ -1662,12 +1661,8 @@ function exportToExcel() {
   XLSX.utils.book_append_sheet(wb, ws3, '회차별신청및증빙');
 
   // ===== Sheet: 자택출근자 =====
-  const homeFuelRows = state.fuelReceipts.sort((a, b) => a.date.localeCompare(b.date));
-  const homeTotalQty = getTotalQty();
-  const homeTotalAmt = getTotalFuelAmt();
-  const homeAvgPrice = Math.round(getAvgPrice());
-  const homeComputed = calcTrips();
-  const homeTrip = homeComputed[0];
+  // fuelRows, computed, totalQty, totalFuelAmt, avgPrice 재사용
+  const homeTrip = computed[0];
   const homeTolls = homeTrip ? state.tollReceipts.filter(t => t.tripId === homeTrip.id) : [];
   const homeTollFee = homeTolls.reduce((s, t) => s + t.amount, 0);
   const homeCalc = homeTrip ? Math.round(homeTrip.calculated) : 0;
@@ -1680,18 +1675,18 @@ function exportToExcel() {
     [,'유종선택', FUEL_TYPE_LABEL[state.settings.fuelType] || '유류', effVal, ,'※ 유종별 환산 연비',,,,,'선택'],
     [,'주유일','주유/충전량','주유금액', ,'유종','환산연비',,,,,'입력'],
   ];
-  homeFuelRows.forEach((r, i) => {
+  fuelRows.forEach((r, i) => {
     if (i === 0) homeRows.push([, new Date(r.date), r.quantity, r.amount,,'유류', FUEL_EFFICIENCY.fuel,,,,,'자동']);
     else homeRows.push([, new Date(r.date), r.quantity, r.amount]);
   });
-  if (homeFuelRows.length === 0) {
+  if (fuelRows.length === 0) {
     homeRows.push([,,,,,'유류', FUEL_EFFICIENCY.fuel,,,,,'자동']);
     homeRows.push([,,,,,'전기', FUEL_EFFICIENCY.electric]);
     homeRows.push([,,,,,'수소', FUEL_EFFICIENCY.hydrogen]);
   }
   while (homeRows.length < 16) homeRows.push([]);
-  homeRows.push([,'주유합계', homeTotalQty, homeTotalAmt]);
-  homeRows.push([,'평균단가',, homeAvgPrice]);
+  homeRows.push([,'주유합계', totalQty, totalFuelAmt]);
+  homeRows.push([,'평균단가',, avgPrice]);
   homeRows.push([]);
   homeRows.push([,'■ 회차별 정산 (e-HR 국내교통비 신청 시스템 입력 항목)']);
   homeRows.push([]);
