@@ -1469,6 +1469,16 @@ function renderExportPreview() {
   else if (state.settings.vehicleType === 'car')
     checks.push({ ok: true, label: `통행료 영수증 ${state.tollReceipts.length}건` });
 
+  if (state.settings.vehicleType === 'transit') {
+    const express = state.transitReceipts.filter(r => r.type === 'express');
+    const local = state.transitReceipts.filter(r => r.type === 'local');
+    if (state.transitReceipts.length === 0)
+      checks.push({ ok: false, label: '대중교통 영수증 없음' });
+    else {
+      checks.push({ ok: true, label: `대중교통 영수증 ${state.transitReceipts.length}건 (시외 ${express.length}, 시내 ${local.length})` });
+    }
+  }
+
   let cl = '';
   checks.forEach(c => {
     const icon = c.ok === true ? '✅' : c.ok === false ? '❌' : '⚪';
