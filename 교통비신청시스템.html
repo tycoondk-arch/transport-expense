@@ -1245,7 +1245,7 @@ function renderTransitList() {
     const tripLabel = tripIdx >= 0 ? `${tripIdx + 1}회차` : '미분류';
     const typeLabel = r.type === 'local' ? '시내' : '시외';
     const thumb = r.imageData
-      ? `<img class="receipt-thumb" src="${r.imageData}" alt="영수증">`
+      ? `<img class="receipt-thumb" src="${r.imageData}" alt="영수증" onclick="viewImage('${r.id}','transit')">`
       : `<div class="receipt-thumb-placeholder" style="width:40px;height:40px;font-size:18px;">🚌</div>`;
     html += `
     <div class="receipt-item" style="padding:10px;">
@@ -1482,6 +1482,7 @@ function viewImage(id, type) {
   let receipt = null;
   if (type === 'fuel') receipt = state.fuelReceipts.find(r => r.id === id);
   else if (type === 'toll') receipt = state.tollReceipts.find(r => r.id === id);
+  else if (type === 'transit') receipt = state.transitReceipts.find(r => r.id === id);
   if (!receipt || !receipt.imageData) return;
   document.getElementById('imgViewerSrc').src = receipt.imageData;
   document.getElementById('imgViewer').classList.add('show');
