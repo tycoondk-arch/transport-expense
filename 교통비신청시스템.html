@@ -1407,10 +1407,22 @@ function renderSummary() {
     <div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">회차 데이터를 입력하면 표시됩니다</div></div>`;
   } else {
     computed.forEach((t, i) => {
+      const details = [];
+      if (state.settings.vehicleType === 'car') {
+        if (t.fuelCost > 0) details.push(`주유비 ${fmt(t.fuelCost)}원`);
+        if (t.tollFee > 0) details.push(`통행료 ${fmt(t.tollFee)}원`);
+      } else {
+        if (t.transitExpress > 0) details.push(`시외 ${fmt(t.transitExpress)}원`);
+        if (t.transitLocal > 0) details.push(`시내 ${fmt(t.transitLocal)}원`);
+      }
+      const detailStr = details.length ? `<div style="font-size:12px;color:#888;margin-top:2px;">${details.join(' · ')}</div>` : '';
       html += `
-      <div class="summary-row">
-        <span>${i + 1}회차 (${fmtDate(t.startDate)} ~ ${fmtDate(t.endDate)})</span>
-        <span class="summary-row ${t.adjusted ? 'over' : ''}">${fmt(t.requested)}원</span>
+      <div class="summary-row" style="flex-direction:column;align-items:flex-start;gap:0;">
+        <div style="display:flex;justify-content:space-between;width:100%;">
+          <span>${i + 1}회차 (${fmtDate(t.startDate)} ~ ${fmtDate(t.endDate)})</span>
+          <span style="${t.adjusted ? 'color:#d93025;font-weight:700;' : 'font-weight:600;'}">${fmt(t.requested)}원${t.adjusted ? ' ⚠️' : ''}</span>
+        </div>
+        ${detailStr}
       </div>`;
     });
     html += `<div class="summary-row grand"><span>총 신청금액</span><span>${fmt(totalReq)}원</span></div>`;
