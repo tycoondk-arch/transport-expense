@@ -6,259 +6,417 @@
 <title>교통비 신청 시스템</title>
 <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif; background: #f0f4ff; color: #222; min-height: 100vh; }
+/* =====================================================
+   SK 교통비 신청 시스템 | Design: SK Brand + Apple iOS
+   ===================================================== */
+:root {
+  --sk-red:      #E8390E;
+  --sk-orange:   #FF6B00;
+  --sk-grad:     linear-gradient(135deg, #E8390E 0%, #FF7900 60%, #FFA000 100%);
+  --blue:        #007AFF;
+  --green:       #34C759;
+  --red:         #FF3B30;
+  --orange:      #FF9500;
+  --bg:          #F2F2F7;
+  --card:        #FFFFFF;
+  --label:       #1C1C1E;
+  --label2:      #3C3C43;
+  --label3:      #8E8E93;
+  --label4:      #AEAEB2;
+  --fill1:       rgba(120,120,128,.20);
+  --fill2:       rgba(120,120,128,.16);
+  --fill3:       rgba(120,120,128,.12);
+  --fill4:       rgba(120,120,128,.07);
+  --sep:         rgba(60,60,67,.13);
+  --r-sm:        8px;
+  --r-md:        12px;
+  --r-lg:        16px;
+  --r-xl:        22px;
+  --shadow:      0 2px 12px rgba(0,0,0,.08), 0 0 1px rgba(0,0,0,.04);
+  --nav-h:       56px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-tap-highlight-color: transparent; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+  background: var(--bg);
+  color: var(--label);
+  min-height: 100vh;
+  min-height: 100dvh;
+  overscroll-behavior: none;
+}
 
 /* ===== HEADER ===== */
 .app-header {
-  background: linear-gradient(135deg, #1a73e8, #0d47a1);
+  background: var(--sk-grad);
   color: #fff;
-  padding: 14px 16px;
-  display: flex; align-items: center; justify-content: space-between;
-  position: sticky; top: 0; z-index: 200;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  padding: 0 18px;
+  padding-top: env(safe-area-inset-top);
+  height: calc(62px + env(safe-area-inset-top));
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 1px 0 rgba(0,0,0,.12), 0 6px 24px rgba(232,57,14,.28);
 }
-.app-header h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; }
-.month-wrap { display: flex; align-items: center; gap: 6px; }
+.header-brand { display: flex; align-items: center; gap: 10px; }
+.sk-logo {
+  width: 38px; height: 38px;
+  background: #fff;
+  border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 900; color: var(--sk-red);
+  letter-spacing: -1.5px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.18);
+  flex-shrink: 0;
+}
+.header-titles { line-height: 1.25; }
+.header-main { font-size: 17px; font-weight: 700; letter-spacing: -.5px; }
+.header-sub  { font-size: 11px; opacity: .72; letter-spacing: .3px; }
 .month-wrap input[type="month"] {
-  background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);
-  color: #fff; font-size: 14px; padding: 5px 8px; border-radius: 8px; outline: none;
+  background: rgba(255,255,255,.18);
+  border: 1px solid rgba(255,255,255,.32);
+  color: #fff;
+  font-size: 14px; font-weight: 600;
+  padding: 7px 11px;
+  border-radius: var(--r-md);
+  outline: none;
+  font-family: inherit;
+  backdrop-filter: blur(8px);
 }
-.month-wrap input[type="month"]::-webkit-calendar-picker-indicator { filter: invert(1); }
+.month-wrap input[type="month"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: .85; }
 
-/* ===== TABS ===== */
-.tabs {
-  display: flex; background: #fff;
-  border-bottom: 2px solid #e0e0e0;
-  overflow-x: auto; position: sticky; top: 56px; z-index: 199;
-  scrollbar-width: none;
+/* ===== BOTTOM NAV ===== */
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: calc(var(--nav-h) + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+  background: rgba(248,248,248,.94);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-top: .5px solid var(--sep);
+  display: flex;
+  z-index: 200;
 }
-.tabs::-webkit-scrollbar { display: none; }
 .tab-btn {
-  flex: none; min-width: 72px; padding: 11px 10px;
-  border: none; background: none; font-size: 13px; color: #888;
-  cursor: pointer; white-space: nowrap;
-  border-bottom: 3px solid transparent; margin-bottom: -2px;
-  font-weight: 500; transition: all .15s;
+  flex: 1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 3px;
+  height: var(--nav-h);
+  border: none; background: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity .12s;
+  padding: 0 2px;
 }
-.tab-btn.active { color: #1a73e8; border-bottom-color: #1a73e8; font-weight: 700; }
+.tab-btn:active { opacity: .55; }
+.tab-btn .nav-icon { font-size: 23px; line-height: 1; transition: transform .2s cubic-bezier(.34,1.56,.64,1); }
+.tab-btn .nav-label { font-size: 10px; font-weight: 500; color: var(--label3); letter-spacing: -.2px; }
+.tab-btn.active .nav-icon { transform: scale(1.12); }
+.tab-btn.active .nav-label { color: var(--sk-red); font-weight: 700; }
 
 /* ===== CONTENT ===== */
-.tab-content { display: none; padding: 16px; max-width: 640px; margin: 0 auto; }
+.tab-content {
+  display: none;
+  padding: 16px;
+  padding-bottom: calc(var(--nav-h) + 20px + env(safe-area-inset-bottom));
+  max-width: 640px;
+  margin: 0 auto;
+}
 .tab-content.active { display: block; }
 
 /* ===== CARDS ===== */
 .card {
-  background: #fff; border-radius: 14px; padding: 16px;
-  margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  background: var(--card);
+  border-radius: var(--r-xl);
+  padding: 18px 16px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
 }
 .card-title {
-  font-size: 14px; font-weight: 700; color: #1a73e8;
-  margin-bottom: 14px; display: flex; align-items: center; gap: 6px;
+  font-size: 16px; font-weight: 700;
+  color: var(--label);
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px;
 }
 
 /* ===== FORMS ===== */
-.form-group { margin-bottom: 12px; }
-.form-group label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; font-weight: 500; }
-.form-group input, .form-group select, .form-group textarea {
-  width: 100%; padding: 10px 12px;
-  border: 1.5px solid #e0e0e0; border-radius: 9px;
-  font-size: 14px; outline: none; transition: border-color .2s;
+.form-group { margin-bottom: 14px; }
+.form-group:last-child { margin-bottom: 0; }
+.form-group label { display: block; font-size: 13px; color: var(--label3); margin-bottom: 7px; font-weight: 500; }
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%; padding: 13px 14px;
+  background: var(--fill4);
+  border: 1.5px solid transparent;
+  border-radius: var(--r-md);
+  font-size: 16px; /* Prevents iOS auto-zoom */
+  color: var(--label);
+  outline: none;
+  transition: background .15s, border-color .15s, box-shadow .15s;
   font-family: inherit;
+  -webkit-appearance: none; appearance: none;
 }
-.form-group input:focus, .form-group select:focus { border-color: #1a73e8; }
-.input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.form-group input:focus,
+.form-group select:focus {
+  background: var(--card);
+  border-color: var(--sk-red);
+  box-shadow: 0 0 0 3.5px rgba(232,57,14,.14);
+}
+.form-group select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238E8E93' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-color: var(--fill4);
+  padding-right: 36px;
+}
+.input-row  { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .input-row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
 
-.radio-group { display: flex; gap: 8px; }
-.radio-opt {
-  flex: 1; padding: 10px 8px; border: 2px solid #e0e0e0;
-  border-radius: 9px; text-align: center; cursor: pointer;
-  font-size: 13px; font-weight: 500; color: #666; transition: all .15s;
-  user-select: none;
+/* ===== SEGMENTED CONTROL ===== */
+.radio-group {
+  display: flex;
+  background: var(--fill3);
+  border-radius: var(--r-md);
+  padding: 3px;
+  gap: 2px;
 }
-.radio-opt.sel { border-color: #1a73e8; background: #e8f0fe; color: #1a73e8; }
+.radio-opt {
+  flex: 1; padding: 9px 6px;
+  border-radius: 9px;
+  text-align: center; cursor: pointer;
+  font-size: 14px; font-weight: 500;
+  color: var(--label3);
+  transition: all .2s cubic-bezier(.34,1.3,.64,1);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.radio-opt.sel {
+  background: var(--card);
+  color: var(--label);
+  font-weight: 600;
+  box-shadow: 0 1px 6px rgba(0,0,0,.13), 0 0 1px rgba(0,0,0,.07);
+}
 
 /* ===== BUTTONS ===== */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-  padding: 10px 16px; border: none; border-radius: 9px;
-  font-size: 14px; font-weight: 600; cursor: pointer; transition: all .15s;
+  padding: 13px 18px;
+  border: none; border-radius: var(--r-md);
+  font-size: 15px; font-weight: 600;
+  cursor: pointer; transition: all .14s;
   font-family: inherit;
+  min-height: 48px;
+  -webkit-tap-highlight-color: transparent;
 }
-.btn-primary { background: #1a73e8; color: #fff; }
-.btn-primary:hover { background: #1557b0; }
-.btn-success { background: #0f9d58; color: #fff; }
-.btn-success:hover { background: #0b8043; }
-.btn-danger { background: #d93025; color: #fff; }
-.btn-danger:hover { background: #b71c1c; }
-.btn-outline { background: none; border: 1.5px solid #1a73e8; color: #1a73e8; }
-.btn-outline:hover { background: #e8f0fe; }
-.btn-gray { background: #f5f5f5; color: #333; }
-.btn-gray:hover { background: #e0e0e0; }
-.btn-sm { padding: 6px 10px; font-size: 12px; }
+.btn:active { transform: scale(0.96); }
+.btn-primary { background: var(--sk-red); color: #fff; }
+.btn-primary:active { background: #c42f0a; }
+.btn-success { background: var(--green); color: #fff; }
+.btn-success:active { background: #29a849; }
+.btn-danger  { background: var(--red);  color: #fff; }
+.btn-danger:active  { background: #d4271e; }
+.btn-outline { background: rgba(232,57,14,.07); border: 1.5px solid rgba(232,57,14,.28); color: var(--sk-red); }
+.btn-outline:active { background: rgba(232,57,14,.14); }
+.btn-gray { background: var(--fill3); color: var(--label2); }
+.btn-gray:active { background: var(--fill2); }
+.btn-sm  { padding: 8px 12px; font-size: 13px; min-height: 36px; }
 .btn-full { width: 100%; }
 
-/* ===== CAPTURE ===== */
+/* ===== CAPTURE ZONE ===== */
 .capture-zone {
-  border: 2.5px dashed #1a73e8; border-radius: 14px; padding: 28px 16px;
-  text-align: center; cursor: pointer; background: #f8f9ff;
-  transition: background .15s;
+  border: 2px dashed rgba(232,57,14,.28);
+  border-radius: var(--r-xl);
+  padding: 34px 20px 28px;
+  text-align: center; cursor: pointer;
+  background: linear-gradient(160deg, rgba(232,57,14,.04) 0%, rgba(255,107,0,.07) 100%);
+  transition: all .18s;
+  -webkit-tap-highlight-color: transparent;
 }
-.capture-zone:hover { background: #e8f0fe; }
-.capture-icon { font-size: 44px; margin-bottom: 8px; }
-.capture-label { color: #555; font-size: 14px; margin-bottom: 6px; font-weight: 500; }
-.capture-sub { color: #999; font-size: 12px; }
+.capture-zone:active { background: rgba(232,57,14,.12); transform: scale(.99); }
+.capture-icon { font-size: 54px; display: block; margin-bottom: 10px; }
+.capture-label { font-size: 17px; font-weight: 700; color: var(--sk-red); margin-bottom: 5px; }
+.capture-sub   { font-size: 13px; color: var(--label3); }
 input[type="file"] { display: none; }
 
-/* ===== RECEIPT LIST ===== */
+/* ===== RECEIPT ITEMS ===== */
 .receipt-item {
   display: flex; align-items: center; gap: 12px;
-  padding: 12px; border: 1.5px solid #e8f0fe;
-  border-radius: 10px; margin-bottom: 8px; background: #fafcff;
+  padding: 12px 0;
+  border-bottom: .5px solid var(--sep);
 }
+.receipt-item:last-child { border-bottom: none; }
 .receipt-thumb {
-  width: 52px; height: 52px; border-radius: 8px; object-fit: cover;
-  background: #e0e0e0; flex-shrink: 0;
-  cursor: pointer;
+  width: 58px; height: 58px; border-radius: var(--r-md);
+  object-fit: cover; background: var(--fill3); flex-shrink: 0; cursor: pointer;
 }
 .receipt-thumb-placeholder {
-  width: 52px; height: 52px; border-radius: 8px;
-  background: #e8f0fe; flex-shrink: 0;
+  width: 58px; height: 58px; border-radius: var(--r-md);
+  background: linear-gradient(135deg, rgba(232,57,14,.09), rgba(255,107,0,.13));
+  flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
-  font-size: 22px;
+  font-size: 26px;
 }
 .receipt-info { flex: 1; min-width: 0; }
-.receipt-date { font-size: 12px; color: #999; margin-bottom: 2px; }
-.receipt-amount { font-size: 16px; font-weight: 700; color: #222; }
-.receipt-qty { font-size: 12px; color: #666; margin-top: 2px; }
-.receipt-actions { display: flex; gap: 6px; }
+.receipt-date   { font-size: 12px; color: var(--label3); margin-bottom: 3px; }
+.receipt-amount { font-size: 18px; font-weight: 700; color: var(--label); letter-spacing: -.4px; }
+.receipt-qty    { font-size: 12px; color: var(--label3); margin-top: 2px; }
+.receipt-actions { display: flex; gap: 6px; flex-shrink: 0; }
 
 /* ===== TRIP ITEMS ===== */
 .trip-item {
-  border: 1.5px solid #e0e0e0; border-radius: 12px;
-  padding: 14px; margin-bottom: 12px; background: #fff;
+  background: var(--card);
+  border-radius: var(--r-xl);
+  padding: 16px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
 }
-.trip-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.trip-round { font-size: 15px; font-weight: 700; color: #1a73e8; }
-.trip-calc {
-  background: #f8f9ff; border-radius: 8px; padding: 10px 12px; margin-top: 10px;
+.trip-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.trip-round {
+  font-size: 16px; font-weight: 700; color: var(--label);
+  display: flex; align-items: center; gap: 8px;
 }
+.trip-badge {
+  background: var(--sk-grad);
+  color: #fff; font-size: 11px; font-weight: 700;
+  padding: 3px 9px; border-radius: 20px; letter-spacing: .2px;
+}
+.trip-calc { background: var(--fill4); border-radius: var(--r-md); padding: 12px 14px; margin-top: 10px; }
 .calc-row { display: flex; justify-content: space-between; font-size: 13px; padding: 3px 0; }
-.calc-row .lbl { color: #777; }
+.calc-row .lbl { color: var(--label3); }
 .calc-row .val { font-weight: 600; }
-.calc-row.total-row { border-top: 1px solid #e0e0e0; margin-top: 4px; padding-top: 6px; font-size: 14px; color: #1a73e8; font-weight: 700; }
-.calc-row.req-row { color: #0f9d58; font-weight: 700; }
-.calc-row.warn-row { color: #d93025; font-weight: 700; }
+.calc-row.total-row { border-top: .5px solid var(--sep); margin-top: 6px; padding-top: 8px; font-size: 15px; color: var(--sk-red); font-weight: 700; }
+.calc-row.req-row  { color: var(--green); font-weight: 700; }
+.calc-row.warn-row { color: var(--red);   font-weight: 700; }
 
 /* ===== SUMMARY ===== */
-.summary-row { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+.summary-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: .5px solid var(--sep); font-size: 14px; }
 .summary-row:last-child { border-bottom: none; }
 .summary-row.subtotal { font-weight: 600; }
-.summary-row.grand { font-size: 16px; font-weight: 700; color: #1a73e8; border-top: 2px solid #1a73e8; padding-top: 10px; }
-.summary-row.over { color: #d93025; }
+.summary-row.grand { font-size: 18px; font-weight: 700; color: var(--sk-red); border-top: 2px solid var(--sk-red); padding-top: 12px; margin-top: 4px; }
+.summary-row.over { color: var(--red); }
 
 .limit-bar { margin-top: 10px; }
-.limit-bar-track { height: 10px; background: #e0e0e0; border-radius: 5px; overflow: hidden; margin-top: 6px; }
-.limit-bar-fill { height: 100%; border-radius: 5px; transition: width .4s; background: #1a73e8; }
-.limit-bar-fill.over { background: #d93025; }
+.limit-bar-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--label3); margin-bottom: 7px; }
+.limit-bar-track { height: 8px; background: var(--fill3); border-radius: 4px; overflow: hidden; }
+.limit-bar-fill { height: 100%; border-radius: 4px; transition: width .5s cubic-bezier(.34,1.2,.64,1); background: linear-gradient(90deg, var(--sk-red), var(--sk-orange)); }
+.limit-bar-fill.over { background: var(--red); }
 
-/* ===== OCR LOADING ===== */
+/* ===== OCR OVERLAY ===== */
 .ocr-overlay {
-  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.55); backdrop-filter: blur(4px);
   z-index: 500; align-items: center; justify-content: center; flex-direction: column;
 }
 .ocr-overlay.show { display: flex; }
-.ocr-box { background: #fff; border-radius: 16px; padding: 32px 40px; text-align: center; }
-.spinner {
-  width: 44px; height: 44px; border: 4px solid #e0e0e0;
-  border-top-color: #1a73e8; border-radius: 50%;
-  animation: spin .8s linear infinite; margin: 0 auto 16px;
-}
+.ocr-box { background: var(--card); border-radius: var(--r-xl); padding: 36px 48px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,.3); }
+.spinner { width: 44px; height: 44px; border: 3px solid var(--fill3); border-top-color: var(--sk-red); border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 16px; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ===== ALERTS ===== */
-.alert {
-  padding: 11px 14px; border-radius: 9px; font-size: 13px;
-  margin-bottom: 12px; line-height: 1.5;
-}
-.alert-info { background: #e8f0fe; color: #1557b0; border-left: 3px solid #1a73e8; }
-.alert-warn { background: #fff8e1; color: #e65100; border-left: 3px solid #fb8c00; }
-.alert-danger { background: #fde8e8; color: #b71c1c; border-left: 3px solid #d93025; }
-.alert-success { background: #e6f4ea; color: #1b5e20; border-left: 3px solid #0f9d58; }
+.alert { padding: 12px 14px; border-radius: var(--r-md); font-size: 13px; margin-bottom: 14px; line-height: 1.55; }
+.alert-info    { background: rgba(0,122,255,.08);   color: #0055CC; border-left: 3px solid var(--blue); }
+.alert-warn    { background: rgba(255,149,0,.10);   color: #C45500; border-left: 3px solid var(--orange); }
+.alert-danger  { background: rgba(255,59,48,.08);   color: #CC1A10; border-left: 3px solid var(--red); }
+.alert-success { background: rgba(52,199,89,.09);   color: #1A7A32; border-left: 3px solid var(--green); }
 
 /* ===== ADD BUTTON ===== */
 .add-btn {
   display: flex; align-items: center; justify-content: center; gap: 8px;
-  width: 100%; padding: 13px; border: 2px dashed #1a73e8;
-  border-radius: 10px; background: none; color: #1a73e8;
-  font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 4px;
-  font-family: inherit;
+  width: 100%; padding: 14px;
+  border: 2px dashed rgba(232,57,14,.26);
+  border-radius: var(--r-lg);
+  background: rgba(232,57,14,.04);
+  color: var(--sk-red); font-size: 15px; font-weight: 600;
+  cursor: pointer; margin-top: 6px;
+  font-family: inherit; min-height: 52px;
+  -webkit-tap-highlight-color: transparent; transition: background .14s;
 }
-.add-btn:hover { background: #e8f0fe; }
+.add-btn:active { background: rgba(232,57,14,.11); }
 
-/* ===== BIG EXPORT ===== */
+/* ===== EXPORT BUTTON ===== */
 .export-btn {
   display: flex; align-items: center; justify-content: center; gap: 10px;
-  width: 100%; padding: 20px;
-  background: linear-gradient(135deg, #0f9d58, #0b8043);
-  color: #fff; border: none; border-radius: 14px;
-  font-size: 18px; font-weight: 700; cursor: pointer;
-  box-shadow: 0 4px 12px rgba(15,157,88,0.35);
-  margin-top: 8px; font-family: inherit;
+  width: 100%; padding: 19px;
+  background: var(--sk-grad);
+  color: #fff; border: none; border-radius: var(--r-xl);
+  font-size: 18px; font-weight: 700; letter-spacing: -.3px;
+  cursor: pointer;
+  box-shadow: 0 6px 22px rgba(232,57,14,.36), 0 2px 6px rgba(0,0,0,.14);
+  margin-top: 8px; font-family: inherit; min-height: 58px;
+  -webkit-tap-highlight-color: transparent; transition: all .14s;
 }
-.export-btn:hover { background: linear-gradient(135deg, #0b8043, #087434); }
+.export-btn:active { transform: scale(.98); opacity: .88; }
 
-/* ===== MODAL ===== */
+/* ===== MODAL (bottom sheet) ===== */
 .modal-overlay {
-  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
-  z-index: 300; align-items: center; justify-content: center; padding: 16px;
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.45); backdrop-filter: blur(2px);
+  z-index: 300; align-items: flex-end; justify-content: center;
 }
 .modal-overlay.show { display: flex; }
 .modal-box {
-  background: #fff; border-radius: 16px; padding: 20px;
-  width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto;
+  background: var(--card);
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+  padding: 0 20px 20px;
+  padding-bottom: calc(20px + env(safe-area-inset-bottom));
+  width: 100%; max-width: 640px; max-height: 92vh;
+  overflow-y: auto; -webkit-overflow-scrolling: touch;
+  animation: slideUp .3s cubic-bezier(.34,1.15,.64,1);
 }
-.modal-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; color: #222; }
-.modal-footer { display: flex; gap: 10px; margin-top: 16px; }
+@keyframes slideUp { from { transform: translateY(110%); } to { transform: translateY(0); } }
+.modal-handle { width: 38px; height: 4px; background: var(--fill2); border-radius: 2px; margin: 14px auto 18px; }
+.modal-title  { font-size: 18px; font-weight: 700; margin-bottom: 20px; color: var(--label); text-align: center; }
+.modal-footer { display: flex; gap: 10px; margin-top: 20px; }
 .modal-footer .btn { flex: 1; }
 
 /* ===== IMAGE VIEWER ===== */
 .img-viewer-overlay {
-  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,.92);
   z-index: 400; align-items: center; justify-content: center;
 }
 .img-viewer-overlay.show { display: flex; }
-.img-viewer-overlay img { max-width: 95vw; max-height: 90vh; border-radius: 8px; }
+.img-viewer-overlay img { max-width: 95vw; max-height: 90vh; border-radius: var(--r-lg); object-fit: contain; }
 .img-viewer-close {
-  position: fixed; top: 16px; right: 16px; background: rgba(255,255,255,0.2);
-  border: none; color: #fff; font-size: 28px; cursor: pointer; border-radius: 50%;
-  width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+  position: fixed; top: calc(20px + env(safe-area-inset-top)); right: 20px;
+  background: rgba(255,255,255,.14); backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,.2);
+  color: #fff; font-size: 20px; font-weight: 300;
+  cursor: pointer; border-radius: 50%;
+  width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
 }
 
-/* ===== STAT ROW ===== */
-.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-.stat-box { background: #f8f9ff; border-radius: 10px; padding: 12px; text-align: center; }
-.stat-label { font-size: 11px; color: #888; margin-bottom: 4px; }
-.stat-value { font-size: 18px; font-weight: 700; color: #1a73e8; }
-.stat-unit { font-size: 12px; color: #888; font-weight: 400; }
+/* ===== STATS ===== */
+.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 4px; }
+.stat-box { background: var(--fill4); border-radius: var(--r-md); padding: 14px 12px; text-align: center; }
+.stat-label { font-size: 11px; color: var(--label3); margin-bottom: 6px; font-weight: 500; }
+.stat-value { font-size: 20px; font-weight: 700; color: var(--label); letter-spacing: -.5px; }
+.stat-value.accent { color: var(--sk-red); }
+.stat-unit  { font-size: 12px; color: var(--label3); font-weight: 400; margin-left: 2px; }
 
-/* ===== DIVIDER ===== */
-.divider { height: 1px; background: #f0f0f0; margin: 12px 0; }
-
-/* Section label */
-.sec-label { font-size: 12px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; margin-top: 4px; }
-
-/* Empty state */
-.empty-state { text-align: center; padding: 32px 16px; color: #bbb; }
-.empty-icon { font-size: 48px; margin-bottom: 10px; }
-.empty-text { font-size: 14px; }
-
-/* number input right-aligned */
+/* ===== MISC ===== */
+.divider  { height: .5px; background: var(--sep); margin: 12px 0; }
+.sec-label { font-size: 12px; font-weight: 600; color: var(--label3); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; margin-top: 4px; }
+.empty-state { text-align: center; padding: 44px 20px; color: var(--label4); }
+.empty-icon  { font-size: 54px; margin-bottom: 12px; opacity: .6; }
+.empty-text  { font-size: 15px; font-weight: 500; }
 input[type="number"] { text-align: right; }
+.adjusted { color: var(--red); }
+#naverRouteLink { background: linear-gradient(135deg,#03C75A,#00A847) !important; box-shadow: 0 4px 14px rgba(3,199,90,.3) !important; border-radius: var(--r-lg) !important; }
+.export-summary { background: var(--fill4); border-radius: var(--r-md); padding: 14px; font-size: 14px; color: var(--label2); margin-bottom: 12px; line-height: 1.8; }
 
-/* Highlight adjusted cell */
-.adjusted { color: #d93025; }
+@media (min-width: 640px) {
+  .bottom-nav { justify-content: center; }
+  .tab-btn { max-width: 110px; }
+  .modal-box { border-radius: var(--r-xl); margin-bottom: 40px; }
+  .modal-overlay { align-items: center; }
+}
 </style>
 </head>
 <body>
@@ -267,8 +425,8 @@ input[type="number"] { text-align: right; }
 <div class="ocr-overlay" id="ocrOverlay">
   <div class="ocr-box">
     <div class="spinner"></div>
-    <div style="font-size:15px;font-weight:600;color:#333;">영수증 분석 중...</div>
-    <div style="font-size:13px;color:#888;margin-top:6px;" id="ocrStatus">AI가 영수증을 읽고 있습니다</div>
+    <div style="font-size:16px;font-weight:700;color:var(--label);">영수증 분석 중...</div>
+    <div style="font-size:13px;color:var(--label3);margin-top:6px;" id="ocrStatus">AI가 영수증을 읽고 있습니다</div>
   </div>
 </div>
 
@@ -281,6 +439,7 @@ input[type="number"] { text-align: right; }
 <!-- Fuel Receipt Modal -->
 <div class="modal-overlay" id="fuelModal">
   <div class="modal-box">
+    <div class="modal-handle"></div>
     <div class="modal-title">⛽ 주유/충전 영수증 입력</div>
     <div id="fuelModalPreview"></div>
     <div class="form-group">
@@ -307,6 +466,7 @@ input[type="number"] { text-align: right; }
 <!-- Transit Receipt Modal -->
 <div class="modal-overlay" id="transitModal">
   <div class="modal-box">
+    <div class="modal-handle"></div>
     <div class="modal-title">🚌 대중교통 영수증 입력</div>
     <div id="transitModalPreview"></div>
     <div class="form-group">
@@ -338,6 +498,7 @@ input[type="number"] { text-align: right; }
 <!-- Naver Route Modal -->
 <div class="modal-overlay" id="naverRouteModal">
   <div class="modal-box">
+    <div class="modal-handle"></div>
     <div class="modal-title">🗺️ 네이버 지도 길찾기</div>
     <div class="alert alert-info" style="margin-bottom:12px;">
       아래 버튼으로 네이버 지도를 열어 <strong>첫 번째 추천 경로의 편도 거리</strong>를 확인 후 입력하세요.
@@ -363,6 +524,7 @@ input[type="number"] { text-align: right; }
 <!-- Toll Receipt Modal -->
 <div class="modal-overlay" id="tollModal">
   <div class="modal-box">
+    <div class="modal-handle"></div>
     <div class="modal-title">🛣️ 통행료 영수증 입력</div>
     <div id="tollModalPreview"></div>
     <div class="form-group">
@@ -385,22 +547,46 @@ input[type="number"] { text-align: right; }
 </div>
 
 <!-- App Header -->
-<div class="app-header">
-  <h1>🚗 교통비 신청 시스템</h1>
+<header class="app-header">
+  <div class="header-brand">
+    <div class="sk-logo">SK</div>
+    <div class="header-titles">
+      <div class="header-main">교통비 신청</div>
+      <div class="header-sub">Transportation Expense</div>
+    </div>
+  </div>
   <div class="month-wrap">
     <input type="month" id="monthPicker" onchange="changeMonth(this.value)">
   </div>
-</div>
+</header>
 
-<!-- Tabs -->
-<div class="tabs">
-  <button class="tab-btn active" onclick="showTab('settings')">⚙️ 설정</button>
-  <button class="tab-btn" onclick="showTab('fuel')">⛽ 주유/충전</button>
-  <button class="tab-btn" onclick="showTab('toll')">🛣️ 통행료</button>
-  <button class="tab-btn" onclick="showTab('trips')">📅 회차신청</button>
-  <button class="tab-btn" onclick="showTab('summary')">📊 정산요약</button>
-  <button class="tab-btn" onclick="showTab('export')">📥 내보내기</button>
-</div>
+<!-- Bottom Navigation -->
+<nav class="bottom-nav">
+  <button class="tab-btn active" onclick="showTab('settings')">
+    <span class="nav-icon">⚙️</span>
+    <span class="nav-label">설정</span>
+  </button>
+  <button class="tab-btn" onclick="showTab('fuel')">
+    <span class="nav-icon">⛽</span>
+    <span class="nav-label">주유</span>
+  </button>
+  <button class="tab-btn" onclick="showTab('toll')">
+    <span class="nav-icon">🛣️</span>
+    <span class="nav-label">통행료</span>
+  </button>
+  <button class="tab-btn" onclick="showTab('trips')">
+    <span class="nav-icon">📅</span>
+    <span class="nav-label">회차</span>
+  </button>
+  <button class="tab-btn" onclick="showTab('summary')">
+    <span class="nav-icon">📊</span>
+    <span class="nav-label">정산</span>
+  </button>
+  <button class="tab-btn" onclick="showTab('export')">
+    <span class="nav-icon">📥</span>
+    <span class="nav-label">내보내기</span>
+  </button>
+</nav>
 
 <!-- ==================== SETTINGS TAB ==================== -->
 <div class="tab-content active" id="tab-settings">
@@ -511,16 +697,15 @@ input[type="number"] { text-align: right; }
       영수증을 촬영하거나 업로드하면 Claude AI가 자동으로 날짜/금액/주유량을 읽어옵니다.
     </div>
 
-    <div class="capture-zone" onclick="document.getElementById('fuelFileInput').click()">
-      <div class="capture-icon">📷</div>
-      <div class="capture-label">영수증 촬영 / 업로드</div>
-      <div class="capture-sub">카메라로 찍거나 파일을 선택하세요</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <button class="btn btn-primary btn-full" style="flex-direction:column;gap:8px;height:88px;border-radius:18px;font-size:14px;" onclick="document.getElementById('fuelFileInput').click()">
+        <span style="font-size:30px;">📷</span>촬영 / 업로드
+      </button>
+      <button class="btn btn-outline btn-full" style="flex-direction:column;gap:8px;height:88px;border-radius:18px;font-size:14px;" onclick="openFuelManual()">
+        <span style="font-size:30px;">✏️</span>수동 입력
+      </button>
     </div>
     <input type="file" id="fuelFileInput" accept="image/*" capture="environment" onchange="handleFuelImage(this)">
-
-    <button class="add-btn" onclick="openFuelManual()" style="margin-top:10px;">
-      ✏️ 수동 입력
-    </button>
   </div>
 
   <div class="card" id="fuelStatsCard" style="display:none;">
@@ -528,11 +713,11 @@ input[type="number"] { text-align: right; }
     <div class="stat-grid">
       <div class="stat-box">
         <div class="stat-label">총 주유/충전량</div>
-        <div class="stat-value" id="totalQty">0<span class="stat-unit" id="totalQtyUnit">L</span></div>
+        <div class="stat-value accent" id="totalQty">0<span class="stat-unit" id="totalQtyUnit">L</span></div>
       </div>
       <div class="stat-box">
         <div class="stat-label">총 주유금액</div>
-        <div class="stat-value" id="totalFuelAmt">0<span class="stat-unit">원</span></div>
+        <div class="stat-value accent" id="totalFuelAmt">0<span class="stat-unit">원</span></div>
       </div>
       <div class="stat-box">
         <div class="stat-label">평균단가</div>
@@ -560,15 +745,15 @@ input[type="number"] { text-align: right; }
     <div class="alert alert-info">
       영수증을 촬영하거나 업로드하면 AI가 자동으로 날짜/금액을 읽어옵니다.
     </div>
-    <div class="capture-zone" onclick="document.getElementById('tollFileInput').click()">
-      <div class="capture-icon">📷</div>
-      <div class="capture-label">통행료 영수증 촬영 / 업로드</div>
-      <div class="capture-sub">하이패스/톨게이트 영수증</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <button class="btn btn-primary btn-full" style="flex-direction:column;gap:8px;height:88px;border-radius:18px;font-size:14px;" onclick="document.getElementById('tollFileInput').click()">
+        <span style="font-size:30px;">📷</span>촬영 / 업로드
+      </button>
+      <button class="btn btn-outline btn-full" style="flex-direction:column;gap:8px;height:88px;border-radius:18px;font-size:14px;" onclick="openTollManual()">
+        <span style="font-size:30px;">✏️</span>수동 입력
+      </button>
     </div>
     <input type="file" id="tollFileInput" accept="image/*" capture="environment" onchange="handleTollImage(this)">
-    <button class="add-btn" onclick="openTollManual()" style="margin-top:10px;">
-      ✏️ 수동 입력
-    </button>
     <div id="tollList" style="margin-top:10px;"></div>
   </div>
 </div>
@@ -596,22 +781,22 @@ input[type="number"] { text-align: right; }
   <!-- Transit receipts (for transit vehicle type) -->
   <div class="card" id="transitCard" style="display:none;">
     <div class="card-title">🚌 대중교통 영수증</div>
-    <div class="capture-zone" onclick="document.getElementById('transitFileInput').click()">
-      <div class="capture-icon">📷</div>
-      <div class="capture-label">교통비 영수증 촬영 / 업로드</div>
-      <div class="capture-sub">버스/기차/택시 영수증</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <button class="btn btn-primary btn-full" style="flex-direction:column;gap:8px;height:88px;border-radius:18px;font-size:14px;" onclick="document.getElementById('transitFileInput').click()">
+        <span style="font-size:30px;">📷</span>촬영 / 업로드
+      </button>
+      <button class="btn btn-outline btn-full" style="flex-direction:column;gap:8px;height:88px;border-radius:18px;font-size:14px;" onclick="openTransitManual()">
+        <span style="font-size:30px;">✏️</span>수동 입력
+      </button>
     </div>
     <input type="file" id="transitFileInput" accept="image/*" capture="environment" onchange="handleTransitImage(this)">
-    <button class="add-btn" onclick="openTransitManual()" style="margin-top:10px;">
-      ✏️ 수동 입력
-    </button>
     <div id="transitList" style="margin-top:10px;"></div>
   </div>
 
   <div id="tripList"></div>
 
   <div id="fieldAddBtn">
-    <button class="add-btn" onclick="addTrip()">+ 회차 추가</button>
+    <button class="add-btn" onclick="addTrip()">＋ 회차 추가</button>
   </div>
 </div>
 
@@ -660,7 +845,7 @@ input[type="number"] { text-align: right; }
     </div>
     <div id="exportPreview" class="export-summary"></div>
     <button class="export-btn" onclick="exportToExcel()">
-      📊 엑셀 파일 다운로드
+      📊 엑셀 파일 내보내기
     </button>
   </div>
 
@@ -865,7 +1050,10 @@ function setVehicleType(type) {
   document.getElementById('vt_transit').classList.toggle('sel', type === 'transit');
   document.getElementById('fuelTypeSection').style.display = type === 'car' ? '' : 'none';
   document.getElementById('transitCard').style.display = type === 'transit' ? '' : 'none';
-  renderAll();
+  // renderAll() 대신 필요한 렌더만 실행 (renderAll → initSettingsUI → setVehicleType 무한재귀 방지)
+  renderTripList();
+  renderSummary();
+  renderExportPreview();
 }
 
 function setFuelType(type) {
@@ -875,7 +1063,11 @@ function setFuelType(type) {
     document.getElementById('ft_' + t).classList.toggle('sel', t === type);
   });
   updateEfficiencyInfo();
-  renderAll();
+  // renderAll() 대신 필요한 렌더만 실행 (무한재귀 방지)
+  renderFuelList();
+  renderTripList();
+  renderSummary();
+  renderExportPreview();
 }
 
 function updateEfficiencyInfo() {
@@ -1233,18 +1425,15 @@ function saveCommuteDays(val) {
 function renderFuelList() {
   const receipts = state.fuelReceipts.sort((a, b) => a.date.localeCompare(b.date));
   const container = document.getElementById('fuelList');
-  const empty = document.getElementById('fuelEmpty');
   const statsCard = document.getElementById('fuelStatsCard');
 
   if (receipts.length === 0) {
-    empty.style.display = '';
     statsCard.style.display = 'none';
-    container.innerHTML = '';
-    container.appendChild(empty);
+    // innerHTML으로 빈 상태 렌더 (appendChild 방식은 요소가 DOM에서 분리될 수 있음)
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">🪣</div><div class="empty-text">등록된 영수증이 없습니다</div></div>';
     return;
   }
 
-  empty.style.display = 'none';
   statsCard.style.display = '';
 
   // Stats
@@ -1369,7 +1558,7 @@ function renderTripList() {
     container.innerHTML = `
     <div class="trip-item">
       <div class="trip-header">
-        <div class="trip-round">📅 이번 달 출퇴근</div>
+        <div class="trip-round"><span class="trip-badge">자택출근</span> 이번 달</div>
       </div>
       <div class="input-row">
         <div class="form-group">
@@ -1418,7 +1607,7 @@ function renderTripList() {
     html += `
     <div class="trip-item">
       <div class="trip-header">
-        <div class="trip-round">${idx + 1}회차</div>
+        <div class="trip-round"><span class="trip-badge">${idx + 1}회차</span></div>
         <button class="btn btn-danger btn-sm" onclick="deleteTrip('${trip.id}')">삭제</button>
       </div>
       <div class="input-row">

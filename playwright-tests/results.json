@@ -1,0 +1,1646 @@
+{
+  "config": {
+    "configFile": "D:\\교통비정산증빙 시스템\\playwright-tests\\playwright.config.js",
+    "rootDir": "D:/교통비정산증빙 시스템/playwright-tests/tests",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/교통비정산증빙 시스템/playwright-tests/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "D:/교통비정산증빙 시스템/playwright-tests/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.59.1",
+    "workers": 11,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "transport.spec.js",
+      "file": "transport.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "교통비 신청 시스템 - 기본 렌더링",
+          "file": "transport.spec.js",
+          "line": 13,
+          "column": 6,
+          "specs": [
+            {
+              "title": "페이지 로드 및 헤더 확인",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 7851,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.app-header h1')\nExpected substring: \u001b[32m\"교통비 신청 시스템\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.app-header h1')\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.app-header h1')\nExpected substring: \u001b[32m\"교통비 신청 시스템\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.app-header h1')\u001b[22m\n\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:16:50",
+                        "location": {
+                          "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                          "column": 50,
+                          "line": 16
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 14 |\u001b[39m   test(\u001b[32m'페이지 로드 및 헤더 확인'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n \u001b[90m 15 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[33mFILE_URL\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 16 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'.app-header h1'\u001b[39m))\u001b[33m.\u001b[39mtoContainText(\u001b[32m'교통비 신청 시스템'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                  \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#monthPicker'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 19 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 50,
+                            "line": 16
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.app-header h1')\nExpected substring: \u001b[32m\"교통비 신청 시스템\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.app-header h1')\u001b[22m\n\n\n  14 |   test('페이지 로드 및 헤더 확인', async ({ page }) => {\n  15 |     await page.goto(FILE_URL);\n> 16 |     await expect(page.locator('.app-header h1')).toContainText('교통비 신청 시스템');\n     |                                                  ^\n  17 |     await expect(page.locator('#monthPicker')).toBeVisible();\n  18 |   });\n  19 |\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:16:50"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:30:51.158Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-교통비-신청-시스템---기본-렌더링-페이지-로드-및-헤더-확인-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                        "column": 50,
+                        "line": 16
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-7aa0bc0065e1d5a1ac29",
+              "file": "transport.spec.js",
+              "line": 14,
+              "column": 3
+            },
+            {
+              "title": "6개 탭 버튼 존재 확인",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 2706,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:26:51",
+                        "location": {
+                          "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                          "column": 51,
+                          "line": 26
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 24 |\u001b[39m     \u001b[36mconst\u001b[39m labels \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m tabs\u001b[33m.\u001b[39mallTextContents()\u001b[33m;\u001b[39m\n \u001b[90m 25 |\u001b[39m     expect(labels\u001b[33m.\u001b[39msome(t \u001b[33m=>\u001b[39m t\u001b[33m.\u001b[39mincludes(\u001b[32m'설정'\u001b[39m)))\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 26 |\u001b[39m     expect(labels\u001b[33m.\u001b[39msome(t \u001b[33m=>\u001b[39m t\u001b[33m.\u001b[39mincludes(\u001b[32m'주유/충전'\u001b[39m)))\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 27 |\u001b[39m     expect(labels\u001b[33m.\u001b[39msome(t \u001b[33m=>\u001b[39m t\u001b[33m.\u001b[39mincludes(\u001b[32m'통행료'\u001b[39m)))\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 28 |\u001b[39m     expect(labels\u001b[33m.\u001b[39msome(t \u001b[33m=>\u001b[39m t\u001b[33m.\u001b[39mincludes(\u001b[32m'회차신청'\u001b[39m)))\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 29 |\u001b[39m     expect(labels\u001b[33m.\u001b[39msome(t \u001b[33m=>\u001b[39m t\u001b[33m.\u001b[39mincludes(\u001b[32m'정산요약'\u001b[39m)))\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 51,
+                            "line": 26
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  24 |     const labels = await tabs.allTextContents();\n  25 |     expect(labels.some(t => t.includes('설정'))).toBe(true);\n> 26 |     expect(labels.some(t => t.includes('주유/충전'))).toBe(true);\n     |                                                   ^\n  27 |     expect(labels.some(t => t.includes('통행료'))).toBe(true);\n  28 |     expect(labels.some(t => t.includes('회차신청'))).toBe(true);\n  29 |     expect(labels.some(t => t.includes('정산요약'))).toBe(true);\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:26:51"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:31:04.635Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-교통비-신청-시스템---기본-렌더링-6개-탭-버튼-존재-확인-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                        "column": 51,
+                        "line": 26
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-d3e87d594b05d6afb12a",
+              "file": "transport.spec.js",
+              "line": 20,
+              "column": 3
+            },
+            {
+              "title": "설정 탭이 기본 활성화",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2679,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:31:13.911Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-ed3d827c3ebccdafcf77",
+              "file": "transport.spec.js",
+              "line": 33,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "설정 탭",
+          "file": "transport.spec.js",
+          "line": 40,
+          "column": 6,
+          "specs": [
+            {
+              "title": "신청자 정보 입력 필드 존재",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2045,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:31:19.014Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-602e06552248f13db048",
+              "file": "transport.spec.js",
+              "line": 41,
+              "column": 3
+            },
+            {
+              "title": "이동수단/유종 라디오 버튼 존재",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1754,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:31:21.088Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-2dbee5ae0e49d71a8e5f",
+              "file": "transport.spec.js",
+              "line": 49,
+              "column": 3
+            },
+            {
+              "title": "신청자 이름 입력 및 저장",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1972,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:31:22.860Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-05fae6e13fbd45c5b862",
+              "file": "transport.spec.js",
+              "line": 58,
+              "column": 3
+            },
+            {
+              "title": "주소 필드 및 길찾기 버튼 존재",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2026,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:31:24.846Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-d1023a252b269beff016",
+              "file": "transport.spec.js",
+              "line": 67,
+              "column": 3
+            },
+            {
+              "title": "편도거리 입력 시 왕복거리 정보 업데이트",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1739,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:31:26.888Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-e7b2edbea8a93e4c3ba2",
+              "file": "transport.spec.js",
+              "line": 77,
+              "column": 3
+            },
+            {
+              "title": "OpenAI API 설정 섹션 확인",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1901,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:31:28.642Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-283291794f444e36510a",
+              "file": "transport.spec.js",
+              "line": 86,
+              "column": 3
+            },
+            {
+              "title": "자택출근자 선택 시 현장주소 숨김",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2531,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:31:30.563Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-ab4a25b8e5fb287d4144",
+              "file": "transport.spec.js",
+              "line": 97,
+              "column": 3
+            },
+            {
+              "title": "대중교통 선택 시 유종 섹션 숨김",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2662,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:31:33.118Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-9debb9c765bd644e1af5",
+              "file": "transport.spec.js",
+              "line": 106,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Naver Maps 길찾기 모달",
+          "file": "transport.spec.js",
+          "line": 115,
+          "column": 6,
+          "specs": [
+            {
+              "title": "길찾기 버튼 클릭 시 주소 미입력 경고",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2459,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:31:35.802Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-12bdcba1ba3ff96a67e6",
+              "file": "transport.spec.js",
+              "line": 116,
+              "column": 3
+            },
+            {
+              "title": "주소 입력 후 길찾기 모달 열림",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2243,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:31:38.285Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-b2edbce9221fa1f67efa",
+              "file": "transport.spec.js",
+              "line": 127,
+              "column": 3
+            },
+            {
+              "title": "네이버 지도 링크 href 확인",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1859,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:31:40.545Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-6532446ddc9e7a35f7de",
+              "file": "transport.spec.js",
+              "line": 140,
+              "column": 3
+            },
+            {
+              "title": "거리 적용 기능",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2202,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:31:42.427Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-a9aa1a346e21b34aa98c",
+              "file": "transport.spec.js",
+              "line": 152,
+              "column": 3
+            },
+            {
+              "title": "모달 취소 버튼",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2529,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:31:44.645Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-fc1a057e9154dd599b58",
+              "file": "transport.spec.js",
+              "line": 168,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "주유/충전 탭",
+          "file": "transport.spec.js",
+          "line": 181,
+          "column": 6,
+          "specs": [
+            {
+              "title": "주유 탭 전환 및 캡처존 확인",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 60047,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 54,
+                            "line": 184
+                          },
+                          "message": "Error: locator.click: Test timeout of 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.tab-btn:has-text(\"주유/충전\")')\u001b[22m\n\n\n  182 |   test('주유 탭 전환 및 캡처존 확인', async ({ page }) => {\n  183 |     await page.goto(FILE_URL);\n> 184 |     await page.locator('.tab-btn:has-text(\"주유/충전\")').click();\n      |                                                      ^\n  185 |     await expect(page.locator('#tab-fuel')).toBeVisible();\n  186 |     await expect(page.locator('#fuelFileInput')).toBeAttached();\n  187 |     await expect(page.locator('button:has-text(\"수동 입력\")').first()).toBeVisible();\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:184:54"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:31:47.197Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-주유-충전-탭-주유-탭-전환-및-캡처존-확인-chromium\\error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-29131cc62d335b6f5048",
+              "file": "transport.spec.js",
+              "line": 182,
+              "column": 3
+            },
+            {
+              "title": "주유 수동 입력 모달",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 60074,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 54,
+                            "line": 192
+                          },
+                          "message": "Error: locator.click: Test timeout of 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.tab-btn:has-text(\"주유/충전\")')\u001b[22m\n\n\n  190 |   test('주유 수동 입력 모달', async ({ page }) => {\n  191 |     await page.goto(FILE_URL);\n> 192 |     await page.locator('.tab-btn:has-text(\"주유/충전\")').click();\n      |                                                      ^\n  193 |     await page.locator('button:has-text(\"수동 입력\")').first().click();\n  194 |     await expect(page.locator('#fuelModal')).toHaveClass(/show/);\n  195 |     await expect(page.locator('#fm_date')).toBeVisible();\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:192:54"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:32:51.134Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-주유-충전-탭-주유-수동-입력-모달-chromium\\error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-75df254e7b311778580f",
+              "file": "transport.spec.js",
+              "line": 190,
+              "column": 3
+            },
+            {
+              "title": "주유 영수증 입력 및 저장",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 60044,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 54,
+                            "line": 202
+                          },
+                          "message": "Error: locator.click: Test timeout of 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.tab-btn:has-text(\"주유/충전\")')\u001b[22m\n\n\n  200 |   test('주유 영수증 입력 및 저장', async ({ page }) => {\n  201 |     await page.goto(FILE_URL);\n> 202 |     await page.locator('.tab-btn:has-text(\"주유/충전\")').click();\n      |                                                      ^\n  203 |     await page.locator('button:has-text(\"수동 입력\")').first().click();\n  204 |     await page.locator('#fm_date').fill('2026-03-06');\n  205 |     await page.locator('#fm_qty').fill('50.5');\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:202:54"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:33:57.264Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-주유-충전-탭-주유-영수증-입력-및-저장-chromium\\error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-496c40f51b4dddc5f6d2",
+              "file": "transport.spec.js",
+              "line": 200,
+              "column": 3
+            },
+            {
+              "title": "주유 영수증 삭제",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 60047,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 54,
+                            "line": 217
+                          },
+                          "message": "Error: locator.click: Test timeout of 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.tab-btn:has-text(\"주유/충전\")')\u001b[22m\n\n\n  215 |     await page.goto(FILE_URL);\n  216 |     // 먼저 추가\n> 217 |     await page.locator('.tab-btn:has-text(\"주유/충전\")').click();\n      |                                                      ^\n  218 |     await page.locator('button:has-text(\"수동 입력\")').first().click();\n  219 |     await page.locator('#fm_date').fill('2026-03-06');\n  220 |     await page.locator('#fm_qty').fill('50');\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:217:54"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:35:02.984Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-주유-충전-탭-주유-영수증-삭제-chromium\\error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-624955726de72a3027e9",
+              "file": "transport.spec.js",
+              "line": 214,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "통행료 탭 (신규)",
+          "file": "transport.spec.js",
+          "line": 231,
+          "column": 6,
+          "specs": [
+            {
+              "title": "통행료 탭 전환 및 레이아웃 확인",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2717,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:36:08.392Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-6fcd41d252290ba028a4",
+              "file": "transport.spec.js",
+              "line": 232,
+              "column": 3
+            },
+            {
+              "title": "통행료 수동 입력 모달 열기",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2363,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:36:13.562Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-00a52781fca928f876cf",
+              "file": "transport.spec.js",
+              "line": 239,
+              "column": 3
+            },
+            {
+              "title": "통행료 영수증 추가 및 목록 표시",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2967,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:36:15.945Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-55ecc068fefefa69956f",
+              "file": "transport.spec.js",
+              "line": 249,
+              "column": 3
+            },
+            {
+              "title": "통행료 영수증 수정",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2879,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:36:18.931Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-4f48878129bc60ea67f5",
+              "file": "transport.spec.js",
+              "line": 261,
+              "column": 3
+            },
+            {
+              "title": "통행료 영수증 삭제",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2694,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:36:21.828Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-5e781b9090f32e99211e",
+              "file": "transport.spec.js",
+              "line": 276,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "회차신청 탭",
+          "file": "transport.spec.js",
+          "line": 289,
+          "column": 6,
+          "specs": [
+            {
+              "title": "회차 추가 버튼 존재",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 60058,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 53,
+                            "line": 292
+                          },
+                          "message": "Error: locator.click: Test timeout of 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.tab-btn:has-text(\"회차신청\")')\u001b[22m\n\n\n  290 |   test('회차 추가 버튼 존재', async ({ page }) => {\n  291 |     await page.goto(FILE_URL);\n> 292 |     await page.locator('.tab-btn:has-text(\"회차신청\")').click();\n      |                                                     ^\n  293 |     await expect(page.locator('#tab-trips')).toBeVisible();\n  294 |     await expect(page.locator('#fieldAddBtn button')).toBeVisible();\n  295 |   });\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:292:53"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:36:24.540Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-회차신청-탭-회차-추가-버튼-존재-chromium\\error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-bff8a749a687f155a10d",
+              "file": "transport.spec.js",
+              "line": 290,
+              "column": 3
+            },
+            {
+              "title": "회차 추가 및 날짜 입력",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 60036,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 53,
+                            "line": 299
+                          },
+                          "message": "Error: locator.click: Test timeout of 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.tab-btn:has-text(\"회차신청\")')\u001b[22m\n\n\n  297 |   test('회차 추가 및 날짜 입력', async ({ page }) => {\n  298 |     await page.goto(FILE_URL);\n> 299 |     await page.locator('.tab-btn:has-text(\"회차신청\")').click();\n      |                                                     ^\n  300 |     await page.locator('#fieldAddBtn button').click();\n  301 |     await expect(page.locator('.trip-item')).toHaveCount(1);\n  302 |   });\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:299:53"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:37:28.408Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-회차신청-탭-회차-추가-및-날짜-입력-chromium\\error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-79b6d7ee2b398df57bd9",
+              "file": "transport.spec.js",
+              "line": 297,
+              "column": 3
+            },
+            {
+              "title": "자택출근자 모드에서 출퇴근일수 입력 표시",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 60046,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 53,
+                            "line": 307
+                          },
+                          "message": "Error: locator.click: Test timeout of 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.tab-btn:has-text(\"회차신청\")')\u001b[22m\n\n\n  305 |     await page.goto(FILE_URL);\n  306 |     await page.locator('#wt_home').click();\n> 307 |     await page.locator('.tab-btn:has-text(\"회차신청\")').click();\n      |                                                     ^\n  308 |     await expect(page.locator('#homeCommuteSection')).toBeVisible();\n  309 |     await expect(page.locator('#commuteDays')).toBeVisible();\n  310 |   });\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:307:53"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:38:34.748Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-회차신청-탭-자택출근자-모드에서-출퇴근일수-입력-표시-chromium\\error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-8958c4892bb884319675",
+              "file": "transport.spec.js",
+              "line": 304,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "정산요약 탭",
+          "file": "transport.spec.js",
+          "line": 313,
+          "column": 6,
+          "specs": [
+            {
+              "title": "데이터 없을 때 빈 상태 표시",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 60072,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 53,
+                            "line": 316
+                          },
+                          "message": "Error: locator.click: Test timeout of 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.tab-btn:has-text(\"정산요약\")')\u001b[22m\n\n\n  314 |   test('데이터 없을 때 빈 상태 표시', async ({ page }) => {\n  315 |     await page.goto(FILE_URL);\n> 316 |     await page.locator('.tab-btn:has-text(\"정산\")').click();\n      |                                                     ^\n  317 |     await expect(page.locator('#tab-summary')).toBeVisible();\n  318 |     await expect(page.locator('#summaryContent')).toBeVisible();\n  319 |   });\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:316:53"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:39:40.278Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-정산요약-탭-데이터-없을-때-빈-상태-표시-chromium\\error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-12f22eb4f2e909cca814",
+              "file": "transport.spec.js",
+              "line": 314,
+              "column": 3
+            },
+            {
+              "title": "주유+회차 입력 후 정산 계산 확인",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3932,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:40:47.305Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-d21441506d81fcda5b0e",
+              "file": "transport.spec.js",
+              "line": 321,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "내보내기 탭",
+          "file": "transport.spec.js",
+          "line": 348,
+          "column": 6,
+          "specs": [
+            {
+              "title": "내보내기 탭 레이아웃 확인",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2562,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:40:54.336Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-41047c110a55fb7bf686",
+              "file": "transport.spec.js",
+              "line": 349,
+              "column": 3
+            },
+            {
+              "title": "양식 미선택 상태에서 내보내기 시도 시 경고",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2734,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:40:56.918Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-5d46f40d3f0775b3aace",
+              "file": "transport.spec.js",
+              "line": 360,
+              "column": 3
+            },
+            {
+              "title": "신청자 이름 미입력 시 설정 탭으로 이동",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2629,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:40:59.672Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-50c22229146f0779cdbc",
+              "file": "transport.spec.js",
+              "line": 370,
+              "column": 3
+            },
+            {
+              "title": "체크리스트 표시 확인",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2461,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:41:02.318Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-5a1ad4f5786eb7c8ccc2",
+              "file": "transport.spec.js",
+              "line": 379,
+              "column": 3
+            },
+            {
+              "title": "내보내기 미리보기 정보 표시",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2516,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:41:04.804Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-51a2ad8a2c2b6fc5013b",
+              "file": "transport.spec.js",
+              "line": 385,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "탭 간 데이터 연동",
+          "file": "transport.spec.js",
+          "line": 394,
+          "column": 6,
+          "specs": [
+            {
+              "title": "통행료가 정산요약에 반영",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3820,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:41:07.343Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-3f54b996b0516e810890",
+              "file": "transport.spec.js",
+              "line": 395,
+              "column": 3
+            },
+            {
+              "title": "월 변경 시 데이터 초기화",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3152,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-10T06:41:11.183Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-f6fafd1940761b0544aa",
+              "file": "transport.spec.js",
+              "line": 426,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-04-10T06:30:48.013Z",
+    "duration": 626717.12,
+    "expected": 27,
+    "skipped": 0,
+    "unexpected": 10,
+    "flaky": 0
+  }
+}
