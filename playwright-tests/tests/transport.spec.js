@@ -64,14 +64,11 @@ test.describe('설정 탭', () => {
     await expect(page.locator('#s_dept')).toHaveValue('현장팀');
   });
 
-  test('주소 필드 및 길찾기 버튼 존재', async ({ page }) => {
+  test('주소 필드 및 편도거리 입력 존재', async ({ page }) => {
     await page.goto(FILE_URL);
     await expect(page.locator('#s_homeAddr')).toBeVisible();
     await expect(page.locator('#s_siteAddr')).toBeVisible();
     await expect(page.locator('#s_dist')).toBeVisible();
-    // 길찾기 버튼 확인
-    const naverBtn = page.locator('button:has-text("길찾기")');
-    await expect(naverBtn).toBeVisible();
   });
 
   test('편도거리 입력 시 왕복거리 정보 업데이트', async ({ page }) => {
@@ -85,11 +82,9 @@ test.describe('설정 탭', () => {
 
   test('OpenAI API 설정 섹션 확인', async ({ page }) => {
     await page.goto(FILE_URL);
-    // OpenAI 텍스트 확인 (Anthropic 아님)
-    const apiCard = page.locator('.card:has(#s_apiKey)');
-    await expect(apiCard).toContainText('OpenAI');
-    await expect(page.locator('#s_apiKey')).toBeVisible();
-    // API key 기본값 설정 여부 확인
+    // API 카드는 관리자 모드에서만 보임 (기본 숨김)
+    await expect(page.locator('#aiApiCard')).toBeHidden();
+    // API key input은 DOM에 존재하고 기본값이 설정됨 (숨겨진 상태로)
     const apiKeyVal = await page.locator('#s_apiKey').inputValue();
     expect(apiKeyVal.startsWith('sk-proj-')).toBe(true);
   });
@@ -112,69 +107,37 @@ test.describe('설정 탭', () => {
   });
 });
 
-test.describe('Naver Maps 길찾기 모달', () => {
-  test('길찾기 버튼 클릭 시 주소 미입력 경고', async ({ page }) => {
+test.describe('편도거리 설정', () => {
+  test('편도거리 수동 입력 및 왕복거리 표시', async ({ page }) => {
     await page.goto(FILE_URL);
-    page.on('dialog', d => d.accept());
-    await page.locator('button:has-text("길찾기")').click();
-    // 주소 미입력 alert이 뜨거나 모달이 열려야 함
-    // 둘 중 하나
-    const modalVisible = await page.locator('#naverRouteModal').evaluate(el => el.classList.contains('show'));
-    // alert이 수락되었으므로 모달은 열리지 않음
-    expect(modalVisible).toBe(false);
-  });
-
-  test('주소 입력 후 길찾기 모달 열림', async ({ page }) => {
-    await page.goto(FILE_URL);
-    await page.locator('#s_homeAddr').fill('경기도 고양시 덕양구 덕수천 1로 59');
-    await page.locator('#s_homeAddr').dispatchEvent('input');
-    await page.locator('#s_siteAddr').fill('경기도 이천시 부발읍 아미리 701-2');
-    await page.locator('#s_siteAddr').dispatchEvent('input');
-    await page.locator('button:has-text("길찾기")').click();
-    await expect(page.locator('#naverRouteModal')).toHaveClass(/show/);
-    // 주소 표시 확인
-    await expect(page.locator('#naverRouteAddrs')).toContainText('고양시');
-    await expect(page.locator('#naverRouteAddrs')).toContainText('이천시');
-  });
-
-  test('네이버 지도 링크 href 확인', async ({ page }) => {
-    await page.goto(FILE_URL);
-    await page.locator('#s_homeAddr').fill('서울 강남구');
-    await page.locator('#s_homeAddr').dispatchEvent('input');
-    await page.locator('#s_siteAddr').fill('경기 이천시');
-    await page.locator('#s_siteAddr').dispatchEvent('input');
-    await page.locator('button:has-text("길찾기")').click();
-    const href = await page.locator('#naverRouteLink').getAttribute('href');
-    expect(href).toContain('map.naver.com');
-    expect(href).toContain('directions');
-  });
-
-  test('거리 적용 기능', async ({ page }) => {
-    await page.goto(FILE_URL);
-    await page.locator('#s_homeAddr').fill('서울');
-    await page.locator('#s_homeAddr').dispatchEvent('input');
-    await page.locator('#s_siteAddr').fill('이천');
-    await page.locator('#s_siteAddr').dispatchEvent('input');
-    await page.locator('button:has-text("길찾기")').click();
-    await page.locator('#naverDistInput').fill('75.5');
-    await page.locator('button:has-text("이 거리 적용")').click();
-    // 모달 닫힘
-    await expect(page.locator('#naverRouteModal')).not.toHaveClass(/show/);
-    // 편도거리 필드 업데이트
-    await expect(page.locator('#s_dist')).toHaveValue('75.5');
+    await page.locator('#s_dist').fill('75.5');
+    await page.locator('#s_dist').dispatchEvent('input');
     await expect(page.locator('#distInfo')).toContainText('75.5');
+    await expect(page.locator('#distInfo')).toContainText('151');
   });
 
-  test('모달 취소 버튼', async ({ page }) => {
+  test('길찾기 버튼 없음 확인 (기능 제거됨)', async ({ page }) => {
     await page.goto(FILE_URL);
-    await page.locator('#s_homeAddr').fill('서울');
+    await expect(page.locator('button:has-text("길찾기")')).toHaveCount(0);
+  });
+
+  test('주소 필드 입력 저장', async ({ page }) => {
+    await page.goto(FILE_URL);
+    await page.locator('#s_homeAddr').fill('경기도 고양시');
     await page.locator('#s_homeAddr').dispatchEvent('input');
-    await page.locator('#s_siteAddr').fill('이천');
+    await page.locator('#s_siteAddr').fill('경기도 이천시');
     await page.locator('#s_siteAddr').dispatchEvent('input');
-    await page.locator('button:has-text("길찾기")').click();
-    await expect(page.locator('#naverRouteModal')).toHaveClass(/show/);
-    await page.locator('#naverRouteModal .btn-gray').click();
-    await expect(page.locator('#naverRouteModal')).not.toHaveClass(/show/);
+    await expect(page.locator('#s_homeAddr')).toHaveValue('경기도 고양시');
+    await expect(page.locator('#s_siteAddr')).toHaveValue('경기도 이천시');
+  });
+
+  test('관리자 모드: SK 로고 5회 탭 시 API 카드 표시', async ({ page }) => {
+    await page.goto(FILE_URL);
+    await expect(page.locator('#aiApiCard')).toBeHidden();
+    page.on('dialog', d => d.accept());
+    const logo = page.locator('.sk-logo');
+    for (let i = 0; i < 5; i++) await logo.click();
+    await expect(page.locator('#aiApiCard')).toBeVisible();
   });
 });
 
@@ -183,7 +146,8 @@ test.describe('주유/충전 탭', () => {
     await page.goto(FILE_URL);
     await page.locator('.tab-btn:has-text("주유")').click();
     await expect(page.locator('#tab-fuel')).toBeVisible();
-    await expect(page.locator('#fuelFileInput')).toBeAttached();
+    await expect(page.locator('#fuelCameraInput')).toBeAttached();
+    await expect(page.locator('#fuelGalleryInput')).toBeAttached();
     await expect(page.locator('button:has-text("수동 입력")').first()).toBeVisible();
   });
 
@@ -233,7 +197,8 @@ test.describe('통행료 탭 (신규)', () => {
     await page.goto(FILE_URL);
     await page.locator('.tab-btn:has-text("통행료")').click();
     await expect(page.locator('#tab-toll')).toBeVisible();
-    await expect(page.locator('#tollFileInput')).toBeAttached();
+    await expect(page.locator('#tollCameraInput')).toBeAttached();
+    await expect(page.locator('#tollGalleryInput')).toBeAttached();
   });
 
   test('통행료 수동 입력 모달 열기', async ({ page }) => {
@@ -287,18 +252,21 @@ test.describe('통행료 탭 (신규)', () => {
 });
 
 test.describe('회차신청 탭', () => {
-  test('회차 추가 버튼 존재', async ({ page }) => {
+  test('회차 4개 자동 생성 확인', async ({ page }) => {
     await page.goto(FILE_URL);
     await page.locator('.tab-btn:has-text("회차")').click();
     await expect(page.locator('#tab-trips')).toBeVisible();
-    await expect(page.locator('#fieldAddBtn button')).toBeVisible();
+    // 현장근무자 기본 4회차 자동 생성
+    await expect(page.locator('.trip-item')).toHaveCount(4);
   });
 
-  test('회차 추가 및 날짜 입력', async ({ page }) => {
+  test('회차 날짜 수동 입력', async ({ page }) => {
     await page.goto(FILE_URL);
     await page.locator('.tab-btn:has-text("회차")').click();
-    await page.locator('#fieldAddBtn button').click();
-    await expect(page.locator('.trip-item')).toHaveCount(1);
+    const startInput = page.locator('.trip-item input[type="date"]').first();
+    await startInput.fill('2026-03-06');
+    await startInput.dispatchEvent('change');
+    await expect(startInput).toHaveValue('2026-03-06');
   });
 
   test('자택출근자 모드에서 출퇴근일수 입력 표시', async ({ page }) => {
@@ -330,11 +298,10 @@ test.describe('정산요약 탭', () => {
     await page.locator('#fm_qty').fill('55');
     await page.locator('#fm_amount').fill('110000');
     await page.locator('#fuelModal .btn-primary').click();
-    // 회차 추가
+    // 회차 탭 - 자동 생성된 1회차 날짜 설정
     await page.locator('.tab-btn:has-text("회차")').click();
-    await page.locator('#fieldAddBtn button').click();
     const startInput = page.locator('.trip-item input[type="date"]').first();
-    const endInput = page.locator('.trip-item input[type="date"]').last();
+    const endInput = page.locator('.trip-item input[type="date"]').nth(1);
     await startInput.fill('2026-03-06');
     await startInput.dispatchEvent('change');
     await endInput.fill('2026-03-08');
@@ -350,21 +317,19 @@ test.describe('내보내기 탭', () => {
     await page.goto(FILE_URL);
     await page.locator('.tab-btn:has-text("내보내기")').click();
     await expect(page.locator('#tab-export')).toBeVisible();
-    await expect(page.locator('#templateFileInput')).toBeAttached();
-    await expect(page.locator('#templateStatus')).toBeVisible();
-    // 양식 미선택 경고
-    await expect(page.locator('#templateStatus')).toContainText('양식 파일');
     await expect(page.locator('.export-btn')).toBeVisible();
+    // 양식 업로드 UI 없음 (기본 양식 자동 로드)
+    await expect(page.locator('#templateFileInput')).toHaveCount(0);
   });
 
-  test('양식 미선택 상태에서 내보내기 시도 시 경고', async ({ page }) => {
+  test('양식 미로드 상태에서 내보내기 시도 시 경고', async ({ page }) => {
     await page.goto(FILE_URL);
     await page.locator('#s_name').fill('홍길동');
     await page.locator('#s_name').dispatchEvent('input');
     await page.locator('.tab-btn:has-text("내보내기")').click();
     page.on('dialog', d => d.accept());
     await page.locator('.export-btn').click();
-    // alert이 발생해야 함 (양식 파일 미선택)
+    // alert이 발생해야 함 (양식 파일 미로드)
   });
 
   test('신청자 이름 미입력 시 설정 탭으로 이동', async ({ page }) => {
@@ -403,11 +368,7 @@ test.describe('탭 간 데이터 연동', () => {
     await page.locator('#fm_qty').fill('55');
     await page.locator('#fm_amount').fill('110000');
     await page.locator('#fuelModal .btn-primary').click();
-    // 회차 추가
-    await page.locator('.tab-btn:has-text("회차")').click();
-    await page.locator('#fieldAddBtn button').click();
-    const tripId = await page.locator('.trip-item').getAttribute('data-id') || '';
-    // 통행료 추가 (회차 연결)
+    // 통행료 추가 (자동 생성된 1회차에 연결)
     await page.locator('.tab-btn:has-text("통행료")').click();
     await page.locator('#tab-toll button:has-text("수동 입력")').click();
     await page.locator('#tm_date').fill('2026-03-06');
