@@ -4,3 +4,4 @@ playwright-tests/results.json
 playwright-tests/test-results/
 playwright-tests/playwright-report/
 *.DS_Store
+.claude/settings.local.json
