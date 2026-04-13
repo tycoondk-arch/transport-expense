@@ -84,9 +84,8 @@ test.describe('설정 탭', () => {
     await page.goto(FILE_URL);
     // API 카드는 관리자 모드에서만 보임 (기본 숨김)
     await expect(page.locator('#aiApiCard')).toBeHidden();
-    // API key input은 DOM에 존재하고 기본값이 설정됨 (숨겨진 상태로)
-    const apiKeyVal = await page.locator('#s_apiKey').inputValue();
-    expect(apiKeyVal.startsWith('sk-proj-')).toBe(true);
+    // API key input이 DOM에 존재함 (숨겨진 카드 안에)
+    await expect(page.locator('#s_apiKey')).toHaveCount(1);
   });
 
   test('자택출근자 선택 시 현장주소 숨김', async ({ page }) => {
@@ -317,7 +316,7 @@ test.describe('내보내기 탭', () => {
     await page.goto(FILE_URL);
     await page.locator('.tab-btn:has-text("내보내기")').click();
     await expect(page.locator('#tab-export')).toBeVisible();
-    await expect(page.locator('.export-btn')).toBeVisible();
+    await expect(page.locator('button[onclick="exportToHTML()"]')).toBeVisible();
     // 양식 업로드 UI 없음 (HTML 직접 생성 방식)
     await expect(page.locator('#templateFileInput')).toHaveCount(0);
   });
@@ -325,14 +324,14 @@ test.describe('내보내기 탭', () => {
   test('내보내기 버튼 텍스트 확인 (HTML 내보내기)', async ({ page }) => {
     await page.goto(FILE_URL);
     await page.locator('.tab-btn:has-text("내보내기")').click();
-    await expect(page.locator('.export-btn')).toContainText('증빙서류 내보내기');
+    await expect(page.locator('button[onclick="exportToHTML()"]')).toContainText('증빙서류 내보내기');
   });
 
   test('신청자 이름 미입력 시 설정 탭으로 이동', async ({ page }) => {
     await page.goto(FILE_URL);
     await page.locator('.tab-btn:has-text("내보내기")').click();
     page.on('dialog', d => d.accept());
-    await page.locator('.export-btn').click();
+    await page.locator('button[onclick="exportToHTML()"]').click();
     // 설정 탭으로 전환됨
     await expect(page.locator('#tab-settings')).toBeVisible();
   });
