@@ -804,15 +804,14 @@ input[type="number"] { text-align: right; }
 <!-- ==================== EXPORT TAB ==================== -->
 <div class="tab-content" id="tab-export">
   <div class="card">
-    <div class="card-title">📥 엑셀 파일 내보내기</div>
-    <div id="templateStatus" style="display:none;"></div>
+    <div class="card-title">📋 증빙서류 내보내기</div>
     <div class="alert alert-info">
-      작성된 교통비 신청 내역을 원본 엑셀 양식과 동일한 형식으로 내보냅니다.<br>
-      통상 <strong>매월 마지막 주</strong>에 결제 시스템에 제출하세요.
+      작성된 교통비 신청 내역과 영수증 이미지를 하나의 HTML 파일로 내보냅니다.<br>
+      내보낸 파일을 브라우저에서 열고 <strong>인쇄 → PDF 저장</strong>으로 제출하세요.
     </div>
     <div id="exportPreview" class="export-summary"></div>
-    <button class="export-btn" onclick="exportToExcel()">
-      📊 엑셀 파일 내보내기
+    <button class="export-btn" onclick="exportToHTML()">
+      📋 증빙서류 내보내기 (HTML)
     </button>
   </div>
 
@@ -1769,15 +1768,11 @@ function closeImgViewer() {
   document.getElementById('imgViewer').classList.remove('show');
 }
 
-// ==================== EXCEL EXPORT ====================
-async function exportToExcel() {
+// ==================== HTML EXPORT ====================
+function exportToHTML() {
   if (!state.settings.name) {
     alert('설정에서 신청자 이름을 입력해주세요.');
     showTab('settings');
-    return;
-  }
-  if (!templateArrayBuffer) {
-    alert('내보내기 탭에서 양식 파일(국내교통비신청양식_3월.xlsx)을 먼저 선택해주세요.');
     return;
   }
 
@@ -1789,207 +1784,198 @@ async function exportToExcel() {
   const eff = getFuelEfficiency();
   const rt = roundTripDistance();
   const fuelTypeLabel = FUEL_TYPE_LABEL[state.settings.fuelType] || '유류';
+  const fuelUnitLabel = FUEL_UNIT_LABEL[state.settings.fuelType] || 'L';
   const isCar = state.settings.vehicleType === 'car';
-  const isHome = state.settings.workerType === 'home';
   const fuelRows = [...state.fuelReceipts].sort((a, b) => a.date.localeCompare(b.date));
+  const tollRows = [...state.tollReceipts].sort((a, b) => a.date.localeCompare(b.date));
+  const transitRows = [...state.transitReceipts].sort((a, b) => a.date.localeCompare(b.date));
   const totalCalc = computed.reduce((s, t) => s + t.calculated, 0);
   const totalReq = computed.reduce((s, t) => s + t.requested, 0);
+  const f = n => Math.round(n).toLocaleString('ko-KR');
 
-  const wb = new ExcelJS.Workbook();
-  await wb.xlsx.load(templateArrayBuffer);
-
-  // ===== 거리산정기준 시트 =====
-  const wsDist = wb.getWorksheet('거리산정기준');
-  if (wsDist) {
-    wsDist.getCell('M7').value = state.settings.siteAddress || '';
-    wsDist.getCell('M8').value = state.settings.homeAddress || '';
-    wsDist.getCell('M10').value = state.settings.oneWayDistance || 0;
-    wsDist.getCell('M11').value = rt;
-  }
-
-  // ===== 회차별신청및증빙 시트 (현장근무자) =====
-  const wsTrip = wb.getWorksheet('회차별신청및증빙');
-  if (wsTrip && !isHome) {
-    // 유종 정보 (Row 4)
-    wsTrip.getCell('C4').value = fuelTypeLabel;
-    wsTrip.getCell('D4').value = eff;
-
-    // 주유 영수증 (Row 6~16)
-    fuelRows.forEach((r, i) => {
-      const row = 6 + i;
-      if (row > 16) return;
-      wsTrip.getCell(`B${row}`).value = new Date(r.date);
-      wsTrip.getCell(`B${row}`).numFmt = 'yyyy-mm-dd';
-      wsTrip.getCell(`C${row}`).value = r.quantity || 0;
-      wsTrip.getCell(`D${row}`).value = r.amount || 0;
-      if (i === 0) {
-        wsTrip.getCell(`F${row}`).value = fuelTypeLabel;
-        wsTrip.getCell(`G${row}`).value = eff;
-        wsTrip.getCell(`I${row}`).value = '자동';
-      }
-    });
-
-    // 주유합계/평균단가 (Row 17~18)
-    wsTrip.getCell('C17').value = totalQty;
-    wsTrip.getCell('D17').value = totalFuelAmt;
-    wsTrip.getCell('D18').value = avgPrice;
-
-    // 회차별 데이터 (Row 23~)
-    computed.forEach((t, i) => {
-      const row = 23 + i;
-      wsTrip.getCell(`B${row}`).value = `${i+1}회차`;
-      wsTrip.getCell(`C${row}`).value = new Date(t.startDate);
-      wsTrip.getCell(`C${row}`).numFmt = 'yyyy-mm-dd';
-      wsTrip.getCell(`D${row}`).value = new Date(t.endDate);
-      wsTrip.getCell(`D${row}`).numFmt = 'yyyy-mm-dd';
-      wsTrip.getCell(`E${row}`).value = VEHICLE_TYPE_LABEL[state.settings.vehicleType];
-      wsTrip.getCell(`F${row}`).value = 1;
-      wsTrip.getCell(`G${row}`).value = 2;
-      if (isCar) {
-        wsTrip.getCell(`H${row}`).value = avgPrice;
-        wsTrip.getCell(`I${row}`).value = rt;
-        wsTrip.getCell(`J${row}`).value = Math.round(t.fuelCost);
-        wsTrip.getCell(`K${row}`).value = t.tollFee || 0;
-      } else {
-        wsTrip.getCell(`L${row}`).value = Math.round(t.transitExpress || 0);
-        wsTrip.getCell(`M${row}`).value = Math.round(t.transitLocal || 0);
-      }
-      wsTrip.getCell(`N${row}`).value = Math.round(t.calculated);
-      wsTrip.getCell(`O${row}`).value = Math.round(t.requested);
-    });
-
-    // 합계/한도 (Row 28~30)
-    wsTrip.getCell('N28').value = Math.round(totalCalc);
-    wsTrip.getCell('O28').value = Math.round(totalReq);
-    wsTrip.getCell('N29').value = MONTHLY_LIMIT;
-    wsTrip.getCell('O29').value = MONTHLY_LIMIT;
-    wsTrip.getCell('N30').value = MONTHLY_LIMIT - Math.round(totalReq);
-    wsTrip.getCell('O30').value = MONTHLY_LIMIT - Math.round(totalReq);
-
-    // 영수증 이미지 삽입 (Row 34~, 주유/통행료 왼쪽, 대중교통 오른쪽)
-    await insertReceiptImages(wsTrip, 34);
-  }
-
-  // ===== 자택출근자 시트 =====
-  const wsHome = wb.getWorksheet('자택출근자');
-  if (wsHome && isHome) {
-    const homeTrip = computed[0];
-    const homeTolls = homeTrip ? state.tollReceipts.filter(t => t.tripId === homeTrip.id) : [];
-    const homeTollFee = homeTolls.reduce((s, t) => s + t.amount, 0);
-    const homeCalc = homeTrip ? Math.round(homeTrip.calculated) : 0;
-    const homeReq = homeTrip ? Math.round(homeTrip.requested) : 0;
-
-    // 유종 정보 (Row 4)
-    wsHome.getCell('C4').value = fuelTypeLabel;
-    wsHome.getCell('D4').value = eff;
-
-    // 주유 영수증 (Row 6~16)
-    fuelRows.forEach((r, i) => {
-      const row = 6 + i;
-      if (row > 16) return;
-      wsHome.getCell(`B${row}`).value = new Date(r.date);
-      wsHome.getCell(`B${row}`).numFmt = 'yyyy-mm-dd';
-      wsHome.getCell(`C${row}`).value = r.quantity || 0;
-      wsHome.getCell(`D${row}`).value = r.amount || 0;
-      if (i === 0) {
-        wsHome.getCell(`F${row}`).value = fuelTypeLabel;
-        wsHome.getCell(`G${row}`).value = eff;
-        wsHome.getCell(`J${row}`).value = '자동';
-      }
-    });
-
-    // 주유합계/평균단가 (Row 17~18)
-    wsHome.getCell('C17').value = totalQty;
-    wsHome.getCell('D17').value = totalFuelAmt;
-    wsHome.getCell('D18').value = avgPrice;
-
-    // 회차 데이터 (Row 23)
-    wsHome.getCell('B23').value = '1회차';
-    wsHome.getCell('C23').value = new Date(yr, mo-1, 1);
-    wsHome.getCell('C23').numFmt = 'yyyy-mm-dd';
-    wsHome.getCell('D23').value = new Date(yr, mo, 0);
-    wsHome.getCell('D23').numFmt = 'yyyy-mm-dd';
-    wsHome.getCell('E23').value = VEHICLE_TYPE_LABEL[state.settings.vehicleType];
-    wsHome.getCell('F23').value = state.settings.homeShortAddress || state.settings.homeAddress || '자택';
-    wsHome.getCell('G23').value = '현장';
-    wsHome.getCell('I23').value = state.commuteDays || 0;
+  // ── 회차별 정산 테이블 ──
+  let tripRows = '';
+  computed.forEach((t, i) => {
+    const tollSum = tollRows.filter(r => r.tripId === t.id).reduce((s, r) => s + r.amount, 0);
     if (isCar) {
-      wsHome.getCell('H23').value = avgPrice;
-      wsHome.getCell('J23').value = rt * (state.commuteDays || 0);
-      wsHome.getCell('K23').value = homeTrip ? Math.round(homeTrip.fuelCost) : 0;
-      wsHome.getCell('L23').value = homeTollFee;
+      tripRows += `<tr${t.adjusted ? ' class="adjusted"' : ''}>
+        <td>${i+1}회차</td><td>${t.startDate}</td><td>${t.endDate}</td>
+        <td>${VEHICLE_TYPE_LABEL[state.settings.vehicleType]}</td>
+        <td>${f(t.fuelCost)}원</td><td>${f(tollSum)}원</td>
+        <td>${f(t.calculated)}원</td>
+        <td>${f(t.requested)}원${t.adjusted ? '<br><small style="color:#FF9500">⚠️한도조정</small>' : ''}</td>
+      </tr>`;
     } else {
-      wsHome.getCell('M23').value = homeTrip ? Math.round(homeTrip.transitExpress || 0) : 0;
-      wsHome.getCell('N23').value = homeTrip ? Math.round(homeTrip.transitLocal || 0) : 0;
+      tripRows += `<tr${t.adjusted ? ' class="adjusted"' : ''}>
+        <td>${i+1}회차</td><td>${t.startDate}</td><td>${t.endDate}</td>
+        <td>${VEHICLE_TYPE_LABEL[state.settings.vehicleType]}</td>
+        <td>${f(t.transitExpress || 0)}원</td><td>${f(t.transitLocal || 0)}원</td>
+        <td>${f(t.calculated)}원</td>
+        <td>${f(t.requested)}원${t.adjusted ? '<br><small style="color:#FF9500">⚠️한도조정</small>' : ''}</td>
+      </tr>`;
     }
-    wsHome.getCell('O23').value = homeCalc;
-    wsHome.getCell('P23').value = homeReq;
+  });
+  const tripHeaderCols = isCar
+    ? '<th>회차</th><th>시작일</th><th>종료일</th><th>수단</th><th>유류비</th><th>통행료</th><th>산출금액</th><th>신청금액</th>'
+    : '<th>회차</th><th>시작일</th><th>종료일</th><th>수단</th><th>고속/시외</th><th>시내/지하철</th><th>산출금액</th><th>신청금액</th>';
 
-    // 합계/한도 (Row 25~27)
-    wsHome.getCell('O25').value = homeCalc;
-    wsHome.getCell('P25').value = homeReq;
-    wsHome.getCell('O26').value = MONTHLY_LIMIT;
-    wsHome.getCell('P26').value = MONTHLY_LIMIT;
-    wsHome.getCell('O27').value = MONTHLY_LIMIT - homeReq;
-    wsHome.getCell('P27').value = MONTHLY_LIMIT - homeReq;
+  // ── 주유/충전 영수증 테이블 ──
+  let fuelRows2 = fuelRows.map((r, i) =>
+    `<tr><td>${i+1}</td><td>${r.date}</td><td>${r.quantity ? r.quantity + fuelUnitLabel : '-'}</td><td>${f(r.amount)}원</td></tr>`
+  ).join('');
+  if (fuelRows.length) fuelRows2 += `<tr class="total-row"><td colspan="2" style="text-align:right">합계</td><td>${totalQty}${fuelUnitLabel}</td><td>${f(totalFuelAmt)}원</td></tr>`;
 
-    // 영수증 이미지 삽입
-    await insertReceiptImages(wsHome, 31);
-  }
+  // ── 통행료 영수증 테이블 ──
+  let tollRows2 = tollRows.map((r, i) => {
+    const ti = computed.findIndex(t => t.id === r.tripId);
+    return `<tr><td>${i+1}</td><td>${r.date}</td><td>${ti >= 0 ? ti+1+'회차' : '-'}</td><td>${f(r.amount)}원</td></tr>`;
+  }).join('');
+  const tollTotal = tollRows.reduce((s, r) => s + r.amount, 0);
+  if (tollRows.length) tollRows2 += `<tr class="total-row"><td colspan="3" style="text-align:right">합계</td><td>${f(tollTotal)}원</td></tr>`;
 
-  // 파일 저장
-  const [y2, m2] = state.month.split('-');
-  const fileName = `국내교통비신청양식_${state.settings.name || '신청자'}_${m2}월.xlsx`;
-  const buffer = await wb.xlsx.writeBuffer();
-  const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  // ── 대중교통 영수증 테이블 ──
+  let transitRows2 = transitRows.map((r, i) => {
+    const ti = computed.findIndex(t => t.id === r.tripId);
+    return `<tr><td>${i+1}</td><td>${r.date}</td><td>${r.type || '-'}</td><td>${ti >= 0 ? ti+1+'회차' : '-'}</td><td>${f(r.amount)}원</td></tr>`;
+  }).join('');
+  const transitTotal = transitRows.reduce((s, r) => s + r.amount, 0);
+  if (transitRows.length) transitRows2 += `<tr class="total-row"><td colspan="4" style="text-align:right">합계</td><td>${f(transitTotal)}원</td></tr>`;
+
+  // ── 영수증 이미지 ──
+  const allImages = [
+    ...fuelRows.filter(r => r.imageData).map(r => ({ src: r.imageData, label: `주유/충전 ${r.date}` })),
+    ...tollRows.filter(r => r.imageData).map(r => ({ src: r.imageData, label: `통행료 ${r.date}` })),
+    ...transitRows.filter(r => r.imageData).map(r => ({ src: r.imageData, label: `대중교통 ${r.date}` }))
+  ];
+  const imageHTML = allImages.map(img =>
+    `<div class="receipt-block">
+      <div class="receipt-label">${img.label}</div>
+      <img src="${img.src}" class="receipt-img">
+    </div>`
+  ).join('');
+
+  const html = `<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>국내교통비신청_${state.settings.name}_${String(mo).padStart(2,'0')}월</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:13px;color:#1a1a1a;background:#fff}
+  .page{width:210mm;min-height:297mm;margin:0 auto;padding:14mm 14mm 10mm}
+  .header{display:flex;align-items:center;border-bottom:3px solid #E8390E;padding-bottom:10px;margin-bottom:14px}
+  .header h1{flex:1;font-size:20px;font-weight:700}
+  .header p{font-size:11px;color:#888;margin-top:2px}
+  .header-badge{background:linear-gradient(135deg,#E8390E,#FF7900);color:#fff;padding:5px 14px;border-radius:20px;font-weight:700;font-size:14px;white-space:nowrap}
+  .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 20px;background:#f8f8f8;border-radius:8px;padding:10px 14px;margin-bottom:14px}
+  .info-row{display:flex;gap:8px;align-items:baseline}
+  .info-label{color:#888;font-size:11px;min-width:65px;flex-shrink:0}
+  .info-value{font-weight:600;font-size:13px}
+  h2{font-size:13px;font-weight:700;color:#333;margin:14px 0 6px;padding-left:8px;border-left:3px solid #E8390E}
+  table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:10px}
+  th{background:#E8390E;color:#fff;padding:5px 6px;text-align:center;font-weight:600}
+  td{padding:4px 6px;border:1px solid #e0e0e0;text-align:center}
+  tr:nth-child(even) td{background:#fafafa}
+  .total-row td{background:#fff3f0!important;font-weight:700;color:#E8390E}
+  .adjusted td:last-child{color:#FF9500}
+  .summary-box{background:#fff3f0;border:1px solid #ffc8b8;border-radius:8px;padding:10px 14px;margin-bottom:14px}
+  .summary-row{display:flex;justify-content:space-between;padding:3px 0;font-size:13px}
+  .summary-row.grand{font-weight:700;font-size:15px;color:#E8390E;border-top:1px solid #E8390E;margin-top:6px;padding-top:6px}
+  .no-data{color:#aaa;font-size:12px;text-align:center;padding:10px;background:#fafafa;border-radius:6px;margin-bottom:10px}
+  .img-section{margin-top:20px}
+  .img-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .receipt-block{border:1px solid #ddd;border-radius:6px;overflow:hidden;page-break-inside:avoid}
+  .receipt-label{background:#444;color:#fff;font-size:11px;padding:4px 8px}
+  .receipt-img{width:100%;max-height:220px;object-fit:contain;display:block;background:#f5f5f5}
+  .print-btn{position:fixed;top:16px;right:16px;background:#E8390E;color:#fff;border:none;padding:10px 18px;border-radius:20px;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2);z-index:999}
+  @media print{.print-btn{display:none}.img-section{page-break-before:always}}
+</style>
+</head>
+<body>
+<button class="print-btn" onclick="window.print()">🖨️ 인쇄 / PDF 저장</button>
+<div class="page">
+
+  <div class="header">
+    <div>
+      <h1>국내 교통비 신청서</h1>
+      <p>출력일: ${new Date().toLocaleDateString('ko-KR')}</p>
+    </div>
+    <div class="header-badge">${yr}년 ${mo}월</div>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-row"><span class="info-label">신청자</span><span class="info-value">${state.settings.name || '-'}</span></div>
+    <div class="info-row"><span class="info-label">부서</span><span class="info-value">${state.settings.department || '-'}</span></div>
+    <div class="info-row"><span class="info-label">신청월</span><span class="info-value">${yr}년 ${mo}월</span></div>
+    <div class="info-row"><span class="info-label">교통수단</span><span class="info-value">${VEHICLE_TYPE_LABEL[state.settings.vehicleType] || '-'}${isCar ? ' · ' + fuelTypeLabel : ''}</span></div>
+    <div class="info-row"><span class="info-label">자택주소</span><span class="info-value">${state.settings.homeAddress || '-'}</span></div>
+    <div class="info-row"><span class="info-label">현장주소</span><span class="info-value">${state.settings.siteAddress || '-'}</span></div>
+    <div class="info-row"><span class="info-label">편도거리</span><span class="info-value">${state.settings.oneWayDistance || 0} km</span></div>
+    <div class="info-row"><span class="info-label">왕복거리</span><span class="info-value">${rt} km</span></div>
+    ${isCar ? `<div class="info-row"><span class="info-label">평균단가</span><span class="info-value">${f(avgPrice)}원/${fuelUnitLabel}</span></div>
+    <div class="info-row"><span class="info-label">연비</span><span class="info-value">${eff} km/${fuelUnitLabel}</span></div>` : ''}
+  </div>
+
+  <h2>회차별 정산 내역</h2>
+  ${computed.length === 0 ? '<div class="no-data">회차 데이터 없음</div>' : `
+  <table>
+    <thead><tr>${tripHeaderCols}</tr></thead>
+    <tbody>
+      ${tripRows}
+      <tr class="total-row">
+        <td colspan="6" style="text-align:right;padding-right:10px">합계</td>
+        <td>${f(totalCalc)}원</td><td>${f(totalReq)}원</td>
+      </tr>
+    </tbody>
+  </table>`}
+
+  <div class="summary-box">
+    <div class="summary-row"><span>총 산출금액</span><span>${f(totalCalc)}원</span></div>
+    <div class="summary-row"><span>월 한도</span><span>${f(MONTHLY_LIMIT)}원</span></div>
+    <div class="summary-row"><span>잔여 한도</span><span>${f(MONTHLY_LIMIT - Math.round(totalReq))}원</span></div>
+    <div class="summary-row grand"><span>총 신청금액</span><span>${f(totalReq)}원</span></div>
+  </div>
+
+  ${isCar ? `
+  <h2>주유/충전 내역</h2>
+  ${fuelRows.length === 0 ? '<div class="no-data">주유/충전 내역 없음</div>' : `
+  <table>
+    <thead><tr><th>번호</th><th>날짜</th><th>수량</th><th>금액</th></tr></thead>
+    <tbody>${fuelRows2}</tbody>
+  </table>`}
+
+  <h2>통행료 내역</h2>
+  ${tollRows.length === 0 ? '<div class="no-data">통행료 내역 없음</div>' : `
+  <table>
+    <thead><tr><th>번호</th><th>날짜</th><th>연결 회차</th><th>금액</th></tr></thead>
+    <tbody>${tollRows2}</tbody>
+  </table>`}
+  ` : `
+  <h2>대중교통 내역</h2>
+  ${transitRows.length === 0 ? '<div class="no-data">대중교통 내역 없음</div>' : `
+  <table>
+    <thead><tr><th>번호</th><th>날짜</th><th>종류</th><th>연결 회차</th><th>금액</th></tr></thead>
+    <tbody>${transitRows2}</tbody>
+  </table>`}
+  `}
+
+  ${allImages.length > 0 ? `
+  <div class="img-section">
+    <h2>영수증 증빙 이미지 (${allImages.length}건)</h2>
+    <div class="img-grid">${imageHTML}</div>
+  </div>` : '<div class="no-data" style="margin-top:14px">첨부된 영수증 이미지 없음</div>'}
+
+</div>
+</body>
+</html>`;
+
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = fileName;
+  a.download = `교통비증빙_${state.settings.name || '신청자'}_${String(mo).padStart(2,'0')}월.html`;
   a.click();
   URL.revokeObjectURL(url);
-}
-
-async function insertReceiptImages(ws, startRow) {
-  // 주유/통행료 이미지: 왼쪽 (col B~H)
-  const leftImages = [
-    ...state.fuelReceipts.filter(r => r.imageData),
-    ...state.tollReceipts.filter(r => r.imageData)
-  ];
-  // 대중교통 이미지: 오른쪽 (col J~P)
-  const rightImages = state.transitReceipts.filter(r => r.imageData);
-
-  const imgH = 15; // rows per image
-
-  for (let i = 0; i < leftImages.length; i++) {
-    const r = leftImages[i];
-    try {
-      const base64 = r.imageData.split(',')[1];
-      const ext = r.imageData.includes('image/png') ? 'png' : 'jpeg';
-      const imgId = wb_addImage(ws.workbook, base64, ext);
-      ws.addImage(imgId, {
-        tl: { col: 1, row: startRow - 1 + i * imgH },
-        br: { col: 8, row: startRow - 1 + i * imgH + imgH - 1 }
-      });
-    } catch(e) { console.warn('이미지 삽입 실패:', e); }
-  }
-
-  for (let i = 0; i < rightImages.length; i++) {
-    const r = rightImages[i];
-    try {
-      const base64 = r.imageData.split(',')[1];
-      const ext = r.imageData.includes('image/png') ? 'png' : 'jpeg';
-      const imgId = wb_addImage(ws.workbook, base64, ext);
-      ws.addImage(imgId, {
-        tl: { col: 9, row: startRow - 1 + i * imgH },
-        br: { col: 16, row: startRow - 1 + i * imgH + imgH - 1 }
-      });
-    } catch(e) { console.warn('이미지 삽입 실패:', e); }
-  }
-}
-
-function wb_addImage(workbook, base64, extension) {
-  return workbook.addImage({ base64, extension });
 }
 
 // ==================== TAB MANAGEMENT ====================
@@ -2025,30 +2011,6 @@ function toggleAdminMode() {
   card.style.display = isVisible ? 'none' : '';
   const msg = isVisible ? '관리자 모드 종료' : '관리자 모드 진입\nAPI 키 설정이 표시됩니다';
   alert(msg);
-}
-
-// ==================== TEMPLATE AUTO-LOAD ====================
-let templateArrayBuffer = null;
-
-async function loadDefaultTemplate() {
-  try {
-    const resp = await fetch('국내교통비신청양식 _3월.xlsx');
-    if (resp.ok) {
-      templateArrayBuffer = await resp.arrayBuffer();
-      console.log('기본 양식 파일 로드 완료');
-    }
-  } catch (e) {
-    console.warn('기본 양식 파일 로드 실패 (로컬 환경):', e);
-  }
-}
-
-function loadTemplate(input) {
-  const file = input.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => { templateArrayBuffer = e.target.result; };
-  reader.readAsArrayBuffer(file);
-  input.value = '';
 }
 
 // ==================== MONTH CHANGE ====================
@@ -2246,7 +2208,6 @@ window.addEventListener('load', () => {
   loadState();
   initDefaultTrips();
   renderAll();
-  loadDefaultTemplate();
 });
 </script>
 </body>

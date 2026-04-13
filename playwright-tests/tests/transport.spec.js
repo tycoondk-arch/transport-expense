@@ -318,18 +318,14 @@ test.describe('내보내기 탭', () => {
     await page.locator('.tab-btn:has-text("내보내기")').click();
     await expect(page.locator('#tab-export')).toBeVisible();
     await expect(page.locator('.export-btn')).toBeVisible();
-    // 양식 업로드 UI 없음 (기본 양식 자동 로드)
+    // 양식 업로드 UI 없음 (HTML 직접 생성 방식)
     await expect(page.locator('#templateFileInput')).toHaveCount(0);
   });
 
-  test('양식 미로드 상태에서 내보내기 시도 시 경고', async ({ page }) => {
+  test('내보내기 버튼 텍스트 확인 (HTML 내보내기)', async ({ page }) => {
     await page.goto(FILE_URL);
-    await page.locator('#s_name').fill('홍길동');
-    await page.locator('#s_name').dispatchEvent('input');
     await page.locator('.tab-btn:has-text("내보내기")').click();
-    page.on('dialog', d => d.accept());
-    await page.locator('.export-btn').click();
-    // alert이 발생해야 함 (양식 파일 미로드)
+    await expect(page.locator('.export-btn')).toContainText('증빙서류 내보내기');
   });
 
   test('신청자 이름 미입력 시 설정 탭으로 이동', async ({ page }) => {
