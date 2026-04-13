@@ -408,7 +408,6 @@ input[type="file"] { display: none; }
 .empty-text  { font-size: 15px; font-weight: 500; }
 input[type="number"] { text-align: right; }
 .adjusted { color: var(--red); }
-#naverRouteLink { background: linear-gradient(135deg,#03C75A,#00A847) !important; box-shadow: 0 4px 14px rgba(3,199,90,.3) !important; border-radius: var(--r-lg) !important; }
 .export-summary { background: var(--fill4); border-radius: var(--r-md); padding: 14px; font-size: 14px; color: var(--label2); margin-bottom: 12px; line-height: 1.8; }
 
 @media (min-width: 640px) {
@@ -495,31 +494,6 @@ input[type="number"] { text-align: right; }
   </div>
 </div>
 
-<!-- Naver Route Modal -->
-<div class="modal-overlay" id="naverRouteModal">
-  <div class="modal-box">
-    <div class="modal-handle"></div>
-    <div class="modal-title">🗺️ 네이버 지도 길찾기</div>
-    <div class="alert alert-info" style="margin-bottom:12px;">
-      아래 버튼으로 네이버 지도를 열어 <strong>첫 번째 추천 경로의 편도 거리</strong>를 확인 후 입력하세요.
-    </div>
-    <div id="naverRouteAddrs" style="font-size:13px;color:#555;margin-bottom:12px;line-height:1.6;"></div>
-    <a id="naverRouteLink" href="#" target="_blank" rel="noopener"
-       style="display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;
-              background:#03C75A;color:#fff;border-radius:10px;font-weight:700;font-size:15px;
-              text-decoration:none;margin-bottom:16px;">
-      🗺️ 네이버 지도에서 경로 확인
-    </a>
-    <div class="form-group">
-      <label>확인한 편도 거리 (km)</label>
-      <input type="number" id="naverDistInput" step="0.1" placeholder="예: 86.5">
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-gray" onclick="closeNaverModal()">취소</button>
-      <button class="btn btn-primary" onclick="applyNaverDistance()">이 거리 적용</button>
-    </div>
-  </div>
-</div>
 
 <!-- Toll Receipt Modal -->
 <div class="modal-overlay" id="tollModal">
@@ -549,7 +523,7 @@ input[type="number"] { text-align: right; }
 <!-- App Header -->
 <header class="app-header">
   <div class="header-brand">
-    <div class="sk-logo">SK</div>
+    <div class="sk-logo" onclick="adminTap()" style="cursor:pointer;" title="">SK</div>
     <div class="header-titles">
       <div class="header-main">교통비 신청</div>
       <div class="header-sub">Transportation Expense</div>
@@ -655,17 +629,14 @@ input[type="number"] { text-align: right; }
     </div>
     <div class="form-group">
       <label>편도 거리 (km)</label>
-      <div style="display:flex;gap:8px;align-items:flex-start;">
-        <input type="number" id="s_dist" placeholder="86" step="0.1" style="flex:1;"
-               oninput="saveSetting('oneWayDistance',parseFloat(this.value)||0); updateDistInfo()">
-        <button class="btn btn-outline" style="white-space:nowrap;padding:9px 12px;" onclick="openNaverRoute()">🗺️ 길찾기</button>
-      </div>
+      <input type="number" id="s_dist" placeholder="86" step="0.1"
+             oninput="saveSetting('oneWayDistance',parseFloat(this.value)||0); updateDistInfo()">
     </div>
     <div class="alert alert-info" id="distInfo"></div>
   </div>
 
-  <div class="card">
-    <div class="card-title">🤖 AI 영수증 자동인식 설정</div>
+  <div class="card" id="aiApiCard" style="display:none;">
+    <div class="card-title">🤖 AI 영수증 자동인식 설정 <span style="font-size:11px;color:var(--label3);font-weight:400;">[관리자]</span></div>
     <div class="alert alert-success">
       ✅ OpenAI API 키가 적용되어 있습니다. 영수증 촬영 시 자동으로 내용을 인식합니다.
     </div>
@@ -697,15 +668,19 @@ input[type="number"] { text-align: right; }
       영수증을 촬영하거나 업로드하면 Claude AI가 자동으로 날짜/금액/주유량을 읽어옵니다.
     </div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-      <button class="btn btn-primary btn-full" style="flex-direction:column;gap:8px;height:88px;border-radius:18px;font-size:14px;" onclick="document.getElementById('fuelFileInput').click()">
-        <span style="font-size:30px;">📷</span>촬영 / 업로드
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+      <button class="btn btn-primary btn-full" style="flex-direction:column;gap:6px;height:88px;border-radius:18px;font-size:13px;" onclick="document.getElementById('fuelCameraInput').click()">
+        <span style="font-size:26px;">📷</span>카메라
       </button>
-      <button class="btn btn-outline btn-full" style="flex-direction:column;gap:8px;height:88px;border-radius:18px;font-size:14px;" onclick="openFuelManual()">
-        <span style="font-size:30px;">✏️</span>수동 입력
+      <button class="btn btn-primary btn-full" style="flex-direction:column;gap:6px;height:88px;border-radius:18px;font-size:13px;background:var(--fill3);color:var(--label);box-shadow:none;" onclick="document.getElementById('fuelGalleryInput').click()">
+        <span style="font-size:26px;">🖼️</span>사진첩
+      </button>
+      <button class="btn btn-outline btn-full" style="flex-direction:column;gap:6px;height:88px;border-radius:18px;font-size:13px;" onclick="openFuelManual()">
+        <span style="font-size:26px;">✏️</span>수동 입력
       </button>
     </div>
-    <input type="file" id="fuelFileInput" accept="image/*" capture="environment" onchange="handleFuelImage(this)">
+    <input type="file" id="fuelCameraInput" accept="image/*" capture="environment" style="display:none" onchange="handleFuelImage(this)">
+    <input type="file" id="fuelGalleryInput" accept="image/*" style="display:none" onchange="handleFuelImage(this)">
   </div>
 
   <div class="card" id="fuelStatsCard" style="display:none;">
@@ -745,15 +720,19 @@ input[type="number"] { text-align: right; }
     <div class="alert alert-info">
       영수증을 촬영하거나 업로드하면 AI가 자동으로 날짜/금액을 읽어옵니다.
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-      <button class="btn btn-primary btn-full" style="flex-direction:column;gap:8px;height:88px;border-radius:18px;font-size:14px;" onclick="document.getElementById('tollFileInput').click()">
-        <span style="font-size:30px;">📷</span>촬영 / 업로드
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+      <button class="btn btn-primary btn-full" style="flex-direction:column;gap:6px;height:88px;border-radius:18px;font-size:13px;" onclick="document.getElementById('tollCameraInput').click()">
+        <span style="font-size:26px;">📷</span>카메라
       </button>
-      <button class="btn btn-outline btn-full" style="flex-direction:column;gap:8px;height:88px;border-radius:18px;font-size:14px;" onclick="openTollManual()">
-        <span style="font-size:30px;">✏️</span>수동 입력
+      <button class="btn btn-primary btn-full" style="flex-direction:column;gap:6px;height:88px;border-radius:18px;font-size:13px;background:var(--fill3);color:var(--label);box-shadow:none;" onclick="document.getElementById('tollGalleryInput').click()">
+        <span style="font-size:26px;">🖼️</span>사진첩
+      </button>
+      <button class="btn btn-outline btn-full" style="flex-direction:column;gap:6px;height:88px;border-radius:18px;font-size:13px;" onclick="openTollManual()">
+        <span style="font-size:26px;">✏️</span>수동 입력
       </button>
     </div>
-    <input type="file" id="tollFileInput" accept="image/*" capture="environment" onchange="handleTollImage(this)">
+    <input type="file" id="tollCameraInput" accept="image/*" capture="environment" style="display:none" onchange="handleTollImage(this)">
+    <input type="file" id="tollGalleryInput" accept="image/*" style="display:none" onchange="handleTollImage(this)">
     <div id="tollList" style="margin-top:10px;"></div>
   </div>
 </div>
@@ -773,7 +752,7 @@ input[type="number"] { text-align: right; }
     </div>
     <div id="fieldTripSection">
       <div class="alert alert-info">
-        현장 복귀 또는 자택 방문마다 회차를 추가하세요. 왕복 기준으로 계산됩니다.
+        월 4회차 고정. 출발일/복귀일은 통행료 등록 시 자동으로 반영되며, 수동 수정도 가능합니다.
       </div>
     </div>
   </div>
@@ -781,21 +760,25 @@ input[type="number"] { text-align: right; }
   <!-- Transit receipts (for transit vehicle type) -->
   <div class="card" id="transitCard" style="display:none;">
     <div class="card-title">🚌 대중교통 영수증</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-      <button class="btn btn-primary btn-full" style="flex-direction:column;gap:8px;height:88px;border-radius:18px;font-size:14px;" onclick="document.getElementById('transitFileInput').click()">
-        <span style="font-size:30px;">📷</span>촬영 / 업로드
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+      <button class="btn btn-primary btn-full" style="flex-direction:column;gap:6px;height:88px;border-radius:18px;font-size:13px;" onclick="document.getElementById('transitCameraInput').click()">
+        <span style="font-size:26px;">📷</span>카메라
       </button>
-      <button class="btn btn-outline btn-full" style="flex-direction:column;gap:8px;height:88px;border-radius:18px;font-size:14px;" onclick="openTransitManual()">
-        <span style="font-size:30px;">✏️</span>수동 입력
+      <button class="btn btn-primary btn-full" style="flex-direction:column;gap:6px;height:88px;border-radius:18px;font-size:13px;background:var(--fill3);color:var(--label);box-shadow:none;" onclick="document.getElementById('transitGalleryInput').click()">
+        <span style="font-size:26px;">🖼️</span>사진첩
+      </button>
+      <button class="btn btn-outline btn-full" style="flex-direction:column;gap:6px;height:88px;border-radius:18px;font-size:13px;" onclick="openTransitManual()">
+        <span style="font-size:26px;">✏️</span>수동 입력
       </button>
     </div>
-    <input type="file" id="transitFileInput" accept="image/*" capture="environment" onchange="handleTransitImage(this)">
+    <input type="file" id="transitCameraInput" accept="image/*" capture="environment" style="display:none" onchange="handleTransitImage(this)">
+    <input type="file" id="transitGalleryInput" accept="image/*" style="display:none" onchange="handleTransitImage(this)">
     <div id="transitList" style="margin-top:10px;"></div>
   </div>
 
   <div id="tripList"></div>
 
-  <div id="fieldAddBtn">
+  <div id="fieldAddBtn" style="display:none;">
     <button class="add-btn" onclick="addTrip()">＋ 회차 추가</button>
   </div>
 </div>
@@ -821,24 +804,8 @@ input[type="number"] { text-align: right; }
 <!-- ==================== EXPORT TAB ==================== -->
 <div class="tab-content" id="tab-export">
   <div class="card">
-    <div class="card-title">📋 기준 양식 파일</div>
-    <div class="alert alert-info">
-      <strong>국내교통비신청양식_3월.xlsx</strong> 파일을 선택해야 데이터가 해당 양식 그대로 출력됩니다.
-    </div>
-    <div class="form-group">
-      <label>양식 파일 선택 (.xlsx)</label>
-      <div style="display:flex;gap:8px;align-items:center;">
-        <button class="btn btn-outline btn-full" onclick="document.getElementById('templateFileInput').click()">
-          📂 양식 파일 선택
-        </button>
-      </div>
-      <input type="file" id="templateFileInput" accept=".xlsx" onchange="loadTemplate(this)">
-    </div>
-    <div id="templateStatus" class="alert alert-warn" style="margin-bottom:0;">⚠️ 양식 파일을 선택해주세요</div>
-  </div>
-
-  <div class="card">
     <div class="card-title">📥 엑셀 파일 내보내기</div>
+    <div id="templateStatus" style="display:none;"></div>
     <div class="alert alert-info">
       작성된 교통비 신청 내역을 원본 엑셀 양식과 동일한 형식으로 내보냅니다.<br>
       통상 <strong>매월 마지막 주</strong>에 결제 시스템에 제출하세요.
@@ -1084,6 +1051,27 @@ function updateDistInfo() {
     `편도 ${dist}km → 왕복 ${dist * 2}km`;
 }
 
+// ==================== IMAGE PREPROCESSING ====================
+async function preprocessImage(imageData) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const MAX = 1280;
+      let w = img.width, h = img.height;
+      if (w > MAX || h > MAX) {
+        if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+        else { w = Math.round(w * MAX / h); h = MAX; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      resolve(canvas.toDataURL('image/jpeg', 0.88));
+    };
+    img.src = imageData;
+  });
+}
+
 // ==================== OCR (OpenAI Vision) ====================
 async function ocrReceipt(imageData, type) {
   const apiKey = state.settings.apiKey;
@@ -1091,26 +1079,27 @@ async function ocrReceipt(imageData, type) {
 
   showOCR();
   try {
-    const mimeMatch = imageData.match(/data:([^;]+);/);
-    const mime = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+    // 이미지 전처리: 최대 1280px 리사이즈 + JPEG 압축
+    const processedImage = await preprocessImage(imageData);
 
     let prompt = '';
     if (type === 'fuel') {
-      prompt = `이 주유/충전 영수증에서 다음 정보를 JSON으로 추출하세요:
-- date: 주유일 (YYYY-MM-DD)
-- quantity: 주유량 또는 충전량 (숫자만, L 또는 kWh)
-- amount: 결제금액 (숫자만, 원)
-주유량이 없으면 null. JSON만 출력하세요. 예: {"date":"2026-03-06","quantity":55.384,"amount":108000}`;
+      prompt = `한국 주유소/충전소 영수증 이미지입니다. 아래 정보를 정확히 추출하여 JSON으로만 응답하세요.
+- date: 거래일자 (YYYY-MM-DD 형식, 영수증의 날짜/일시)
+- quantity: 주유량 또는 충전량 (숫자만. 휘발유/경유는 리터(L), 전기차는 kWh. 없으면 null)
+- amount: 실제 결제금액 (숫자만, 원 단위. 합계/청구금액 기준)
+주의: 단가나 누적금액이 아닌 이번 거래 결제금액을 추출하세요.
+JSON 예시: {"date":"2026-03-06","quantity":45.23,"amount":85000}`;
     } else if (type === 'toll') {
-      prompt = `이 통행료 영수증에서 다음 정보를 JSON으로 추출하세요:
-- date: 납부일 (YYYY-MM-DD)
-- amount: 통행료 금액 (숫자만, 원)
-JSON만 출력하세요. 예: {"date":"2026-03-06","amount":13600}`;
+      prompt = `한국 고속도로 통행료 영수증입니다. 아래 정보를 정확히 추출하여 JSON으로만 응답하세요.
+- date: 납부일자 (YYYY-MM-DD 형식)
+- amount: 통행료 금액 (숫자만, 원 단위)
+JSON 예시: {"date":"2026-03-06","amount":13600}`;
     } else {
-      prompt = `이 교통비 영수증에서 다음 정보를 JSON으로 추출하세요:
-- date: 이용일 (YYYY-MM-DD)
-- amount: 금액 (숫자만, 원)
-JSON만 출력하세요. 예: {"date":"2026-03-06","amount":15000}`;
+      prompt = `한국 대중교통 영수증입니다. 아래 정보를 정확히 추출하여 JSON으로만 응답하세요.
+- date: 이용일자 (YYYY-MM-DD 형식)
+- amount: 결제금액 (숫자만, 원 단위)
+JSON 예시: {"date":"2026-03-06","amount":15000}`;
     }
 
     const resp = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -1121,11 +1110,11 @@ JSON만 출력하세요. 예: {"date":"2026-03-06","amount":15000}`;
       },
       body: JSON.stringify({
         model: 'gpt-4o-mini',
-        max_tokens: 256,
+        max_tokens: 300,
         messages: [{
           role: 'user',
           content: [
-            { type: 'image_url', image_url: { url: imageData, detail: 'low' } },
+            { type: 'image_url', image_url: { url: processedImage, detail: 'high' } },
             { type: 'text', text: prompt }
           ]
         }]
@@ -1345,6 +1334,7 @@ function saveTollReceipt() {
   }
 
   saveState();
+  syncTripDatesFromToll();
   closeTollModal();
   renderTollList();
   renderTripList();
@@ -1366,12 +1356,36 @@ function deleteTollReceipt(id) {
   if (!confirm('이 통행료 영수증을 삭제하시겠습니까?')) return;
   state.tollReceipts = state.tollReceipts.filter(r => r.id !== id);
   saveState();
+  syncTripDatesFromToll();
   renderTollList();
   renderTripList();
   renderSummary();
 }
 
 // ==================== TRIPS ====================
+function initDefaultTrips() {
+  // 현장 근무자: 월 4회차 자동 생성
+  if (state.settings.workerType !== 'field') return;
+  if (state.trips.length > 0) return;
+  const start = monthStart();
+  for (let i = 0; i < 4; i++) {
+    state.trips.push({ id: uuid(), startDate: start, endDate: start, commuteDays: 0 });
+  }
+  saveState();
+}
+
+// 통행료 저장 후 연결된 회차의 날짜 자동 업데이트
+function syncTripDatesFromToll() {
+  state.trips.forEach(trip => {
+    const tolls = state.tollReceipts.filter(t => t.tripId === trip.id);
+    if (tolls.length === 0) return;
+    const dates = tolls.map(t => t.date).sort();
+    trip.startDate = dates[0];
+    trip.endDate = dates[dates.length - 1];
+  });
+  saveState();
+}
+
 function addTrip() {
   const trips = state.trips;
   let startDate = monthStart();
@@ -1990,54 +2004,49 @@ function showTab(name) {
   if (name === 'export') renderExportPreview();
 }
 
-// ==================== NAVER ROUTE ====================
-function openNaverRoute() {
-  const from = state.settings.siteAddress || '';
-  const to = state.settings.homeAddress || '';
-  if (!from && !to) {
-    alert('설정에서 자택 주소와 현장 주소를 먼저 입력해주세요.');
-    return;
+// ==================== ADMIN MODE ====================
+let adminTapCount = 0;
+let adminTapTimer = null;
+
+function adminTap() {
+  adminTapCount++;
+  clearTimeout(adminTapTimer);
+  if (adminTapCount >= 5) {
+    adminTapCount = 0;
+    toggleAdminMode();
+  } else {
+    adminTapTimer = setTimeout(() => { adminTapCount = 0; }, 2000);
   }
-
-  const modal = document.getElementById('naverRouteModal');
-  const addrDiv = document.getElementById('naverRouteAddrs');
-  addrDiv.innerHTML = `<b>출발지(현장):</b> ${from || '미입력'}<br><b>도착지(자택):</b> ${to || '미입력'}`;
-
-  const url = `https://map.naver.com/p/directions/${encodeURIComponent(from)}//${encodeURIComponent(to)}/car`;
-  document.getElementById('naverRouteLink').href = url;
-  document.getElementById('naverDistInput').value = state.settings.oneWayDistance || '';
-  modal.classList.add('show');
 }
 
-function closeNaverModal() {
-  document.getElementById('naverRouteModal').classList.remove('show');
+function toggleAdminMode() {
+  const card = document.getElementById('aiApiCard');
+  const isVisible = card.style.display !== 'none';
+  card.style.display = isVisible ? 'none' : '';
+  const msg = isVisible ? '관리자 모드 종료' : '관리자 모드 진입\nAPI 키 설정이 표시됩니다';
+  alert(msg);
 }
 
-function applyNaverDistance() {
-  const val = parseFloat(document.getElementById('naverDistInput').value);
-  if (!val || val <= 0) {
-    alert('올바른 거리를 입력해주세요.');
-    return;
-  }
-  saveSetting('oneWayDistance', val);
-  document.getElementById('s_dist').value = val;
-  updateDistInfo();
-  closeNaverModal();
-}
-
-// ==================== TEMPLATE LOAD ====================
+// ==================== TEMPLATE AUTO-LOAD ====================
 let templateArrayBuffer = null;
+
+async function loadDefaultTemplate() {
+  try {
+    const resp = await fetch('국내교통비신청양식 _3월.xlsx');
+    if (resp.ok) {
+      templateArrayBuffer = await resp.arrayBuffer();
+      console.log('기본 양식 파일 로드 완료');
+    }
+  } catch (e) {
+    console.warn('기본 양식 파일 로드 실패 (로컬 환경):', e);
+  }
+}
 
 function loadTemplate(input) {
   const file = input.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = e => {
-    templateArrayBuffer = e.target.result;
-    const statusEl = document.getElementById('templateStatus');
-    statusEl.className = 'alert alert-success';
-    statusEl.textContent = `✅ 양식 파일 로드 완료: ${file.name}`;
-  };
+  reader.onload = e => { templateArrayBuffer = e.target.result; };
   reader.readAsArrayBuffer(file);
   input.value = '';
 }
@@ -2046,6 +2055,7 @@ function loadTemplate(input) {
 function changeMonth(val) {
   state.month = val;
   loadState();
+  initDefaultTrips();
   renderAll();
 }
 
@@ -2207,7 +2217,8 @@ function initSettingsUI() {
   document.getElementById('s_siteAddr').value = s.siteAddress || '';
   document.getElementById('s_siteShort').value = s.siteShortAddress || '';
   document.getElementById('s_dist').value = s.oneWayDistance || '';
-  document.getElementById('s_apiKey').value = s.apiKey || DEFAULT_API_KEY;
+  const apiKeyEl = document.getElementById('s_apiKey');
+  if (apiKeyEl) apiKeyEl.value = s.apiKey || DEFAULT_API_KEY;
 
   setWorkerType(s.workerType || 'field');
   setVehicleType(s.vehicleType || 'car');
@@ -2233,7 +2244,9 @@ window.addEventListener('load', () => {
   document.getElementById('monthPicker').value = state.month;
 
   loadState();
+  initDefaultTrips();
   renderAll();
+  loadDefaultTemplate();
 });
 </script>
 </body>
