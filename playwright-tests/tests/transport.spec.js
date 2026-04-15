@@ -115,9 +115,10 @@ test.describe('편도거리 설정', () => {
     await expect(page.locator('#distInfo')).toContainText('151');
   });
 
-  test('길찾기 버튼 없음 확인 (기능 제거됨)', async ({ page }) => {
+  test('네이버 지도 길찾기 버튼 표시 확인', async ({ page }) => {
     await page.goto(FILE_URL);
-    await expect(page.locator('button:has-text("길찾기")')).toHaveCount(0);
+    await expect(page.locator('button[onclick="openNaverMap()"]')).toBeVisible();
+    await expect(page.locator('button[onclick="openNaverMap()"]')).toContainText('네이버 지도 길찾기');
   });
 
   test('주소 필드 입력 저장', async ({ page }) => {

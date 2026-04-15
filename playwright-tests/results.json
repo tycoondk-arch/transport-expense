@@ -29,7 +29,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 60000
+        "timeout": 30000
       }
     ],
     "quiet": false,
@@ -73,11 +73,11 @@
           "specs": [
             {
               "title": "페이지 로드 및 헤더 확인",
-              "ok": false,
+              "ok": true,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
@@ -86,48 +86,18 @@
                     {
                       "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 7851,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.app-header h1')\nExpected substring: \u001b[32m\"교통비 신청 시스템\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.app-header h1')\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.app-header h1')\nExpected substring: \u001b[32m\"교통비 신청 시스템\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.app-header h1')\u001b[22m\n\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:16:50",
-                        "location": {
-                          "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
-                          "column": 50,
-                          "line": 16
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 14 |\u001b[39m   test(\u001b[32m'페이지 로드 및 헤더 확인'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n \u001b[90m 15 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[33mFILE_URL\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 16 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'.app-header h1'\u001b[39m))\u001b[33m.\u001b[39mtoContainText(\u001b[32m'교통비 신청 시스템'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                  \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#monthPicker'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 19 |\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
-                            "column": 50,
-                            "line": 16
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.app-header h1')\nExpected substring: \u001b[32m\"교통비 신청 시스템\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.app-header h1')\u001b[22m\n\n\n  14 |   test('페이지 로드 및 헤더 확인', async ({ page }) => {\n  15 |     await page.goto(FILE_URL);\n> 16 |     await expect(page.locator('.app-header h1')).toContainText('교통비 신청 시스템');\n     |                                                  ^\n  17 |     await expect(page.locator('#monthPicker')).toBeVisible();\n  18 |   });\n  19 |\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:16:50"
-                        }
-                      ],
+                      "status": "passed",
+                      "duration": 1040,
+                      "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-04-10T06:30:51.158Z",
+                      "startTime": "2026-04-13T07:40:55.182Z",
                       "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-교통비-신청-시스템---기본-렌더링-페이지-로드-및-헤더-확인-chromium\\error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
-                        "column": 50,
-                        "line": 16
-                      }
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
               "id": "143be9a4ad505096e1d8-7aa0bc0065e1d5a1ac29",
@@ -137,61 +107,31 @@
             },
             {
               "title": "6개 탭 버튼 존재 확인",
-              "ok": false,
+              "ok": true,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 2706,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:26:51",
-                        "location": {
-                          "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
-                          "column": 51,
-                          "line": 26
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 24 |\u001b[39m     \u001b[36mconst\u001b[39m labels \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m tabs\u001b[33m.\u001b[39mallTextContents()\u001b[33m;\u001b[39m\n \u001b[90m 25 |\u001b[39m     expect(labels\u001b[33m.\u001b[39msome(t \u001b[33m=>\u001b[39m t\u001b[33m.\u001b[39mincludes(\u001b[32m'설정'\u001b[39m)))\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 26 |\u001b[39m     expect(labels\u001b[33m.\u001b[39msome(t \u001b[33m=>\u001b[39m t\u001b[33m.\u001b[39mincludes(\u001b[32m'주유/충전'\u001b[39m)))\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 27 |\u001b[39m     expect(labels\u001b[33m.\u001b[39msome(t \u001b[33m=>\u001b[39m t\u001b[33m.\u001b[39mincludes(\u001b[32m'통행료'\u001b[39m)))\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 28 |\u001b[39m     expect(labels\u001b[33m.\u001b[39msome(t \u001b[33m=>\u001b[39m t\u001b[33m.\u001b[39mincludes(\u001b[32m'회차신청'\u001b[39m)))\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 29 |\u001b[39m     expect(labels\u001b[33m.\u001b[39msome(t \u001b[33m=>\u001b[39m t\u001b[33m.\u001b[39mincludes(\u001b[32m'정산요약'\u001b[39m)))\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
-                            "column": 51,
-                            "line": 26
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  24 |     const labels = await tabs.allTextContents();\n  25 |     expect(labels.some(t => t.includes('설정'))).toBe(true);\n> 26 |     expect(labels.some(t => t.includes('주유/충전'))).toBe(true);\n     |                                                   ^\n  27 |     expect(labels.some(t => t.includes('통행료'))).toBe(true);\n  28 |     expect(labels.some(t => t.includes('회차신청'))).toBe(true);\n  29 |     expect(labels.some(t => t.includes('정산요약'))).toBe(true);\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:26:51"
-                        }
-                      ],
+                      "status": "passed",
+                      "duration": 687,
+                      "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-04-10T06:31:04.635Z",
+                      "startTime": "2026-04-13T07:40:56.692Z",
                       "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-교통비-신청-시스템---기본-렌더링-6개-탭-버튼-존재-확인-chromium\\error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
-                        "column": 51,
-                        "line": 26
-                      }
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
               "id": "143be9a4ad505096e1d8-d3e87d594b05d6afb12a",
@@ -205,22 +145,22 @@
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 2,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2679,
+                      "duration": 626,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-04-10T06:31:13.911Z",
+                      "startTime": "2026-04-13T07:40:57.397Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -247,22 +187,22 @@
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 2,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2045,
+                      "duration": 591,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-04-10T06:31:19.014Z",
+                      "startTime": "2026-04-13T07:40:58.038Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -281,22 +221,22 @@
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 2,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1754,
+                      "duration": 666,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-04-10T06:31:21.088Z",
+                      "startTime": "2026-04-13T07:40:58.650Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -315,22 +255,22 @@
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 2,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1972,
+                      "duration": 630,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-04-10T06:31:22.860Z",
+                      "startTime": "2026-04-13T07:40:59.337Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -344,27 +284,27 @@
               "column": 3
             },
             {
-              "title": "주소 필드 및 길찾기 버튼 존재",
+              "title": "주소 필드 및 편도거리 입력 존재",
               "ok": true,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 2,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2026,
+                      "duration": 598,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-04-10T06:31:24.846Z",
+                      "startTime": "2026-04-13T07:40:59.985Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -372,396 +312,210 @@
                   "status": "expected"
                 }
               ],
-              "id": "143be9a4ad505096e1d8-d1023a252b269beff016",
+              "id": "143be9a4ad505096e1d8-58468b6a65f57e11e470",
               "file": "transport.spec.js",
               "line": 67,
               "column": 3
             },
             {
               "title": "편도거리 입력 시 왕복거리 정보 업데이트",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1739,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-04-10T06:31:26.888Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "143be9a4ad505096e1d8-e7b2edbea8a93e4c3ba2",
-              "file": "transport.spec.js",
-              "line": 77,
-              "column": 3
-            },
-            {
-              "title": "OpenAI API 설정 섹션 확인",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1901,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-04-10T06:31:28.642Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "143be9a4ad505096e1d8-283291794f444e36510a",
-              "file": "transport.spec.js",
-              "line": 86,
-              "column": 3
-            },
-            {
-              "title": "자택출근자 선택 시 현장주소 숨김",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2531,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-04-10T06:31:30.563Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "143be9a4ad505096e1d8-ab4a25b8e5fb287d4144",
-              "file": "transport.spec.js",
-              "line": 97,
-              "column": 3
-            },
-            {
-              "title": "대중교통 선택 시 유종 섹션 숨김",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2662,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-04-10T06:31:33.118Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "143be9a4ad505096e1d8-9debb9c765bd644e1af5",
-              "file": "transport.spec.js",
-              "line": 106,
-              "column": 3
-            }
-          ]
-        },
-        {
-          "title": "Naver Maps 길찾기 모달",
-          "file": "transport.spec.js",
-          "line": 115,
-          "column": 6,
-          "specs": [
-            {
-              "title": "길찾기 버튼 클릭 시 주소 미입력 경고",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2459,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-04-10T06:31:35.802Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "143be9a4ad505096e1d8-12bdcba1ba3ff96a67e6",
-              "file": "transport.spec.js",
-              "line": 116,
-              "column": 3
-            },
-            {
-              "title": "주소 입력 후 길찾기 모달 열림",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2243,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-04-10T06:31:38.285Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "143be9a4ad505096e1d8-b2edbce9221fa1f67efa",
-              "file": "transport.spec.js",
-              "line": 127,
-              "column": 3
-            },
-            {
-              "title": "네이버 지도 링크 href 확인",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1859,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-04-10T06:31:40.545Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "143be9a4ad505096e1d8-6532446ddc9e7a35f7de",
-              "file": "transport.spec.js",
-              "line": 140,
-              "column": 3
-            },
-            {
-              "title": "거리 적용 기능",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2202,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-04-10T06:31:42.427Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "143be9a4ad505096e1d8-a9aa1a346e21b34aa98c",
-              "file": "transport.spec.js",
-              "line": 152,
-              "column": 3
-            },
-            {
-              "title": "모달 취소 버튼",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2529,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-04-10T06:31:44.645Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "143be9a4ad505096e1d8-fc1a057e9154dd599b58",
-              "file": "transport.spec.js",
-              "line": 168,
-              "column": 3
-            }
-          ]
-        },
-        {
-          "title": "주유/충전 탭",
-          "file": "transport.spec.js",
-          "line": 181,
-          "column": 6,
-          "specs": [
-            {
-              "title": "주유 탭 전환 및 캡처존 확인",
               "ok": false,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 2,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "timedOut",
-                      "duration": 60047,
+                      "status": "failed",
+                      "duration": 5792,
                       "error": {
-                        "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#distInfo')\nExpected substring: \u001b[32m\"100\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#distInfo')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"distInfo\" class=\"alert alert-info\"></div>\u001b[22m\n\u001b[2m      - unexpected value \"\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#distInfo')\nExpected substring: \u001b[32m\"100\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#distInfo')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"distInfo\" class=\"alert alert-info\"></div>\u001b[22m\n\u001b[2m      - unexpected value \"\"\u001b[22m\n\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:79:28",
+                        "location": {
+                          "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                          "column": 28,
+                          "line": 79
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 77 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'#s_dist'\u001b[39m)\u001b[33m.\u001b[39mdispatchEvent(\u001b[32m'input'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 78 |\u001b[39m     \u001b[36mconst\u001b[39m distInfo \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'#distInfo'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 79 |\u001b[39m     \u001b[36mawait\u001b[39m expect(distInfo)\u001b[33m.\u001b[39mtoContainText(\u001b[32m'100'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 80 |\u001b[39m     \u001b[36mawait\u001b[39m expect(distInfo)\u001b[33m.\u001b[39mtoContainText(\u001b[32m'200'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 81 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 82 |\u001b[39m\u001b[0m"
                       },
                       "errors": [
                         {
-                          "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
-                        },
-                        {
                           "location": {
                             "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
-                            "column": 54,
-                            "line": 184
+                            "column": 28,
+                            "line": 79
                           },
-                          "message": "Error: locator.click: Test timeout of 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.tab-btn:has-text(\"주유/충전\")')\u001b[22m\n\n\n  182 |   test('주유 탭 전환 및 캡처존 확인', async ({ page }) => {\n  183 |     await page.goto(FILE_URL);\n> 184 |     await page.locator('.tab-btn:has-text(\"주유/충전\")').click();\n      |                                                      ^\n  185 |     await expect(page.locator('#tab-fuel')).toBeVisible();\n  186 |     await expect(page.locator('#fuelFileInput')).toBeAttached();\n  187 |     await expect(page.locator('button:has-text(\"수동 입력\")').first()).toBeVisible();\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:184:54"
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#distInfo')\nExpected substring: \u001b[32m\"100\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#distInfo')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"distInfo\" class=\"alert alert-info\"></div>\u001b[22m\n\u001b[2m      - unexpected value \"\"\u001b[22m\n\n\n  77 |     await page.locator('#s_dist').dispatchEvent('input');\n  78 |     const distInfo = page.locator('#distInfo');\n> 79 |     await expect(distInfo).toContainText('100');\n     |                            ^\n  80 |     await expect(distInfo).toContainText('200');\n  81 |   });\n  82 |\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:79:28"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-04-10T06:31:47.197Z",
+                      "startTime": "2026-04-13T07:41:00.599Z",
                       "annotations": [],
                       "attachments": [
                         {
                           "name": "error-context",
                           "contentType": "text/markdown",
-                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-주유-충전-탭-주유-탭-전환-및-캡처존-확인-chromium\\error-context.md"
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-설정-탭-편도거리-입력-시-왕복거리-정보-업데이트-chromium\\error-context.md"
                         }
-                      ]
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                        "column": 28,
+                        "line": 79
+                      }
                     }
                   ],
                   "status": "unexpected"
                 }
               ],
-              "id": "143be9a4ad505096e1d8-29131cc62d335b6f5048",
+              "id": "143be9a4ad505096e1d8-e7b2edbea8a93e4c3ba2",
               "file": "transport.spec.js",
-              "line": 182,
+              "line": 74,
               "column": 3
             },
             {
-              "title": "주유 수동 입력 모달",
+              "title": "OpenAI API 설정 섹션 확인",
               "ok": false,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 949,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:89:46",
+                        "location": {
+                          "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                          "column": 46,
+                          "line": 89
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 87 |\u001b[39m     \u001b[90m// API key input은 DOM에 존재하고 기본값이 설정됨 (숨겨진 상태로)\u001b[39m\n \u001b[90m 88 |\u001b[39m     \u001b[36mconst\u001b[39m apiKeyVal \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'#s_apiKey'\u001b[39m)\u001b[33m.\u001b[39minputValue()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 89 |\u001b[39m     expect(apiKeyVal\u001b[33m.\u001b[39mstartsWith(\u001b[32m'sk-proj-'\u001b[39m))\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 90 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 91 |\u001b[39m\n \u001b[90m 92 |\u001b[39m   test(\u001b[32m'자택출근자 선택 시 현장주소 숨김'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 46,
+                            "line": 89
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  87 |     // API key input은 DOM에 존재하고 기본값이 설정됨 (숨겨진 상태로)\n  88 |     const apiKeyVal = await page.locator('#s_apiKey').inputValue();\n> 89 |     expect(apiKeyVal.startsWith('sk-proj-')).toBe(true);\n     |                                              ^\n  90 |   });\n  91 |\n  92 |   test('자택출근자 선택 시 현장주소 숨김', async ({ page }) => {\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:89:46"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-13T07:41:07.963Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-설정-탭-OpenAI-API-설정-섹션-확인-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                        "column": 46,
+                        "line": 89
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-283291794f444e36510a",
+              "file": "transport.spec.js",
+              "line": 83,
+              "column": 3
+            },
+            {
+              "title": "자택출근자 선택 시 현장주소 숨김",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 6056,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#siteAddrSection')\nExpected: not visible\nReceived: visible\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"not toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#siteAddrSection')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"siteAddrSection\">…</div>\u001b[22m\n\u001b[2m      - unexpected value \"visible\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#siteAddrSection')\nExpected: not visible\nReceived: visible\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"not toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#siteAddrSection')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"siteAddrSection\">…</div>\u001b[22m\n\u001b[2m      - unexpected value \"visible\"\u001b[22m\n\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:95:56",
+                        "location": {
+                          "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                          "column": 56,
+                          "line": 95
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 93 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[33mFILE_URL\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 94 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'#wt_home'\u001b[39m)\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 95 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#siteAddrSection'\u001b[39m))\u001b[33m.\u001b[39mnot\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 96 |\u001b[39m     \u001b[90m// 현장근무자로 복귀\u001b[39m\n \u001b[90m 97 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'#wt_field'\u001b[39m)\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 98 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#siteAddrSection'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 56,
+                            "line": 95
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#siteAddrSection')\nExpected: not visible\nReceived: visible\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"not toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#siteAddrSection')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"siteAddrSection\">…</div>\u001b[22m\n\u001b[2m      - unexpected value \"visible\"\u001b[22m\n\n\n  93 |     await page.goto(FILE_URL);\n  94 |     await page.locator('#wt_home').click();\n> 95 |     await expect(page.locator('#siteAddrSection')).not.toBeVisible();\n     |                                                        ^\n  96 |     // 현장근무자로 복귀\n  97 |     await page.locator('#wt_field').click();\n  98 |     await expect(page.locator('#siteAddrSection')).toBeVisible();\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:95:56"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-13T07:41:11.110Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-설정-탭-자택출근자-선택-시-현장주소-숨김-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                        "column": 56,
+                        "line": 95
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-ab4a25b8e5fb287d4144",
+              "file": "transport.spec.js",
+              "line": 92,
+              "column": 3
+            },
+            {
+              "title": "대중교통 선택 시 유종 섹션 숨김",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
@@ -770,29 +524,369 @@
                     {
                       "workerIndex": 3,
                       "parallelIndex": 0,
-                      "status": "timedOut",
-                      "duration": 60074,
+                      "status": "failed",
+                      "duration": 5960,
                       "error": {
-                        "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#fuelTypeSection')\nExpected: not visible\nReceived: visible\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"not toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#fuelTypeSection')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"fuelTypeSection\">…</div>\u001b[22m\n\u001b[2m      - unexpected value \"visible\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#fuelTypeSection')\nExpected: not visible\nReceived: visible\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"not toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#fuelTypeSection')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"fuelTypeSection\">…</div>\u001b[22m\n\u001b[2m      - unexpected value \"visible\"\u001b[22m\n\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:104:56",
+                        "location": {
+                          "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                          "column": 56,
+                          "line": 104
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 102 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[33mFILE_URL\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 103 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'#vt_transit'\u001b[39m)\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 104 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#fuelTypeSection'\u001b[39m))\u001b[33m.\u001b[39mnot\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 105 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'#vt_car'\u001b[39m)\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 106 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#fuelTypeSection'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m 107 |\u001b[39m   })\u001b[33m;\u001b[39m\u001b[0m"
                       },
                       "errors": [
                         {
-                          "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
-                        },
-                        {
                           "location": {
                             "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
-                            "column": 54,
-                            "line": 192
+                            "column": 56,
+                            "line": 104
                           },
-                          "message": "Error: locator.click: Test timeout of 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.tab-btn:has-text(\"주유/충전\")')\u001b[22m\n\n\n  190 |   test('주유 수동 입력 모달', async ({ page }) => {\n  191 |     await page.goto(FILE_URL);\n> 192 |     await page.locator('.tab-btn:has-text(\"주유/충전\")').click();\n      |                                                      ^\n  193 |     await page.locator('button:has-text(\"수동 입력\")').first().click();\n  194 |     await expect(page.locator('#fuelModal')).toHaveClass(/show/);\n  195 |     await expect(page.locator('#fm_date')).toBeVisible();\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:192:54"
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#fuelTypeSection')\nExpected: not visible\nReceived: visible\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"not toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#fuelTypeSection')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"fuelTypeSection\">…</div>\u001b[22m\n\u001b[2m      - unexpected value \"visible\"\u001b[22m\n\n\n  102 |     await page.goto(FILE_URL);\n  103 |     await page.locator('#vt_transit').click();\n> 104 |     await expect(page.locator('#fuelTypeSection')).not.toBeVisible();\n      |                                                        ^\n  105 |     await page.locator('#vt_car').click();\n  106 |     await expect(page.locator('#fuelTypeSection')).toBeVisible();\n  107 |   });\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:104:56"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-04-10T06:32:51.134Z",
+                      "startTime": "2026-04-13T07:41:19.087Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-설정-탭-대중교통-선택-시-유종-섹션-숨김-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                        "column": 56,
+                        "line": 104
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-9debb9c765bd644e1af5",
+              "file": "transport.spec.js",
+              "line": 101,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "편도거리 설정",
+          "file": "transport.spec.js",
+          "line": 110,
+          "column": 6,
+          "specs": [
+            {
+              "title": "편도거리 수동 입력 및 왕복거리 표시",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 6156,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#distInfo')\nExpected substring: \u001b[32m\"75.5\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#distInfo')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"distInfo\" class=\"alert alert-info\"></div>\u001b[22m\n\u001b[2m      - unexpected value \"\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#distInfo')\nExpected substring: \u001b[32m\"75.5\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#distInfo')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"distInfo\" class=\"alert alert-info\"></div>\u001b[22m\n\u001b[2m      - unexpected value \"\"\u001b[22m\n\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:115:45",
+                        "location": {
+                          "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                          "column": 45,
+                          "line": 115
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 113 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'#s_dist'\u001b[39m)\u001b[33m.\u001b[39mfill(\u001b[32m'75.5'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 114 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'#s_dist'\u001b[39m)\u001b[33m.\u001b[39mdispatchEvent(\u001b[32m'input'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 115 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#distInfo'\u001b[39m))\u001b[33m.\u001b[39mtoContainText(\u001b[32m'75.5'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 116 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#distInfo'\u001b[39m))\u001b[33m.\u001b[39mtoContainText(\u001b[32m'151'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 118 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 45,
+                            "line": 115
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#distInfo')\nExpected substring: \u001b[32m\"75.5\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#distInfo')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"distInfo\" class=\"alert alert-info\"></div>\u001b[22m\n\u001b[2m      - unexpected value \"\"\u001b[22m\n\n\n  113 |     await page.locator('#s_dist').fill('75.5');\n  114 |     await page.locator('#s_dist').dispatchEvent('input');\n> 115 |     await expect(page.locator('#distInfo')).toContainText('75.5');\n      |                                             ^\n  116 |     await expect(page.locator('#distInfo')).toContainText('151');\n  117 |   });\n  118 |\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:115:45"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-13T07:41:27.858Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-편도거리-설정-편도거리-수동-입력-및-왕복거리-표시-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                        "column": 45,
+                        "line": 115
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-3439d85c8f1e68fcaa41",
+              "file": "transport.spec.js",
+              "line": 111,
+              "column": 3
+            },
+            {
+              "title": "길찾기 버튼 없음 확인 (기능 제거됨)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1066,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-13T07:41:36.656Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-6085218003347bc3db0f",
+              "file": "transport.spec.js",
+              "line": 119,
+              "column": 3
+            },
+            {
+              "title": "주소 필드 입력 저장",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1051,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-13T07:41:38.334Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-fb41022785866c90d215",
+              "file": "transport.spec.js",
+              "line": 124,
+              "column": 3
+            },
+            {
+              "title": "관리자 모드: SK 로고 5회 탭 시 API 카드 표시",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 6111,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#aiApiCard')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#aiApiCard')\u001b[22m\n\u001b[2m    9 × locator resolved to <div class=\"card\" id=\"aiApiCard\">…</div>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#aiApiCard')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#aiApiCard')\u001b[22m\n\u001b[2m    9 × locator resolved to <div class=\"card\" id=\"aiApiCard\">…</div>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:140:46",
+                        "location": {
+                          "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                          "column": 46,
+                          "line": 140
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 138 |\u001b[39m     \u001b[36mconst\u001b[39m logo \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'.sk-logo'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 139 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mlet\u001b[39m i \u001b[33m=\u001b[39m \u001b[35m0\u001b[39m\u001b[33m;\u001b[39m i \u001b[33m<\u001b[39m \u001b[35m5\u001b[39m\u001b[33m;\u001b[39m i\u001b[33m++\u001b[39m) \u001b[36mawait\u001b[39m logo\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 140 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#aiApiCard'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 141 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 142 |\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 143 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 46,
+                            "line": 140
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#aiApiCard')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#aiApiCard')\u001b[22m\n\u001b[2m    9 × locator resolved to <div class=\"card\" id=\"aiApiCard\">…</div>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n\n  138 |     const logo = page.locator('.sk-logo');\n  139 |     for (let i = 0; i < 5; i++) await logo.click();\n> 140 |     await expect(page.locator('#aiApiCard')).toBeVisible();\n      |                                              ^\n  141 |   });\n  142 | });\n  143 |\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:140:46"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-13T07:41:39.427Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-편도거리-설정-관리자-모드-SK-로고-5회-탭-시-API-카드-표시-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                        "column": 46,
+                        "line": 140
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-6581b9c1719e6d511721",
+              "file": "transport.spec.js",
+              "line": 134,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "주유/충전 탭",
+          "file": "transport.spec.js",
+          "line": 144,
+          "column": 6,
+          "specs": [
+            {
+              "title": "주유 탭 전환 및 캡처존 확인",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 5965,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#tab-fuel')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#tab-fuel')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"tab-fuel\" class=\"tab-content\">…</div>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#tab-fuel')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#tab-fuel')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"tab-fuel\" class=\"tab-content\">…</div>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:148:45",
+                        "location": {
+                          "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                          "column": 45,
+                          "line": 148
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 146 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[33mFILE_URL\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 147 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'.tab-btn:has-text(\"주유\")'\u001b[39m)\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 148 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#tab-fuel'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 149 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#fuelCameraInput'\u001b[39m))\u001b[33m.\u001b[39mtoBeAttached()\u001b[33m;\u001b[39m\n \u001b[90m 150 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#fuelGalleryInput'\u001b[39m))\u001b[33m.\u001b[39mtoBeAttached()\u001b[33m;\u001b[39m\n \u001b[90m 151 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'button:has-text(\"수동 입력\")'\u001b[39m)\u001b[33m.\u001b[39mfirst())\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 45,
+                            "line": 148
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#tab-fuel')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#tab-fuel')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"tab-fuel\" class=\"tab-content\">…</div>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n\n  146 |     await page.goto(FILE_URL);\n  147 |     await page.locator('.tab-btn:has-text(\"주유\")').click();\n> 148 |     await expect(page.locator('#tab-fuel')).toBeVisible();\n      |                                             ^\n  149 |     await expect(page.locator('#fuelCameraInput')).toBeAttached();\n  150 |     await expect(page.locator('#fuelGalleryInput')).toBeAttached();\n  151 |     await expect(page.locator('button:has-text(\"수동 입력\")').first()).toBeVisible();\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:148:45"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-13T07:41:47.388Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-주유-충전-탭-주유-탭-전환-및-캡처존-확인-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                        "column": 45,
+                        "line": 148
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "143be9a4ad505096e1d8-29131cc62d335b6f5048",
+              "file": "transport.spec.js",
+              "line": 145,
+              "column": 3
+            },
+            {
+              "title": "주유 수동 입력 모달",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 30056,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 60,
+                            "line": 157
+                          },
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"수동 입력\")').first()\u001b[22m\n\u001b[2m    - locator resolved to <button onclick=\"openFuelManual()\" class=\"btn btn-outline btn-full\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    56 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n  155 |     await page.goto(FILE_URL);\n  156 |     await page.locator('.tab-btn:has-text(\"주유\")').click();\n> 157 |     await page.locator('button:has-text(\"수동 입력\")').first().click();\n      |                                                            ^\n  158 |     await expect(page.locator('#fuelModal')).toHaveClass(/show/);\n  159 |     await expect(page.locator('#fm_date')).toBeVisible();\n  160 |     await expect(page.locator('#fm_qty')).toBeVisible();\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:157:60"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-13T07:41:55.073Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -808,7 +902,7 @@
               ],
               "id": "143be9a4ad505096e1d8-75df254e7b311778580f",
               "file": "transport.spec.js",
-              "line": 190,
+              "line": 154,
               "column": 3
             },
             {
@@ -817,38 +911,38 @@
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 4,
+                      "workerIndex": 8,
                       "parallelIndex": 0,
                       "status": "timedOut",
-                      "duration": 60044,
+                      "duration": 30088,
                       "error": {
-                        "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
                       },
                       "errors": [
                         {
-                          "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
                         },
                         {
                           "location": {
                             "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
-                            "column": 54,
-                            "line": 202
+                            "column": 60,
+                            "line": 167
                           },
-                          "message": "Error: locator.click: Test timeout of 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.tab-btn:has-text(\"주유/충전\")')\u001b[22m\n\n\n  200 |   test('주유 영수증 입력 및 저장', async ({ page }) => {\n  201 |     await page.goto(FILE_URL);\n> 202 |     await page.locator('.tab-btn:has-text(\"주유/충전\")').click();\n      |                                                      ^\n  203 |     await page.locator('button:has-text(\"수동 입력\")').first().click();\n  204 |     await page.locator('#fm_date').fill('2026-03-06');\n  205 |     await page.locator('#fm_qty').fill('50.5');\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:202:54"
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"수동 입력\")').first()\u001b[22m\n\u001b[2m    - locator resolved to <button onclick=\"openFuelManual()\" class=\"btn btn-outline btn-full\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    56 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n  165 |     await page.goto(FILE_URL);\n  166 |     await page.locator('.tab-btn:has-text(\"주유\")').click();\n> 167 |     await page.locator('button:has-text(\"수동 입력\")').first().click();\n      |                                                            ^\n  168 |     await page.locator('#fm_date').fill('2026-03-06');\n  169 |     await page.locator('#fm_qty').fill('50.5');\n  170 |     await page.locator('#fm_amount').fill('100000');\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:167:60"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-04-10T06:33:57.264Z",
+                      "startTime": "2026-04-13T07:42:27.181Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -864,7 +958,7 @@
               ],
               "id": "143be9a4ad505096e1d8-496c40f51b4dddc5f6d2",
               "file": "transport.spec.js",
-              "line": 200,
+              "line": 164,
               "column": 3
             },
             {
@@ -873,38 +967,38 @@
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 9,
                       "parallelIndex": 0,
                       "status": "timedOut",
-                      "duration": 60047,
+                      "duration": 30054,
                       "error": {
-                        "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
                       },
                       "errors": [
                         {
-                          "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
                         },
                         {
                           "location": {
                             "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
-                            "column": 54,
-                            "line": 217
+                            "column": 60,
+                            "line": 182
                           },
-                          "message": "Error: locator.click: Test timeout of 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.tab-btn:has-text(\"주유/충전\")')\u001b[22m\n\n\n  215 |     await page.goto(FILE_URL);\n  216 |     // 먼저 추가\n> 217 |     await page.locator('.tab-btn:has-text(\"주유/충전\")').click();\n      |                                                      ^\n  218 |     await page.locator('button:has-text(\"수동 입력\")').first().click();\n  219 |     await page.locator('#fm_date').fill('2026-03-06');\n  220 |     await page.locator('#fm_qty').fill('50');\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:217:54"
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"수동 입력\")').first()\u001b[22m\n\u001b[2m    - locator resolved to <button onclick=\"openFuelManual()\" class=\"btn btn-outline btn-full\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    54 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n  180 |     // 먼저 추가\n  181 |     await page.locator('.tab-btn:has-text(\"주유\")').click();\n> 182 |     await page.locator('button:has-text(\"수동 입력\")').first().click();\n      |                                                            ^\n  183 |     await page.locator('#fm_date').fill('2026-03-06');\n  184 |     await page.locator('#fm_qty').fill('50');\n  185 |     await page.locator('#fm_amount').fill('90000');\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:182:60"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-04-10T06:35:02.984Z",
+                      "startTime": "2026-04-13T07:43:00.101Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -920,7 +1014,7 @@
               ],
               "id": "143be9a4ad505096e1d8-624955726de72a3027e9",
               "file": "transport.spec.js",
-              "line": 214,
+              "line": 178,
               "column": 3
             }
           ]
@@ -928,177 +1022,295 @@
         {
           "title": "통행료 탭 (신규)",
           "file": "transport.spec.js",
-          "line": 231,
+          "line": 195,
           "column": 6,
           "specs": [
             {
               "title": "통행료 탭 전환 및 레이아웃 확인",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 6,
+                      "workerIndex": 10,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2717,
-                      "errors": [],
+                      "status": "failed",
+                      "duration": 6225,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#tab-toll')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#tab-toll')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"tab-toll\" class=\"tab-content\">…</div>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#tab-toll')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#tab-toll')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"tab-toll\" class=\"tab-content\">…</div>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:199:45",
+                        "location": {
+                          "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                          "column": 45,
+                          "line": 199
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 197 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[33mFILE_URL\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 198 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'.tab-btn:has-text(\"통행료\")'\u001b[39m)\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 199 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#tab-toll'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 200 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#tollCameraInput'\u001b[39m))\u001b[33m.\u001b[39mtoBeAttached()\u001b[33m;\u001b[39m\n \u001b[90m 201 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#tollGalleryInput'\u001b[39m))\u001b[33m.\u001b[39mtoBeAttached()\u001b[33m;\u001b[39m\n \u001b[90m 202 |\u001b[39m   })\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 45,
+                            "line": 199
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#tab-toll')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#tab-toll')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"tab-toll\" class=\"tab-content\">…</div>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n\n  197 |     await page.goto(FILE_URL);\n  198 |     await page.locator('.tab-btn:has-text(\"통행료\")').click();\n> 199 |     await expect(page.locator('#tab-toll')).toBeVisible();\n      |                                             ^\n  200 |     await expect(page.locator('#tollCameraInput')).toBeAttached();\n  201 |     await expect(page.locator('#tollGalleryInput')).toBeAttached();\n  202 |   });\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:199:45"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-04-10T06:36:08.392Z",
+                      "startTime": "2026-04-13T07:43:33.452Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-통행료-탭-신규-통행료-탭-전환-및-레이아웃-확인-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                        "column": 45,
+                        "line": 199
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "143be9a4ad505096e1d8-6fcd41d252290ba028a4",
               "file": "transport.spec.js",
-              "line": 232,
+              "line": 196,
               "column": 3
             },
             {
               "title": "통행료 수동 입력 모달 열기",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 6,
+                      "workerIndex": 11,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2363,
-                      "errors": [],
+                      "status": "timedOut",
+                      "duration": 30068,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 62,
+                            "line": 207
+                          },
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#tab-toll button:has-text(\"수동 입력\")')\u001b[22m\n\u001b[2m    - locator resolved to <button onclick=\"openTollManual()\" class=\"btn btn-outline btn-full\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    55 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n  205 |     await page.goto(FILE_URL);\n  206 |     await page.locator('.tab-btn:has-text(\"통행료\")').click();\n> 207 |     await page.locator('#tab-toll button:has-text(\"수동 입력\")').click();\n      |                                                              ^\n  208 |     await expect(page.locator('#tollModal')).toHaveClass(/show/);\n  209 |     await expect(page.locator('#tm_date')).toBeVisible();\n  210 |     await expect(page.locator('#tm_amount')).toBeVisible();\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:207:62"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-04-10T06:36:13.562Z",
+                      "startTime": "2026-04-13T07:43:42.648Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-통행료-탭-신규-통행료-수동-입력-모달-열기-chromium\\error-context.md"
+                        }
+                      ]
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "143be9a4ad505096e1d8-00a52781fca928f876cf",
               "file": "transport.spec.js",
-              "line": 239,
+              "line": 204,
               "column": 3
             },
             {
               "title": "통행료 영수증 추가 및 목록 표시",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 6,
+                      "workerIndex": 12,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2967,
-                      "errors": [],
+                      "status": "timedOut",
+                      "duration": 30048,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 62,
+                            "line": 217
+                          },
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#tab-toll button:has-text(\"수동 입력\")')\u001b[22m\n\u001b[2m    - locator resolved to <button onclick=\"openTollManual()\" class=\"btn btn-outline btn-full\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    56 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n  215 |     await page.goto(FILE_URL);\n  216 |     await page.locator('.tab-btn:has-text(\"통행료\")').click();\n> 217 |     await page.locator('#tab-toll button:has-text(\"수동 입력\")').click();\n      |                                                              ^\n  218 |     await page.locator('#tm_date').fill('2026-03-06');\n  219 |     await page.locator('#tm_amount').fill('13600');\n  220 |     await page.locator('#tollModal .btn-primary').click();\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:217:62"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-04-10T06:36:15.945Z",
+                      "startTime": "2026-04-13T07:44:15.146Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-통행료-탭-신규-통행료-영수증-추가-및-목록-표시-chromium\\error-context.md"
+                        }
+                      ]
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "143be9a4ad505096e1d8-55ecc068fefefa69956f",
               "file": "transport.spec.js",
-              "line": 249,
+              "line": 214,
               "column": 3
             },
             {
               "title": "통행료 영수증 수정",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 6,
+                      "workerIndex": 13,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2879,
-                      "errors": [],
+                      "status": "timedOut",
+                      "duration": 30080,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 62,
+                            "line": 229
+                          },
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#tab-toll button:has-text(\"수동 입력\")')\u001b[22m\n\u001b[2m    - locator resolved to <button onclick=\"openTollManual()\" class=\"btn btn-outline btn-full\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    55 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\n\n  227 |     await page.goto(FILE_URL);\n  228 |     await page.locator('.tab-btn:has-text(\"통행료\")').click();\n> 229 |     await page.locator('#tab-toll button:has-text(\"수동 입력\")').click();\n      |                                                              ^\n  230 |     await page.locator('#tm_date').fill('2026-03-06');\n  231 |     await page.locator('#tm_amount').fill('13600');\n  232 |     await page.locator('#tollModal .btn-primary').click();\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:229:62"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-04-10T06:36:18.931Z",
+                      "startTime": "2026-04-13T07:44:47.047Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-통행료-탭-신규-통행료-영수증-수정-chromium\\error-context.md"
+                        }
+                      ]
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "143be9a4ad505096e1d8-4f48878129bc60ea67f5",
               "file": "transport.spec.js",
-              "line": 261,
+              "line": 226,
               "column": 3
             },
             {
               "title": "통행료 영수증 삭제",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 6,
+                      "workerIndex": 14,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2694,
-                      "errors": [],
+                      "status": "timedOut",
+                      "duration": 30070,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 62,
+                            "line": 244
+                          },
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#tab-toll button:has-text(\"수동 입력\")')\u001b[22m\n\u001b[2m    - locator resolved to <button onclick=\"openTollManual()\" class=\"btn btn-outline btn-full\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    55 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n  242 |     await page.goto(FILE_URL);\n  243 |     await page.locator('.tab-btn:has-text(\"통행료\")').click();\n> 244 |     await page.locator('#tab-toll button:has-text(\"수동 입력\")').click();\n      |                                                              ^\n  245 |     await page.locator('#tm_date').fill('2026-03-06');\n  246 |     await page.locator('#tm_amount').fill('13600');\n  247 |     await page.locator('#tollModal .btn-primary').click();\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:244:62"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-04-10T06:36:21.828Z",
+                      "startTime": "2026-04-13T07:45:19.662Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-통행료-탭-신규-통행료-영수증-삭제-chromium\\error-context.md"
+                        }
+                      ]
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "143be9a4ad505096e1d8-5e781b9090f32e99211e",
               "file": "transport.spec.js",
-              "line": 276,
+              "line": 241,
               "column": 3
             }
           ]
@@ -1106,109 +1318,117 @@
         {
           "title": "회차신청 탭",
           "file": "transport.spec.js",
-          "line": 289,
+          "line": 254,
           "column": 6,
           "specs": [
             {
-              "title": "회차 추가 버튼 존재",
+              "title": "회차 4개 자동 생성 확인",
               "ok": false,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 6,
+                      "workerIndex": 15,
                       "parallelIndex": 0,
-                      "status": "timedOut",
-                      "duration": 60058,
+                      "status": "failed",
+                      "duration": 6117,
                       "error": {
-                        "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#tab-trips')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#tab-trips')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"tab-trips\" class=\"tab-content\">…</div>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#tab-trips')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#tab-trips')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"tab-trips\" class=\"tab-content\">…</div>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:258:46",
+                        "location": {
+                          "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                          "column": 46,
+                          "line": 258
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 256 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[33mFILE_URL\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 257 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'.tab-btn:has-text(\"회차\")'\u001b[39m)\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 258 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#tab-trips'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 259 |\u001b[39m     \u001b[90m// 현장근무자 기본 4회차 자동 생성\u001b[39m\n \u001b[90m 260 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'.trip-item'\u001b[39m))\u001b[33m.\u001b[39mtoHaveCount(\u001b[35m4\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 261 |\u001b[39m   })\u001b[33m;\u001b[39m\u001b[0m"
                       },
                       "errors": [
                         {
-                          "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
-                        },
-                        {
                           "location": {
                             "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
-                            "column": 53,
-                            "line": 292
+                            "column": 46,
+                            "line": 258
                           },
-                          "message": "Error: locator.click: Test timeout of 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.tab-btn:has-text(\"회차신청\")')\u001b[22m\n\n\n  290 |   test('회차 추가 버튼 존재', async ({ page }) => {\n  291 |     await page.goto(FILE_URL);\n> 292 |     await page.locator('.tab-btn:has-text(\"회차신청\")').click();\n      |                                                     ^\n  293 |     await expect(page.locator('#tab-trips')).toBeVisible();\n  294 |     await expect(page.locator('#fieldAddBtn button')).toBeVisible();\n  295 |   });\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:292:53"
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#tab-trips')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#tab-trips')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"tab-trips\" class=\"tab-content\">…</div>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n\n  256 |     await page.goto(FILE_URL);\n  257 |     await page.locator('.tab-btn:has-text(\"회차\")').click();\n> 258 |     await expect(page.locator('#tab-trips')).toBeVisible();\n      |                                              ^\n  259 |     // 현장근무자 기본 4회차 자동 생성\n  260 |     await expect(page.locator('.trip-item')).toHaveCount(4);\n  261 |   });\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:258:46"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-04-10T06:36:24.540Z",
+                      "startTime": "2026-04-13T07:45:54.008Z",
                       "annotations": [],
                       "attachments": [
                         {
                           "name": "error-context",
                           "contentType": "text/markdown",
-                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-회차신청-탭-회차-추가-버튼-존재-chromium\\error-context.md"
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-회차신청-탭-회차-4개-자동-생성-확인-chromium\\error-context.md"
                         }
-                      ]
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                        "column": 46,
+                        "line": 258
+                      }
                     }
                   ],
                   "status": "unexpected"
                 }
               ],
-              "id": "143be9a4ad505096e1d8-bff8a749a687f155a10d",
+              "id": "143be9a4ad505096e1d8-308cdfe28474eca421ac",
               "file": "transport.spec.js",
-              "line": 290,
+              "line": 255,
               "column": 3
             },
             {
-              "title": "회차 추가 및 날짜 입력",
+              "title": "회차 날짜 수동 입력",
               "ok": false,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 7,
+                      "workerIndex": 16,
                       "parallelIndex": 0,
                       "status": "timedOut",
-                      "duration": 60036,
+                      "duration": 30042,
                       "error": {
-                        "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
                       },
                       "errors": [
                         {
-                          "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
                         },
                         {
                           "location": {
                             "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
-                            "column": 53,
-                            "line": 299
+                            "column": 22,
+                            "line": 267
                           },
-                          "message": "Error: locator.click: Test timeout of 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.tab-btn:has-text(\"회차신청\")')\u001b[22m\n\n\n  297 |   test('회차 추가 및 날짜 입력', async ({ page }) => {\n  298 |     await page.goto(FILE_URL);\n> 299 |     await page.locator('.tab-btn:has-text(\"회차신청\")').click();\n      |                                                     ^\n  300 |     await page.locator('#fieldAddBtn button').click();\n  301 |     await expect(page.locator('.trip-item')).toHaveCount(1);\n  302 |   });\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:299:53"
+                          "message": "Error: locator.fill: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.trip-item input[type=\"date\"]').first()\u001b[22m\n\n\n  265 |     await page.locator('.tab-btn:has-text(\"회차\")').click();\n  266 |     const startInput = page.locator('.trip-item input[type=\"date\"]').first();\n> 267 |     await startInput.fill('2026-03-06');\n      |                      ^\n  268 |     await startInput.dispatchEvent('change');\n  269 |     await expect(startInput).toHaveValue('2026-03-06');\n  270 |   });\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:267:22"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-04-10T06:37:28.408Z",
+                      "startTime": "2026-04-13T07:46:02.359Z",
                       "annotations": [],
                       "attachments": [
                         {
                           "name": "error-context",
                           "contentType": "text/markdown",
-                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-회차신청-탭-회차-추가-및-날짜-입력-chromium\\error-context.md"
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-회차신청-탭-회차-날짜-수동-입력-chromium\\error-context.md"
                         }
                       ]
                     }
@@ -1216,9 +1436,9 @@
                   "status": "unexpected"
                 }
               ],
-              "id": "143be9a4ad505096e1d8-79b6d7ee2b398df57bd9",
+              "id": "143be9a4ad505096e1d8-febdde111911d2f1118b",
               "file": "transport.spec.js",
-              "line": 297,
+              "line": 263,
               "column": 3
             },
             {
@@ -1227,38 +1447,41 @@
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 8,
+                      "workerIndex": 17,
                       "parallelIndex": 0,
-                      "status": "timedOut",
-                      "duration": 60046,
+                      "status": "failed",
+                      "duration": 6226,
                       "error": {
-                        "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#homeCommuteSection')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#homeCommuteSection')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"homeCommuteSection\">…</div>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#homeCommuteSection')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#homeCommuteSection')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"homeCommuteSection\">…</div>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:276:55",
+                        "location": {
+                          "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                          "column": 55,
+                          "line": 276
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 274 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'#wt_home'\u001b[39m)\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 275 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'.tab-btn:has-text(\"회차\")'\u001b[39m)\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 276 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#homeCommuteSection'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 277 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#commuteDays'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m 278 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 279 |\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m"
                       },
                       "errors": [
                         {
-                          "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
-                        },
-                        {
                           "location": {
                             "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
-                            "column": 53,
-                            "line": 307
+                            "column": 55,
+                            "line": 276
                           },
-                          "message": "Error: locator.click: Test timeout of 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.tab-btn:has-text(\"회차신청\")')\u001b[22m\n\n\n  305 |     await page.goto(FILE_URL);\n  306 |     await page.locator('#wt_home').click();\n> 307 |     await page.locator('.tab-btn:has-text(\"회차신청\")').click();\n      |                                                     ^\n  308 |     await expect(page.locator('#homeCommuteSection')).toBeVisible();\n  309 |     await expect(page.locator('#commuteDays')).toBeVisible();\n  310 |   });\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:307:53"
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#homeCommuteSection')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#homeCommuteSection')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"homeCommuteSection\">…</div>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n\n  274 |     await page.locator('#wt_home').click();\n  275 |     await page.locator('.tab-btn:has-text(\"회차\")').click();\n> 276 |     await expect(page.locator('#homeCommuteSection')).toBeVisible();\n      |                                                       ^\n  277 |     await expect(page.locator('#commuteDays')).toBeVisible();\n  278 |   });\n  279 | });\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:276:55"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-04-10T06:38:34.748Z",
+                      "startTime": "2026-04-13T07:46:34.501Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -1266,7 +1489,12 @@
                           "contentType": "text/markdown",
                           "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-회차신청-탭-자택출근자-모드에서-출퇴근일수-입력-표시-chromium\\error-context.md"
                         }
-                      ]
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                        "column": 55,
+                        "line": 276
+                      }
                     }
                   ],
                   "status": "unexpected"
@@ -1274,7 +1502,7 @@
               ],
               "id": "143be9a4ad505096e1d8-8958c4892bb884319675",
               "file": "transport.spec.js",
-              "line": 304,
+              "line": 272,
               "column": 3
             }
           ]
@@ -1282,7 +1510,7 @@
         {
           "title": "정산요약 탭",
           "file": "transport.spec.js",
-          "line": 313,
+          "line": 281,
           "column": 6,
           "specs": [
             {
@@ -1291,38 +1519,41 @@
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 9,
+                      "workerIndex": 18,
                       "parallelIndex": 0,
-                      "status": "timedOut",
-                      "duration": 60072,
+                      "status": "failed",
+                      "duration": 6499,
                       "error": {
-                        "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#tab-summary')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#tab-summary')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"tab-summary\" class=\"tab-content\">…</div>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#tab-summary')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#tab-summary')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"tab-summary\" class=\"tab-content\">…</div>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:285:48",
+                        "location": {
+                          "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                          "column": 48,
+                          "line": 285
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 283 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[33mFILE_URL\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 284 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'.tab-btn:has-text(\"정산\")'\u001b[39m)\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 285 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#tab-summary'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 286 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#summaryContent'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m 287 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 288 |\u001b[39m\u001b[0m"
                       },
                       "errors": [
                         {
-                          "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
-                        },
-                        {
                           "location": {
                             "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
-                            "column": 53,
-                            "line": 316
+                            "column": 48,
+                            "line": 285
                           },
-                          "message": "Error: locator.click: Test timeout of 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.tab-btn:has-text(\"정산요약\")')\u001b[22m\n\n\n  314 |   test('데이터 없을 때 빈 상태 표시', async ({ page }) => {\n  315 |     await page.goto(FILE_URL);\n> 316 |     await page.locator('.tab-btn:has-text(\"정산\")').click();\n      |                                                     ^\n  317 |     await expect(page.locator('#tab-summary')).toBeVisible();\n  318 |     await expect(page.locator('#summaryContent')).toBeVisible();\n  319 |   });\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:316:53"
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#tab-summary')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#tab-summary')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"tab-summary\" class=\"tab-content\">…</div>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n\n  283 |     await page.goto(FILE_URL);\n  284 |     await page.locator('.tab-btn:has-text(\"정산\")').click();\n> 285 |     await expect(page.locator('#tab-summary')).toBeVisible();\n      |                                                ^\n  286 |     await expect(page.locator('#summaryContent')).toBeVisible();\n  287 |   });\n  288 |\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:285:48"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-04-10T06:39:40.278Z",
+                      "startTime": "2026-04-13T07:46:42.885Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -1330,7 +1561,12 @@
                           "contentType": "text/markdown",
                           "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-정산요약-탭-데이터-없을-때-빈-상태-표시-chromium\\error-context.md"
                         }
-                      ]
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                        "column": 48,
+                        "line": 285
+                      }
                     }
                   ],
                   "status": "unexpected"
@@ -1338,41 +1574,63 @@
               ],
               "id": "143be9a4ad505096e1d8-12f22eb4f2e909cca814",
               "file": "transport.spec.js",
-              "line": 314,
+              "line": 282,
               "column": 3
             },
             {
               "title": "주유+회차 입력 후 정산 계산 확인",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 10,
+                      "workerIndex": 19,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 3932,
-                      "errors": [],
+                      "status": "timedOut",
+                      "duration": 30074,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 60,
+                            "line": 296
+                          },
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"수동 입력\")').first()\u001b[22m\n\u001b[2m    - locator resolved to <button onclick=\"openFuelManual()\" class=\"btn btn-outline btn-full\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    56 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n  294 |     // 주유 추가\n  295 |     await page.locator('.tab-btn:has-text(\"주유\")').click();\n> 296 |     await page.locator('button:has-text(\"수동 입력\")').first().click();\n      |                                                            ^\n  297 |     await page.locator('#fm_date').fill('2026-03-06');\n  298 |     await page.locator('#fm_qty').fill('55');\n  299 |     await page.locator('#fm_amount').fill('110000');\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:296:60"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-04-10T06:40:47.305Z",
+                      "startTime": "2026-04-13T07:46:51.883Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-정산요약-탭-주유-회차-입력-후-정산-계산-확인-chromium\\error-context.md"
+                        }
+                      ]
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "143be9a4ad505096e1d8-d21441506d81fcda5b0e",
               "file": "transport.spec.js",
-              "line": 321,
+              "line": 289,
               "column": 3
             }
           ]
@@ -1380,177 +1638,327 @@
         {
           "title": "내보내기 탭",
           "file": "transport.spec.js",
-          "line": 348,
+          "line": 315,
           "column": 6,
           "specs": [
             {
               "title": "내보내기 탭 레이아웃 확인",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 10,
+                      "workerIndex": 20,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2562,
-                      "errors": [],
+                      "status": "failed",
+                      "duration": 5924,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#tab-export')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#tab-export')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"tab-export\" class=\"tab-content\">…</div>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#tab-export')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#tab-export')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"tab-export\" class=\"tab-content\">…</div>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:319:47",
+                        "location": {
+                          "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                          "column": 47,
+                          "line": 319
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 317 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[33mFILE_URL\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 318 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'.tab-btn:has-text(\"내보내기\")'\u001b[39m)\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 319 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#tab-export'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 320 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'.export-btn'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m 321 |\u001b[39m     \u001b[90m// 양식 업로드 UI 없음 (HTML 직접 생성 방식)\u001b[39m\n \u001b[90m 322 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#templateFileInput'\u001b[39m))\u001b[33m.\u001b[39mtoHaveCount(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 47,
+                            "line": 319
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#tab-export')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#tab-export')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"tab-export\" class=\"tab-content\">…</div>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n\n  317 |     await page.goto(FILE_URL);\n  318 |     await page.locator('.tab-btn:has-text(\"내보내기\")').click();\n> 319 |     await expect(page.locator('#tab-export')).toBeVisible();\n      |                                               ^\n  320 |     await expect(page.locator('.export-btn')).toBeVisible();\n  321 |     // 양식 업로드 UI 없음 (HTML 직접 생성 방식)\n  322 |     await expect(page.locator('#templateFileInput')).toHaveCount(0);\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:319:47"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-04-10T06:40:54.336Z",
+                      "startTime": "2026-04-13T07:47:24.192Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-내보내기-탭-내보내기-탭-레이아웃-확인-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                        "column": 47,
+                        "line": 319
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "143be9a4ad505096e1d8-41047c110a55fb7bf686",
               "file": "transport.spec.js",
-              "line": 349,
+              "line": 316,
               "column": 3
             },
             {
-              "title": "양식 미선택 상태에서 내보내기 시도 시 경고",
-              "ok": true,
+              "title": "내보내기 버튼 텍스트 확인 (HTML 내보내기)",
+              "ok": false,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 10,
+                      "workerIndex": 21,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2734,
-                      "errors": [],
+                      "status": "failed",
+                      "duration": 1023,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.export-btn')\nExpected substring: \u001b[32m\"증빙서류 내보내기\"\u001b[39m\nError: strict mode violation: locator('.export-btn') resolved to 2 elements:\n    1) <button class=\"export-btn\" onclick=\"exportToHTML()\">↵      📋 증빙서류 내보내기 (HTML)↵    </button> aka getByText('📋 증빙서류 내보내기 (HTML)')\n    2) <button id=\"shareBtn\" class=\"export-btn\" onclick=\"exportAndEmail()\">↵      📤 증빙서류 공유 / 다운로드↵    </button> aka getByText('📤 증빙서류 공유 / 다운로드')\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.export-btn')\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.export-btn')\nExpected substring: \u001b[32m\"증빙서류 내보내기\"\u001b[39m\nError: strict mode violation: locator('.export-btn') resolved to 2 elements:\n    1) <button class=\"export-btn\" onclick=\"exportToHTML()\">↵      📋 증빙서류 내보내기 (HTML)↵    </button> aka getByText('📋 증빙서류 내보내기 (HTML)')\n    2) <button id=\"shareBtn\" class=\"export-btn\" onclick=\"exportAndEmail()\">↵      📤 증빙서류 공유 / 다운로드↵    </button> aka getByText('📤 증빙서류 공유 / 다운로드')\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.export-btn')\u001b[22m\n\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:328:47",
+                        "location": {
+                          "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                          "column": 47,
+                          "line": 328
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 326 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[33mFILE_URL\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 327 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'.tab-btn:has-text(\"내보내기\")'\u001b[39m)\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 328 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'.export-btn'\u001b[39m))\u001b[33m.\u001b[39mtoContainText(\u001b[32m'증빙서류 내보내기'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 329 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 330 |\u001b[39m\n \u001b[90m 331 |\u001b[39m   test(\u001b[32m'신청자 이름 미입력 시 설정 탭으로 이동'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 47,
+                            "line": 328
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.export-btn')\nExpected substring: \u001b[32m\"증빙서류 내보내기\"\u001b[39m\nError: strict mode violation: locator('.export-btn') resolved to 2 elements:\n    1) <button class=\"export-btn\" onclick=\"exportToHTML()\">↵      📋 증빙서류 내보내기 (HTML)↵    </button> aka getByText('📋 증빙서류 내보내기 (HTML)')\n    2) <button id=\"shareBtn\" class=\"export-btn\" onclick=\"exportAndEmail()\">↵      📤 증빙서류 공유 / 다운로드↵    </button> aka getByText('📤 증빙서류 공유 / 다운로드')\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.export-btn')\u001b[22m\n\n\n  326 |     await page.goto(FILE_URL);\n  327 |     await page.locator('.tab-btn:has-text(\"내보내기\")').click();\n> 328 |     await expect(page.locator('.export-btn')).toContainText('증빙서류 내보내기');\n      |                                               ^\n  329 |   });\n  330 |\n  331 |   test('신청자 이름 미입력 시 설정 탭으로 이동', async ({ page }) => {\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:328:47"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-04-10T06:40:56.918Z",
+                      "startTime": "2026-04-13T07:47:32.439Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-내보내기-탭-내보내기-버튼-텍스트-확인-HTML-내보내기--chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                        "column": 47,
+                        "line": 328
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
-              "id": "143be9a4ad505096e1d8-5d46f40d3f0775b3aace",
+              "id": "143be9a4ad505096e1d8-c1ecadb177c3ea8fbf7a",
               "file": "transport.spec.js",
-              "line": 360,
+              "line": 325,
               "column": 3
             },
             {
               "title": "신청자 이름 미입력 시 설정 탭으로 이동",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 10,
+                      "workerIndex": 22,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2629,
-                      "errors": [],
+                      "status": "failed",
+                      "duration": 1060,
+                      "error": {
+                        "message": "Error: locator.click: Error: strict mode violation: locator('.export-btn') resolved to 2 elements:\n    1) <button class=\"export-btn\" onclick=\"exportToHTML()\">↵      📋 증빙서류 내보내기 (HTML)↵    </button> aka getByText('📋 증빙서류 내보내기 (HTML)')\n    2) <button id=\"shareBtn\" class=\"export-btn\" onclick=\"exportAndEmail()\">↵      📤 증빙서류 공유 / 다운로드↵    </button> aka getByText('📤 증빙서류 공유 / 다운로드')\n\nCall log:\n\u001b[2m  - waiting for locator('.export-btn')\u001b[22m\n",
+                        "stack": "Error: locator.click: Error: strict mode violation: locator('.export-btn') resolved to 2 elements:\n    1) <button class=\"export-btn\" onclick=\"exportToHTML()\">↵      📋 증빙서류 내보내기 (HTML)↵    </button> aka getByText('📋 증빙서류 내보내기 (HTML)')\n    2) <button id=\"shareBtn\" class=\"export-btn\" onclick=\"exportAndEmail()\">↵      📤 증빙서류 공유 / 다운로드↵    </button> aka getByText('📤 증빙서류 공유 / 다운로드')\n\nCall log:\n\u001b[2m  - waiting for locator('.export-btn')\u001b[22m\n\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:335:39",
+                        "location": {
+                          "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                          "column": 39,
+                          "line": 335
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 333 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'.tab-btn:has-text(\"내보내기\")'\u001b[39m)\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 334 |\u001b[39m     page\u001b[33m.\u001b[39mon(\u001b[32m'dialog'\u001b[39m\u001b[33m,\u001b[39m d \u001b[33m=>\u001b[39m d\u001b[33m.\u001b[39maccept())\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 335 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'.export-btn'\u001b[39m)\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 336 |\u001b[39m     \u001b[90m// 설정 탭으로 전환됨\u001b[39m\n \u001b[90m 337 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#tab-settings'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m 338 |\u001b[39m   })\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 39,
+                            "line": 335
+                          },
+                          "message": "Error: locator.click: Error: strict mode violation: locator('.export-btn') resolved to 2 elements:\n    1) <button class=\"export-btn\" onclick=\"exportToHTML()\">↵      📋 증빙서류 내보내기 (HTML)↵    </button> aka getByText('📋 증빙서류 내보내기 (HTML)')\n    2) <button id=\"shareBtn\" class=\"export-btn\" onclick=\"exportAndEmail()\">↵      📤 증빙서류 공유 / 다운로드↵    </button> aka getByText('📤 증빙서류 공유 / 다운로드')\n\nCall log:\n\u001b[2m  - waiting for locator('.export-btn')\u001b[22m\n\n\n  333 |     await page.locator('.tab-btn:has-text(\"내보내기\")').click();\n  334 |     page.on('dialog', d => d.accept());\n> 335 |     await page.locator('.export-btn').click();\n      |                                       ^\n  336 |     // 설정 탭으로 전환됨\n  337 |     await expect(page.locator('#tab-settings')).toBeVisible();\n  338 |   });\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:335:39"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-04-10T06:40:59.672Z",
+                      "startTime": "2026-04-13T07:47:35.664Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-내보내기-탭-신청자-이름-미입력-시-설정-탭으로-이동-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                        "column": 39,
+                        "line": 335
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "143be9a4ad505096e1d8-50c22229146f0779cdbc",
               "file": "transport.spec.js",
-              "line": 370,
+              "line": 331,
               "column": 3
             },
             {
               "title": "체크리스트 표시 확인",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 10,
+                      "workerIndex": 23,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2461,
-                      "errors": [],
+                      "status": "failed",
+                      "duration": 6038,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#checklistContent')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#checklistContent')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"checklistContent\"></div>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#checklistContent')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#checklistContent')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"checklistContent\"></div>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:343:53",
+                        "location": {
+                          "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                          "column": 53,
+                          "line": 343
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 341 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[33mFILE_URL\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 342 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'.tab-btn:has-text(\"내보내기\")'\u001b[39m)\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 343 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#checklistContent'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 344 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 345 |\u001b[39m\n \u001b[90m 346 |\u001b[39m   test(\u001b[32m'내보내기 미리보기 정보 표시'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 53,
+                            "line": 343
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#checklistContent')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#checklistContent')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"checklistContent\"></div>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n\n  341 |     await page.goto(FILE_URL);\n  342 |     await page.locator('.tab-btn:has-text(\"내보내기\")').click();\n> 343 |     await expect(page.locator('#checklistContent')).toBeVisible();\n      |                                                     ^\n  344 |   });\n  345 |\n  346 |   test('내보내기 미리보기 정보 표시', async ({ page }) => {\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:343:53"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-04-10T06:41:02.318Z",
+                      "startTime": "2026-04-13T07:47:39.326Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-내보내기-탭-체크리스트-표시-확인-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                        "column": 53,
+                        "line": 343
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "143be9a4ad505096e1d8-5a1ad4f5786eb7c8ccc2",
               "file": "transport.spec.js",
-              "line": 379,
+              "line": 340,
               "column": 3
             },
             {
               "title": "내보내기 미리보기 정보 표시",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 10,
+                      "workerIndex": 24,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2516,
-                      "errors": [],
+                      "status": "failed",
+                      "duration": 6182,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#exportPreview')\nExpected substring: \u001b[32m\"김진현\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#exportPreview')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"exportPreview\" class=\"export-summary\"></div>\u001b[22m\n\u001b[2m      - unexpected value \"\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#exportPreview')\nExpected substring: \u001b[32m\"김진현\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#exportPreview')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"exportPreview\" class=\"export-summary\"></div>\u001b[22m\n\u001b[2m      - unexpected value \"\"\u001b[22m\n\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:351:50",
+                        "location": {
+                          "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                          "column": 50,
+                          "line": 351
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 349 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'#s_name'\u001b[39m)\u001b[33m.\u001b[39mdispatchEvent(\u001b[32m'input'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 350 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'.tab-btn:has-text(\"내보내기\")'\u001b[39m)\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 351 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#exportPreview'\u001b[39m))\u001b[33m.\u001b[39mtoContainText(\u001b[32m'김진현'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                  \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 352 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 353 |\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 354 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 50,
+                            "line": 351
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#exportPreview')\nExpected substring: \u001b[32m\"김진현\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#exportPreview')\u001b[22m\n\u001b[2m    9 × locator resolved to <div id=\"exportPreview\" class=\"export-summary\"></div>\u001b[22m\n\u001b[2m      - unexpected value \"\"\u001b[22m\n\n\n  349 |     await page.locator('#s_name').dispatchEvent('input');\n  350 |     await page.locator('.tab-btn:has-text(\"내보내기\")').click();\n> 351 |     await expect(page.locator('#exportPreview')).toContainText('김진현');\n      |                                                  ^\n  352 |   });\n  353 | });\n  354 |\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:351:50"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-04-10T06:41:04.804Z",
+                      "startTime": "2026-04-13T07:47:47.424Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-내보내기-탭-내보내기-미리보기-정보-표시-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                        "column": 50,
+                        "line": 351
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "143be9a4ad505096e1d8-51a2ad8a2c2b6fc5013b",
               "file": "transport.spec.js",
-              "line": 385,
+              "line": 346,
               "column": 3
             }
           ]
@@ -1558,75 +1966,119 @@
         {
           "title": "탭 간 데이터 연동",
           "file": "transport.spec.js",
-          "line": 394,
+          "line": 355,
           "column": 6,
           "specs": [
             {
               "title": "통행료가 정산요약에 반영",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 10,
+                      "workerIndex": 25,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 3820,
-                      "errors": [],
+                      "status": "timedOut",
+                      "duration": 30042,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 60,
+                            "line": 362
+                          },
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"수동 입력\")').first()\u001b[22m\n\u001b[2m    - locator resolved to <button onclick=\"openFuelManual()\" class=\"btn btn-outline btn-full\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    55 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n  360 |     // 주유 추가\n  361 |     await page.locator('.tab-btn:has-text(\"주유\")').click();\n> 362 |     await page.locator('button:has-text(\"수동 입력\")').first().click();\n      |                                                            ^\n  363 |     await page.locator('#fm_date').fill('2026-03-06');\n  364 |     await page.locator('#fm_qty').fill('55');\n  365 |     await page.locator('#fm_amount').fill('110000');\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:362:60"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-04-10T06:41:07.343Z",
+                      "startTime": "2026-04-13T07:47:56.041Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-탭-간-데이터-연동-통행료가-정산요약에-반영-chromium\\error-context.md"
+                        }
+                      ]
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "143be9a4ad505096e1d8-3f54b996b0516e810890",
               "file": "transport.spec.js",
-              "line": 395,
+              "line": 356,
               "column": 3
             },
             {
               "title": "월 변경 시 데이터 초기화",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 10,
+                      "workerIndex": 26,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 3152,
-                      "errors": [],
+                      "status": "timedOut",
+                      "duration": 30098,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js",
+                            "column": 60,
+                            "line": 387
+                          },
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"수동 입력\")').first()\u001b[22m\n\u001b[2m    - locator resolved to <button onclick=\"openFuelManual()\" class=\"btn btn-outline btn-full\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    56 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n  385 |     // 주유 추가 (현재 월)\n  386 |     await page.locator('.tab-btn:has-text(\"주유\")').click();\n> 387 |     await page.locator('button:has-text(\"수동 입력\")').first().click();\n      |                                                            ^\n  388 |     await page.locator('#fm_date').fill('2026-03-06');\n  389 |     await page.locator('#fm_qty').fill('50');\n  390 |     await page.locator('#fm_amount').fill('90000');\n    at D:\\교통비정산증빙 시스템\\playwright-tests\\tests\\transport.spec.js:387:60"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-04-10T06:41:11.183Z",
+                      "startTime": "2026-04-13T07:48:27.846Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "D:\\교통비정산증빙 시스템\\playwright-tests\\test-results\\transport-탭-간-데이터-연동-월-변경-시-데이터-초기화-chromium\\error-context.md"
+                        }
+                      ]
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "143be9a4ad505096e1d8-f6fafd1940761b0544aa",
               "file": "transport.spec.js",
-              "line": 426,
+              "line": 383,
               "column": 3
             }
           ]
@@ -1636,11 +2088,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-04-10T06:30:48.013Z",
-    "duration": 626717.12,
-    "expected": 27,
+    "startTime": "2026-04-13T07:40:53.047Z",
+    "duration": 485829.799,
+    "expected": 9,
     "skipped": 0,
-    "unexpected": 10,
+    "unexpected": 27,
     "flaky": 0
   }
 }

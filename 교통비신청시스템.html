@@ -678,6 +678,15 @@ input[type="number"] { text-align: right; }
              oninput="saveSetting('oneWayDistance',parseFloat(this.value)||0); updateDistInfo()">
     </div>
     <div class="alert alert-info" id="distInfo"></div>
+    <div class="form-group" style="margin-top:12px;">
+      <button type="button" onclick="openNaverMap()" style="width:100%;padding:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;">🗺️ 네이버 지도 길찾기 열기</button>
+      <p style="font-size:12px;color:var(--label3);margin:6px 0 10px;">클릭 시 현장→자택 경로가 자동 입력된 네이버 지도가 열립니다. 첫 번째 추천 경로가 보이도록 캡쳐 후 아래에 첨부하세요.</p>
+    </div>
+    <div class="form-group">
+      <label>📸 거리 증빙 캡쳐 첨부</label>
+      <input type="file" id="distanceProofInput" accept="image/*" onchange="saveDistanceProof(this)" style="display:block;margin-top:6px;width:100%;font-size:13px;">
+      <div id="distanceProofPreview" style="margin-top:8px;"></div>
+    </div>
   </div>
 
   <div class="card" id="aiApiCard" style="display:none;">
@@ -1223,6 +1232,29 @@ async function ocrReceipt(imageData, type) {
 
 // ===== 06_settings.js =====
 // ==================== SETTINGS HANDLERS ====================
+
+function openNaverMap() {
+  const from = state.settings.siteAddress;
+  const to   = state.settings.homeAddress;
+  if (!from || !to) { alert('자택 주소와 현장 주소를 먼저 입력하세요.'); return; }
+  const url = 'https://map.naver.com/p/directions/'
+    + encodeURIComponent(from) + '///'
+    + encodeURIComponent(to) + '///car';
+  window.open(url, '_blank');
+}
+
+function saveDistanceProof(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    state.settings.distanceProofImage = e.target.result;
+    saveState();
+    document.getElementById('distanceProofPreview').innerHTML =
+      '<img src="' + e.target.result + '" style="max-width:100%;max-height:200px;border-radius:8px;margin-top:4px;display:block;">';
+  };
+  reader.readAsDataURL(file);
+}
 
 function saveSetting(key, value) {
   state.settings[key] = value;
@@ -1898,13 +1930,18 @@ function buildExportHTML() {
   if (transitRows.length) transitTableRows +=
     `<tr class="total-row"><td colspan="4" style="text-align:right">합계</td><td>${f(transitTotal)}원</td></tr>`;
 
+  // ── 거리 증빙 ──
+  const distProof = state.settings.distanceProofImage || '';
+
   // ── 영수증 이미지 + 라이트박스 ──
   const allImages = [
     ...fuelRows.filter(r => r.imageData).map(r => ({ src: r.imageData, label: `주유/충전 ${r.date}` })),
     ...tollRows.filter(r => r.imageData).map(r => ({ src: r.imageData, label: `통행료 ${r.date}` })),
     ...transitRows.filter(r => r.imageData).map(r => ({ src: r.imageData, label: `대중교통 ${r.date}` }))
   ];
-  const imageHTML = allImages.map((img, i) =>
+  const distLbIdx = distProof ? allImages.length : -1;
+  if (distProof) allImages.push({ src: distProof, label: '거리 증빙 (네이버/티맵 길찾기 캡쳐)' });
+  const imageHTML = allImages.filter((_, i) => i !== distLbIdx).map((img, i) =>
     `<div class="receipt-block">
       <div class="receipt-label">${img.label}<span>클릭하여 확대</span></div>
       <img src="${img.src}" class="receipt-img" onclick="openLb(${i})" alt="${img.label}">
@@ -1956,7 +1993,13 @@ function buildExportHTML() {
   #lb-nav button{background:rgba(255,255,255,.15);color:#fff;border:none;padding:8px 22px;border-radius:20px;font-size:14px;cursor:pointer}
   #lb-nav button:hover{background:rgba(255,255,255,.3)}
   .print-btn{position:fixed;top:16px;right:16px;background:#E8390E;color:#fff;border:none;padding:10px 18px;border-radius:20px;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2);z-index:999}
-  @media print{.print-btn{display:none}#lb{display:none!important}.img-grid{grid-template-columns:1fr 1fr}.receipt-img{max-height:300px}.img-section{page-break-before:always}}
+  .dist-proof-section{margin-top:20px;page-break-inside:avoid}
+  .dist-proof-table{width:auto;min-width:300px;margin-bottom:10px}
+  .dist-proof-table th{background:#444;color:#fff;text-align:left;padding:5px 10px;font-size:12px}
+  .dist-proof-table td{text-align:left;padding:5px 10px;font-size:13px;font-weight:600}
+  .dist-proof-img{max-width:100%;max-height:480px;object-fit:contain;border-radius:8px;display:block;border:1px solid #ddd;cursor:zoom-in;transition:opacity .15s}
+  .dist-proof-img:hover{opacity:.88}
+  @media print{.print-btn{display:none}#lb{display:none!important}.img-grid{grid-template-columns:1fr 1fr}.receipt-img{max-height:300px}.img-section{page-break-before:always}.dist-proof-img{max-height:300px}}
 </style>
 </head>
 <body>
@@ -1995,6 +2038,20 @@ document.addEventListener('keydown',function(e){var lb=document.getElementById('
     ${isCar ? `<div class="info-row"><span class="info-label">평균단가</span><span class="info-value">${f(avgPrice)}원/${fuelUnitLabel}</span></div>
     <div class="info-row"><span class="info-label">연비</span><span class="info-value">${eff} km/${fuelUnitLabel}</span></div>` : ''}
   </div>
+  <div class="dist-proof-section">
+    <h2>거리산정기준</h2>
+    <table class="dist-proof-table">
+      <tbody>
+        <tr><th>출발지 (현장)</th><td>${state.settings.siteAddress || '-'}</td></tr>
+        <tr><th>도착지 (자택)</th><td>${state.settings.homeAddress || '-'}</td></tr>
+        <tr><th>편도거리</th><td>${state.settings.oneWayDistance || 0} km</td></tr>
+        <tr><th>왕복거리</th><td>${rt} km</td></tr>
+      </tbody>
+    </table>
+    ${distProof
+      ? `<img src="${distProof}" class="dist-proof-img" onclick="openLb(${distLbIdx})" alt="거리 증빙 캡쳐">`
+      : '<div class="no-data">거리 증빙 캡쳐 미첨부 — 설정 탭에서 네이버/티맵 캡쳐를 첨부하세요</div>'}
+  </div>
   <h2>회차별 정산 내역</h2>
   ${computed.length === 0 ? '<div class="no-data">회차 데이터 없음</div>' : `
   <table><thead><tr>${tripHeaderCols}</tr></thead>
@@ -2018,9 +2075,9 @@ document.addEventListener('keydown',function(e){var lb=document.getElementById('
   <h2>대중교통 내역</h2>
   ${transitRows.length === 0 ? '<div class="no-data">대중교통 내역 없음</div>' : `<table><thead><tr><th>번호</th><th>날짜</th><th>종류</th><th>연결 회차</th><th>금액</th></tr></thead><tbody>${transitTableRows}</tbody></table>`}
   `}
-  ${allImages.length > 0 ? `
+  ${allImages.filter((_, i) => i !== distLbIdx).length > 0 ? `
   <div class="img-section">
-    <h2>영수증 증빙 이미지 (${allImages.length}건)</h2>
+    <h2>영수증 증빙 이미지 (${allImages.filter((_, i) => i !== distLbIdx).length}건)</h2>
     <div class="img-grid">${imageHTML}</div>
   </div>` : '<div class="no-data" style="margin-top:14px">첨부된 영수증 이미지 없음</div>'}
 </div>
@@ -2207,6 +2264,12 @@ function initSettingsUI() {
   setFuelType(s.fuelType      || 'fuel');
   updateDistInfo();
   updateEfficiencyInfo();
+  const preview = document.getElementById('distanceProofPreview');
+  if (preview) {
+    preview.innerHTML = s.distanceProofImage
+      ? '<img src="' + s.distanceProofImage + '" style="max-width:100%;max-height:200px;border-radius:8px;margin-top:4px;display:block;">'
+      : '';
+  }
 }
 
 function renderAll() {
