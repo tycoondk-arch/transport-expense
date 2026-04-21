@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>교통비 신청 시스템</title>
 <style>
 /* =====================================================
@@ -457,9 +457,48 @@ input[type="number"] { text-align: right; }
   .modal-box { padding: 0 14px 14px; padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
 }
 
+/* ===== TOAST SYSTEM ===== */
+.toast-container{position:fixed;top:calc(62px + env(safe-area-inset-top) + 12px);left:50%;transform:translateX(-50%);z-index:600;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;width:calc(100% - 32px);max-width:400px;}
+.toast{display:flex;align-items:center;gap:10px;padding:13px 16px;border-radius:var(--r-lg);font-size:14px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.18);pointer-events:auto;animation:toastIn .28s cubic-bezier(.34,1.3,.64,1);width:100%;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
+.toast.out{animation:toastOut .22s ease-in forwards;}
+.toast-success{background:rgba(52,199,89,.92);color:#fff;}
+.toast-error{background:rgba(255,59,48,.92);color:#fff;}
+.toast-info{background:rgba(0,122,255,.90);color:#fff;}
+.toast-warn{background:rgba(255,149,0,.92);color:#fff;}
+.toast-icon{font-size:18px;flex-shrink:0;}
+.toast-msg{flex:1;line-height:1.4;}
+@keyframes toastIn{from{opacity:0;transform:translateY(-14px) scale(.94)}to{opacity:1;transform:none}}
+@keyframes toastOut{from{opacity:1;transform:none}to{opacity:0;transform:translateY(-10px) scale(.96)}}
+/* ===== DANGER DIALOG ===== */
+.danger-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:none;align-items:flex-end;justify-content:center;}
+.danger-overlay.show{display:flex;}
+.danger-box{background:var(--card);border-radius:var(--r-xl) var(--r-xl) 0 0;padding:24px 20px calc(20px + env(safe-area-inset-bottom));width:100%;max-width:560px;}
+.danger-title{font-size:16px;font-weight:700;color:var(--red);margin-bottom:6px;}
+.danger-msg{font-size:14px;color:var(--label2);margin-bottom:20px;line-height:1.5;}
+.danger-actions{display:flex;gap:10px;}
+/* ===== MONTH NAV BUTTONS ===== */
+.month-nav-btn{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.32);color:#fff;border-radius:var(--r-sm);width:32px;height:34px;font-size:13px;cursor:pointer;font-family:inherit;-webkit-tap-highlight-color:transparent;flex-shrink:0;}
+.month-nav-btn:active{background:rgba(255,255,255,.35);}
+/* ===== NAV BADGE ===== */
+.tab-btn{position:relative;}
+.nav-badge{position:absolute;top:5px;right:calc(50% - 20px);background:var(--red);color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:8px;padding:0 4px;display:flex;align-items:center;justify-content:center;border:1.5px solid #f2f2f7;}
+
 </style>
 </head>
 <body>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<div class="danger-overlay" id="dangerOverlay">
+  <div class="danger-box">
+    <div class="danger-title" id="dangerTitle"></div>
+    <div class="danger-msg" id="dangerMsg"></div>
+    <div class="danger-actions">
+      <button class="btn btn-gray" style="flex:1;" onclick="closeDangerDialog()">취소</button>
+      <button class="btn btn-danger" style="flex:1;" id="dangerConfirmBtn">삭제</button>
+    </div>
+  </div>
+</div>
 
 <!-- OCR Loading Overlay -->
 <div class="ocr-overlay" id="ocrOverlay">
@@ -477,7 +516,7 @@ input[type="number"] { text-align: right; }
 </div>
 
 <!-- Fuel Receipt Modal -->
-<div class="modal-overlay" id="fuelModal">
+<div class="modal-overlay" id="fuelModal" onclick="handleModalOverlayClick(event,'closeFuelModal')">
   <div class="modal-box">
     <div class="modal-handle"></div>
     <div class="modal-title">⛽ 주유/충전 영수증 입력</div>
@@ -504,7 +543,7 @@ input[type="number"] { text-align: right; }
 </div>
 
 <!-- Transit Receipt Modal -->
-<div class="modal-overlay" id="transitModal">
+<div class="modal-overlay" id="transitModal" onclick="handleModalOverlayClick(event,'closeTransitModal')">
   <div class="modal-box">
     <div class="modal-handle"></div>
     <div class="modal-title">🚌 대중교통 영수증 입력</div>
@@ -537,7 +576,7 @@ input[type="number"] { text-align: right; }
 
 
 <!-- Toll Receipt Modal -->
-<div class="modal-overlay" id="tollModal">
+<div class="modal-overlay" id="tollModal" onclick="handleModalOverlayClick(event,'closeTollModal')">
   <div class="modal-box">
     <div class="modal-handle"></div>
     <div class="modal-title">🛣️ 통행료 영수증 입력</div>
@@ -571,7 +610,9 @@ input[type="number"] { text-align: right; }
     </div>
   </div>
   <div class="month-wrap">
+    <button class="month-nav-btn" onclick="stepMonth(-1)" aria-label="이전 달">&#9664;</button>
     <input type="month" id="monthPicker" onchange="changeMonth(this.value)">
+    <button class="month-nav-btn" onclick="stepMonth(1)" aria-label="다음 달">&#9654;</button>
   </div>
 </header>
 
@@ -583,10 +624,12 @@ input[type="number"] { text-align: right; }
   </button>
   <button class="tab-btn" onclick="showTab('fuel')">
     <span class="nav-icon">⛽</span>
+    <span class="nav-badge" id="fuelBadge" style="display:none"></span>
     <span class="nav-label">주유</span>
   </button>
   <button class="tab-btn" onclick="showTab('toll')">
     <span class="nav-icon">🛣️</span>
+    <span class="nav-badge" id="tollBadge" style="display:none"></span>
     <span class="nav-label">통행료</span>
   </button>
   <button class="tab-btn" onclick="showTab('trips')">
@@ -678,28 +721,45 @@ input[type="number"] { text-align: right; }
              oninput="saveSetting('oneWayDistance',parseFloat(this.value)||0); updateDistInfo()">
     </div>
     <div class="alert alert-info" id="distInfo"></div>
-    <div class="form-group" style="margin-top:12px;">
-      <button type="button" onclick="openNaverMap()" style="width:100%;padding:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;">🗺️ 네이버 지도 길찾기 열기</button>
-      <p style="font-size:12px;color:var(--label3);margin:6px 0 10px;">클릭 시 현장→자택 경로가 자동 입력된 네이버 지도가 열립니다. 첫 번째 추천 경로가 보이도록 캡쳐 후 아래에 첨부하세요.</p>
+    <div style="margin-top:14px;">
+      <button type="button" onclick="openTmapRoute()" style="width:100%;padding:14px 16px;background:var(--sk-grad);color:#fff;border:none;border-radius:var(--r-lg);font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 3px 12px rgba(232,57,14,.30);-webkit-tap-highlight-color:transparent;letter-spacing:-.2px;">
+        <span style="font-size:20px;">🗺️</span> TMap 길찾기 열기
+      </button>
+      <div style="display:flex;align-items:flex-start;gap:6px;margin:8px 2px 0;font-size:12px;color:var(--label3);line-height:1.5;">
+        <span>💡</span><span>현장→자택 경로가 자동 입력됩니다. 첫 번째 추천 경로가 보이도록 캡쳐 후 아래에 첨부하세요.</span>
+      </div>
     </div>
-    <div class="form-group">
-      <label>📸 거리 증빙 캡쳐 첨부</label>
-      <input type="file" id="distanceProofInput" accept="image/*" onchange="saveDistanceProof(this)" style="display:block;margin-top:6px;width:100%;font-size:13px;">
-      <div id="distanceProofPreview" style="margin-top:8px;"></div>
+    <div style="margin-top:14px;">
+      <label style="font-size:13px;font-weight:600;color:var(--label2);display:block;margin-bottom:8px;">📸 거리 증빙 캡쳐 첨부</label>
+      <input type="file" id="distanceProofInput" accept="image/*" onchange="saveDistanceProof(this)" style="display:none;">
+      <div onclick="document.getElementById('distanceProofInput').click()" id="distProofZone"
+           style="border:2px dashed rgba(232,57,14,.35);border-radius:var(--r-lg);padding:20px 16px;text-align:center;cursor:pointer;background:rgba(232,57,14,.03);transition:background .15s;">
+        <div style="font-size:36px;margin-bottom:6px;">📎</div>
+        <div style="font-size:14px;font-weight:600;color:var(--sk-red);">캡쳐 이미지 첨부</div>
+        <div style="font-size:12px;color:var(--label3);margin-top:3px;">탭하여 갤러리에서 선택</div>
+      </div>
+      <div id="distanceProofPreview" style="margin-top:10px;"></div>
     </div>
   </div>
 
   <div class="card" id="aiApiCard" style="display:none;">
     <div class="card-title">🤖 AI 영수증 자동인식 설정 <span style="font-size:11px;color:var(--label3);font-weight:400;">[관리자]</span></div>
     <div class="alert alert-success">
-      ✅ OpenAI API 키가 적용되어 있습니다. 영수증 촬영 시 자동으로 내용을 인식합니다.
+      ✅ Upstage API 키가 적용되어 있습니다. 영수증 촬영 시 자동으로 내용을 인식합니다.
     </div>
     <div class="form-group">
-      <label>OpenAI API 키</label>
-      <input type="password" id="s_apiKey" placeholder="sk-proj-..." oninput="saveSetting('apiKey',this.value)">
+      <label>Upstage API 키</label>
+      <input type="password" id="s_apiKey" placeholder="up_..." oninput="saveSetting('apiKey',this.value)">
     </div>
     <div class="alert alert-info">
       API 키 없이도 수동으로 영수증 정보를 입력할 수 있습니다.
+    </div>
+    <div class="form-group" style="margin-top:12px;">
+      <label>TMap API 키</label>
+      <input type="text" id="s_tmapApiKey" placeholder="TMap 앱키를 입력하세요" oninput="saveSetting('tmapApiKey',this.value)">
+      <div style="font-size:11px;color:var(--label3);margin-top:4px;">
+        <a href="https://openapi.sk.com/" target="_blank" style="color:var(--sk-red);">openapi.sk.com</a>에서 무료 발급 후 입력
+      </div>
     </div>
   </div>
 
@@ -864,6 +924,7 @@ input[type="number"] { text-align: right; }
       내보낸 파일을 브라우저에서 열고 <strong>인쇄 → PDF 저장</strong>으로 제출하세요.
     </div>
     <div id="exportPreview" class="export-summary"></div>
+    <div class="alert alert-warn" id="exportWarning" style="display:none;margin-bottom:10px;">⚠️ 미완료 항목이 있습니다. 아래 체크리스트를 확인하세요.</div>
     <button class="export-btn" onclick="exportToHTML()">
       📋 증빙서류 내보내기 (HTML)
     </button>
@@ -880,9 +941,79 @@ input[type="number"] { text-align: right; }
 
 
 <script>
+// ==================== TOAST SYSTEM ====================
+const TOAST_ICONS = { success:'✅', error:'❌', info:'ℹ️', warn:'⚠️' };
+function showToast(msg, type, duration) {
+  type = type || 'info'; duration = duration || 2800;
+  const c = document.getElementById('toastContainer');
+  const el = document.createElement('div');
+  el.className = 'toast toast-' + type;
+  el.innerHTML = '<span class="toast-icon">' + TOAST_ICONS[type] + '</span><span class="toast-msg">' + msg + '</span>';
+  c.appendChild(el);
+  const remove = function() { el.classList.add('out'); setTimeout(function(){el.remove();},230); };
+  const t = setTimeout(remove, duration);
+  el.addEventListener('click', function(){ clearTimeout(t); remove(); });
+}
+
+// ==================== INLINE CONFIRM (삭제) ====================
+function confirmDelete(btn, onConfirm) {
+  if (btn.dataset.confirming) { onConfirm(); return; }
+  const orig = btn.innerHTML, origClass = btn.className;
+  btn.dataset.confirming = '1';
+  btn.innerHTML = '확인?'; btn.className = 'btn btn-danger btn-sm';
+  const cancelBtn = document.createElement('button');
+  cancelBtn.className = 'btn btn-gray btn-sm';
+  cancelBtn.style.marginLeft = '4px';
+  cancelBtn.textContent = '취소';
+  cancelBtn.onclick = function(e) {
+    e.stopPropagation();
+    btn.innerHTML = orig; btn.className = origClass;
+    delete btn.dataset.confirming; cancelBtn.remove();
+  };
+  btn.insertAdjacentElement('afterend', cancelBtn);
+  setTimeout(function(){ cancelBtn.click(); }, 3000);
+}
+
+// ==================== DANGER DIALOG (초기화) ====================
+function showDangerDialog(title, msg, onConfirm) {
+  document.getElementById('dangerTitle').textContent = title;
+  document.getElementById('dangerMsg').textContent   = msg;
+  const confirmBtn = document.getElementById('dangerConfirmBtn');
+  confirmBtn.onclick = function() { closeDangerDialog(); onConfirm(); };
+  document.getElementById('dangerOverlay').classList.add('show');
+}
+function closeDangerDialog() {
+  document.getElementById('dangerOverlay').classList.remove('show');
+}
+
+// ==================== MODAL BACKDROP CLICK ====================
+function handleModalOverlayClick(e, fn) {
+  if (e.target === e.currentTarget) window[fn]();
+}
+
+// ==================== MONTH STEP ====================
+function stepMonth(dir) {
+  var parts = state.month.split('-');
+  var y = parseInt(parts[0]), m = parseInt(parts[1]);
+  var d = new Date(y, m - 1 + dir, 1);
+  var next = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
+  document.getElementById('monthPicker').value = next;
+  changeMonth(next);
+}
+
+// ==================== NAV BADGES ====================
+function updateNavBadges() {
+  var fc = state.fuelReceipts.length, tc = state.tollReceipts.length;
+  var fb = document.getElementById('fuelBadge');
+  var tb = document.getElementById('tollBadge');
+  if (fb) { fb.textContent = fc; fb.style.display = fc > 0 ? '' : 'none'; }
+  if (tb) { tb.textContent = tc; tb.style.display = tc > 0 ? '' : 'none'; }
+}
+
 // ===== 01_config.js =====
 // ==================== CONSTANTS ====================
-const DEFAULT_API_KEY = '';
+const DEFAULT_API_KEY      = 'up_UYoilWR7995pV3rUGZXlehAOAbyhp';
+const DEFAULT_TMAP_API_KEY = '1vwqSspKnA9yToSL1BhzP26XMI6jlfAkaUz0NrwG';
 const FUEL_EFFICIENCY  = { fuel: 7, electric: 3.5, hydrogen: 65.8 };
 const FUEL_UNIT_LABEL  = { fuel: 'L', electric: 'kWh', hydrogen: 'kg' };
 const FUEL_TYPE_LABEL  = { fuel: '유류', electric: '전기', hydrogen: '수소' };
@@ -902,7 +1033,8 @@ let state = {
     siteAddress: '', siteShortAddress: '',
     oneWayDistance: 86,
     apiKey: '',
-    resendApiKey: ''
+    resendApiKey: '',
+    tmapApiKey: ''
   },
   month: new Date().toISOString().slice(0, 7),
   fuelReceipts:    [],  // { id, date, quantity, amount, imageData }
@@ -936,9 +1068,8 @@ function loadState() {
     const saved = JSON.parse(base);
     state.settings = { ...state.settings, ...saved };
   }
-  if (!state.settings.apiKey) {
-    state.settings.apiKey = DEFAULT_API_KEY;
-  }
+  if (!state.settings.apiKey)     state.settings.apiKey     = DEFAULT_API_KEY;
+  if (!state.settings.tmapApiKey) state.settings.tmapApiKey = DEFAULT_TMAP_API_KEY;
 
   const monthData = localStorage.getItem(getStorageKey());
   if (monthData) {
@@ -1096,56 +1227,46 @@ function calcTrips() {
 // 스키마 변경이 필요하면 여기만 수정하세요.
 const OCR_SCHEMAS = {
   fuel: {
-    prompt: '한국 주유소/충전소 영수증입니다. 각 항목을 추출하세요. 읽을 수 없는 항목은 "NA"로 채우세요. 단가나 누적금액이 아닌 이번 거래 실제 결제금액을 추출하세요.',
-    schema: {
-      name: 'fuel_receipt', strict: true,
-      schema: {
-        type: 'object',
-        properties: {
-          date:         { type: 'string', description: '거래일자 YYYY-MM-DD. 없으면 NA' },
-          quantity:     { type: 'string', description: '주유량(L) 또는 충전량(kWh) 숫자만. 없으면 NA' },
-          amount:       { type: 'string', description: '실제 결제금액 원 단위 숫자만. 없으면 NA' },
-          station_name: { type: 'string', description: '주유소/충전소 상호명. 없으면 NA' },
-          fuel_type:    { type: 'string', description: '연료 종류 (휘발유/경유/LPG/전기/수소). 없으면 NA' }
-        },
-        required: ['date', 'quantity', 'amount', 'station_name', 'fuel_type'],
-        additionalProperties: false
-      }
-    }
+    prompt: `당신은 한국 주유소/충전소 영수증 전문 OCR 파서입니다. 이미지에서 정보를 추출해 아래 JSON 형식으로만 답하세요.
+
+[추출 규칙]
+1. date: 거래일자를 YYYY-MM-DD로 변환. (예: 2024/03/15 → 2024-03-15). 없으면 "NA"
+2. quantity: 주유량·충전량·공급량·수량·용량 등 라벨과 함께 있는 숫자(소수점 포함). 콤마·단위(L,kWh,kg) 제거 후 숫자만. 없으면 "NA"
+3. amount: 최종 결제금액. 아래 우선순위로 찾기:
+   ① "결제금액" "청구금액" "합계" "실결제" "카드금액" "판매금액" "총금액" 라벨의 값
+   ② 위 라벨이 없으면 단가(원/L, 리터당) × 수량 으로 직접 계산
+   ③ 콤마·원 단위 제거 후 정수만. 없으면 "NA"
+4. station_name: 영수증 상단 상호명. 없으면 "NA"
+5. fuel_type: 휘발유/경유/LPG/전기/수소 중 해당. 불명확하면 "NA"
+
+[주의] 단가(원/L)나 부분 금액 아닌 이번 거래 최종 결제 총액을 amount로 추출.
+
+{"date":"","quantity":"","amount":"","station_name":"","fuel_type":""}`,
+    fields: ['date', 'quantity', 'amount', 'station_name', 'fuel_type']
   },
   toll: {
-    prompt: '한국 고속도로 통행료 영수증입니다. 각 항목을 추출하세요. 읽을 수 없는 항목은 "NA"로 채우세요.',
-    schema: {
-      name: 'toll_receipt', strict: true,
-      schema: {
-        type: 'object',
-        properties: {
-          date:    { type: 'string', description: '납부일자 YYYY-MM-DD. 없으면 NA' },
-          amount:  { type: 'string', description: '통행료 금액 원 단위 숫자만. 없으면 NA' },
-          section: { type: 'string', description: '진출입 구간명 (예: 신갈-오산). 없으면 NA' }
-        },
-        required: ['date', 'amount', 'section'],
-        additionalProperties: false
-      }
-    }
+    prompt: `당신은 한국 고속도로 통행료 영수증 전문 OCR 파서입니다. 이미지에서 정보를 추출해 아래 JSON 형식으로만 답하세요.
+
+[추출 규칙]
+1. date: 납부·통과·거래 일자를 YYYY-MM-DD로 변환. 없으면 "NA"
+2. amount: 통행료 금액. "통행료" "요금" "결제금액" "합계" 라벨의 숫자. 콤마·원 제거 후 정수만. 없으면 "NA"
+3. section: 진입IC-진출IC 또는 구간명 (예: 신갈-오산). 없으면 "NA"
+
+{"date":"","amount":"","section":""}`,
+    fields: ['date', 'amount', 'section']
   },
   transit: {
-    prompt: '한국 대중교통 영수증입니다. 각 항목을 추출하세요. 읽을 수 없는 항목은 "NA"로 채우세요. express_or_local은 시외버스/고속버스/KTX/새마을호면 "시외", 시내버스/지하철/마을버스면 "시내", 판단 불가면 "NA"로 하세요.',
-    schema: {
-      name: 'transit_receipt', strict: true,
-      schema: {
-        type: 'object',
-        properties: {
-          date:             { type: 'string', description: '이용일자 YYYY-MM-DD. 없으면 NA' },
-          amount:           { type: 'string', description: '결제금액 원 단위 숫자만. 없으면 NA' },
-          transport_mode:   { type: 'string', description: '교통수단 종류 (시내버스/시외버스/고속버스/지하철/KTX 등). 없으면 NA' },
-          express_or_local: { type: 'string', description: '시외 또는 시내 또는 NA' }
-        },
-        required: ['date', 'amount', 'transport_mode', 'express_or_local'],
-        additionalProperties: false
-      }
-    }
-  }
+    prompt: `당신은 한국 대중교통(버스/지하철/기차) 영수증 전문 OCR 파서입니다. 이미지에서 정보를 추출해 아래 JSON 형식으로만 답하세요.
+
+[추출 규칙]
+1. date: 이용·승차·결제 일자를 YYYY-MM-DD로 변환. 없으면 "NA"
+2. amount: 결제·승차·이용 금액. 콤마·원 제거 후 정수만. 없으면 "NA"
+3. transport_mode: 교통수단 (시내버스/시외버스/고속버스/마을버스/지하철/KTX/새마을호/무궁화 등). 없으면 "NA"
+4. express_or_local: 시외버스·고속버스·KTX·새마을호·무궁화호 → "시외" / 시내버스·마을버스·지하철 → "시내" / 판단불가 → "NA"
+
+{"date":"","amount":"","transport_mode":"","express_or_local":""}`,
+    fields: ['date', 'amount', 'transport_mode', 'express_or_local']
+  },
 };
 
 // ==================== IMAGE UTILS ====================
@@ -1190,39 +1311,71 @@ function hideOCR() {
 }
 
 async function ocrReceipt(imageData, type) {
-  const apiKey = state.settings.apiKey;
-  if (!apiKey) return null;
-
+  const apiKey = state.settings.apiKey || DEFAULT_API_KEY;
   const config = OCR_SCHEMAS[type];
   if (!config) return null;
 
   showOCR('AI가 영수증을 읽고 있습니다');
   try {
+    // base64 → Blob 변환
     const processedImage = await preprocessImage(imageData);
-    const resp = await fetch('https://api.openai.com/v1/chat/completions', {
+    const [, b64data] = processedImage.split(',');
+    const binaryStr = atob(b64data);
+    const bytes = new Uint8Array(binaryStr.length);
+    for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
+    const blob = new Blob([bytes], { type: 'image/jpeg' });
+
+    // 1단계: Document Digitization — 이미지 → 텍스트
+    const formData = new FormData();
+    formData.append('document', blob, 'receipt.jpg');
+    formData.append('model', 'document-parse-260128');
+    formData.append('ocr', 'auto');
+    formData.append('output_formats', '["html"]');
+
+    const docResp = await fetch('https://api.upstage.ai/v1/document-digitization', {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json'
-      },
+      headers: { Authorization: `Bearer ${apiKey}` },
+      body: formData
+    });
+    if (!docResp.ok) {
+      const errText = await docResp.text();
+      console.error('Document Digitization Error:', docResp.status, errText);
+      showToast('OCR 오류 (' + docResp.status + '): API 키를 확인하세요.', 'error');
+      return null;
+    }
+    const docData = await docResp.json();
+    const pages = docData.content?.pages || docData.pages || [];
+    const extractedText = pages.map(p => p.html || p.text || '').join('\n')
+      || docData.content?.html || docData.content || '';
+    if (!extractedText) { showToast('영수증 텍스트를 인식하지 못했습니다.', 'warn'); return null; }
+
+    // 2단계: solar-pro — 텍스트 → JSON 필드 파싱
+    const chatResp = await fetch('https://api.upstage.ai/v1/chat/completions', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        max_tokens: 300,
-        response_format: { type: 'json_schema', json_schema: config.schema },
+        model: 'solar-pro',
+        max_tokens: 400,
+        response_format: { type: 'json_object' },
         messages: [{
           role: 'user',
-          content: [
-            { type: 'image_url', image_url: { url: processedImage, detail: 'high' } },
-            { type: 'text', text: config.prompt }
-          ]
+          content: `다음 영수증 텍스트에서 정보를 추출해 JSON으로만 답하세요.\n\n[영수증 텍스트]\n${extractedText}\n\n[지시사항]\n${config.prompt}`
         }]
       })
     });
-    if (!resp.ok) throw new Error('API Error: ' + resp.status);
-    const data = await resp.json();
-    return JSON.parse(data.choices[0].message.content);
+    if (!chatResp.ok) {
+      showToast('OCR 파싱 오류: ' + chatResp.status, 'error');
+      return null;
+    }
+    const chatData = await chatResp.json();
+    const content = chatData.choices[0].message.content;
+    console.log('OCR raw response:', content);
+    const match = content.match(/\{[\s\S]*\}/);
+    return match ? JSON.parse(match[0]) : null;
+
   } catch (e) {
     console.error('OCR Error:', e);
+    showToast('OCR 오류: ' + e.message, 'error');
     return null;
   } finally {
     hideOCR();
@@ -1233,14 +1386,51 @@ async function ocrReceipt(imageData, type) {
 // ===== 06_settings.js =====
 // ==================== SETTINGS HANDLERS ====================
 
-function openNaverMap() {
-  const from = state.settings.siteAddress;
-  const to   = state.settings.homeAddress;
-  if (!from || !to) { alert('자택 주소와 현장 주소를 먼저 입력하세요.'); return; }
-  const url = 'https://map.naver.com/p/directions/'
-    + encodeURIComponent(from) + '///'
-    + encodeURIComponent(to) + '///car';
-  window.open(url, '_blank');
+async function geocodeTmap(address, apiKey) {
+  const res = await fetch(
+    `https://apis.openapi.sk.com/tmap/pois?version=1&format=json` +
+    `&searchKeyword=${encodeURIComponent(address)}&count=1`,
+    { headers: { appkey: apiKey, Accept: 'application/json' } }
+  );
+  if (!res.ok) throw new Error('TMap API 오류: ' + res.status);
+  const data = await res.json();
+  const poi = data?.searchPoiInfo?.pois?.poi?.[0];
+  if (!poi) return null;
+  return { lng: poi.noorLon, lat: poi.noorLat, name: poi.name };
+}
+
+async function openTmapRoute() {
+  const from   = state.settings.siteAddress;
+  const to     = state.settings.homeAddress;
+  const apiKey = DEFAULT_TMAP_API_KEY;  // 하드코딩 키 우선 사용
+  if (!from || !to)  { showToast('자택 주소와 현장 주소를 먼저 입력하세요.', 'warn'); return; }
+
+  showToast('주소 검색 중...', 'info');
+  try {
+    const [fromCoord, toCoord] = await Promise.all([
+      geocodeTmap(from, apiKey),
+      geocodeTmap(to,   apiKey)
+    ]);
+    if (!fromCoord) { showToast('현장 주소를 찾을 수 없습니다. 주소를 확인해 주세요.', 'error'); return; }
+    if (!toCoord)   { showToast('자택 주소를 찾을 수 없습니다. 주소를 확인해 주세요.', 'error'); return; }
+
+    const tmapUrl =
+      `tmap://route?rGoName=${encodeURIComponent(toCoord.name)}` +
+      `&rGoX=${toCoord.lng}&rGoY=${toCoord.lat}` +
+      `&rStartName=${encodeURIComponent(fromCoord.name)}` +
+      `&rStartX=${fromCoord.lng}&rStartY=${fromCoord.lat}`;
+
+    // TMap 앱 열기
+    const a = document.createElement('a');
+    a.href = tmapUrl;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    showToast('TMap이 열립니다.', 'info');
+
+  } catch(e) {
+    showToast('경로 검색 오류: ' + e.message, 'error');
+  }
 }
 
 function saveDistanceProof(input) {
@@ -1250,10 +1440,23 @@ function saveDistanceProof(input) {
   reader.onload = function(e) {
     state.settings.distanceProofImage = e.target.result;
     saveState();
+    var zone = document.getElementById('distProofZone');
+    if (zone) zone.style.display = 'none';
     document.getElementById('distanceProofPreview').innerHTML =
-      '<img src="' + e.target.result + '" style="max-width:100%;max-height:200px;border-radius:8px;margin-top:4px;display:block;">';
+      '<div style="position:relative;border-radius:var(--r-lg);overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.10);">' +
+      '<img src="' + e.target.result + '" style="width:100%;max-height:260px;object-fit:contain;display:block;background:#f0f0f0;">' +
+      '<button onclick="removeDistanceProof()" style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,.55);color:#fff;border:none;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;">✕ 삭제</button>' +
+      '</div>';
   };
   reader.readAsDataURL(file);
+}
+
+function removeDistanceProof() {
+  state.settings.distanceProofImage = null;
+  saveState();
+  document.getElementById('distanceProofPreview').innerHTML = '';
+  var zone = document.getElementById('distProofZone');
+  if (zone) zone.style.display = '';
 }
 
 function saveSetting(key, value) {
@@ -1374,8 +1577,8 @@ function saveFuelReceipt() {
   const date   = document.getElementById('fm_date').value;
   const qty    = parseFloat(document.getElementById('fm_qty').value) || 0;
   const amount = parseInt(document.getElementById('fm_amount').value) || 0;
-  if (!date || amount <= 0) { alert('날짜와 금액을 입력해주세요.'); return; }
-  if (qty <= 0) { alert('주유/충전량을 입력해주세요.'); return; }
+  if (!date || amount <= 0) { showToast('날짜와 금액을 입력해주세요.', 'warn'); return; }
+  if (qty <= 0) { showToast('주유/충전량을 입력해주세요.', 'warn'); return; }
 
   if (editingFuelId) {
     const idx = state.fuelReceipts.findIndex(r => r.id === editingFuelId);
@@ -1385,6 +1588,7 @@ function saveFuelReceipt() {
   }
   saveState(); closeFuelModal();
   renderFuelList(); renderSummary(); renderExportPreview();
+  showToast('주유 영수증이 저장되었습니다.', 'success');
 }
 
 function editFuelReceipt(id) {
@@ -1393,10 +1597,12 @@ function editFuelReceipt(id) {
   openFuelModal({ date: r.date, quantity: r.quantity, amount: r.amount }, r.imageData);
 }
 
-function deleteFuelReceipt(id) {
-  if (!confirm('이 영수증을 삭제하시겠습니까?')) return;
-  state.fuelReceipts = state.fuelReceipts.filter(r => r.id !== id);
-  saveState(); renderFuelList(); renderSummary(); renderExportPreview();
+function deleteFuelReceipt(id, btn) {
+  confirmDelete(btn, function() {
+    state.fuelReceipts = state.fuelReceipts.filter(r => r.id !== id);
+    saveState(); renderFuelList(); renderSummary(); renderExportPreview();
+    showToast('영수증이 삭제되었습니다.', 'info');
+  });
 }
 
 // ==================== TOLL MODAL ====================
@@ -1433,7 +1639,7 @@ function saveTollReceipt() {
   const date   = document.getElementById('tm_date').value;
   const amount = parseInt(document.getElementById('tm_amount').value) || 0;
   const tripId = document.getElementById('tm_trip').value;
-  if (!date || amount <= 0) { alert('날짜와 금액을 입력해주세요.'); return; }
+  if (!date || amount <= 0) { showToast('날짜와 금액을 입력해주세요.', 'warn'); return; }
 
   if (editingTollId) {
     const idx = state.tollReceipts.findIndex(r => r.id === editingTollId);
@@ -1443,6 +1649,7 @@ function saveTollReceipt() {
   }
   saveState(); syncTripDatesFromToll(); closeTollModal();
   renderTollList(); renderTripList(); renderSummary(); renderExportPreview();
+  showToast('통행료 영수증이 저장되었습니다.', 'success');
 }
 
 function editTollReceipt(id) {
@@ -1453,11 +1660,13 @@ function editTollReceipt(id) {
   for (const opt of sel.options) { if (opt.value === r.tripId) { opt.selected = true; break; } }
 }
 
-function deleteTollReceipt(id) {
-  if (!confirm('이 통행료 영수증을 삭제하시겠습니까?')) return;
-  state.tollReceipts = state.tollReceipts.filter(r => r.id !== id);
-  saveState(); syncTripDatesFromToll();
-  renderTollList(); renderTripList(); renderSummary();
+function deleteTollReceipt(id, btn) {
+  confirmDelete(btn, function() {
+    state.tollReceipts = state.tollReceipts.filter(r => r.id !== id);
+    saveState(); syncTripDatesFromToll();
+    renderTollList(); renderTripList(); renderSummary();
+    showToast('통행료 영수증이 삭제되었습니다.', 'info');
+  });
 }
 
 // ==================== TRANSIT MODAL ====================
@@ -1505,7 +1714,7 @@ function saveTransitReceipt() {
   const amount = parseInt(document.getElementById('trm_amount').value) || 0;
   const tripId = document.getElementById('trm_trip').value;
   const type   = currentTransitType;
-  if (!date || amount <= 0) { alert('날짜와 금액을 입력해주세요.'); return; }
+  if (!date || amount <= 0) { showToast('날짜와 금액을 입력해주세요.', 'warn'); return; }
 
   if (editingTransitId) {
     const idx = state.transitReceipts.findIndex(r => r.id === editingTransitId);
@@ -1515,6 +1724,7 @@ function saveTransitReceipt() {
   }
   saveState(); closeTransitModal();
   renderTransitList(); renderTripList(); renderSummary(); renderExportPreview();
+  showToast('교통비 영수증이 저장되었습니다.', 'success');
 }
 
 function editTransitReceipt(id) {
@@ -1526,11 +1736,13 @@ function editTransitReceipt(id) {
   for (const opt of sel.options) { if (opt.value === r.tripId) { opt.selected = true; break; } }
 }
 
-function deleteTransitReceipt(id) {
-  if (!confirm('이 교통비 영수증을 삭제하시겠습니까?')) return;
-  state.transitReceipts = state.transitReceipts.filter(r => r.id !== id);
-  saveState();
-  renderTransitList(); renderTripList(); renderSummary(); renderExportPreview();
+function deleteTransitReceipt(id, btn) {
+  confirmDelete(btn, function() {
+    state.transitReceipts = state.transitReceipts.filter(r => r.id !== id);
+    saveState();
+    renderTransitList(); renderTripList(); renderSummary(); renderExportPreview();
+    showToast('교통비 영수증이 삭제되었습니다.', 'info');
+  });
 }
 
 
@@ -1577,10 +1789,12 @@ function updateTrip(id, field, value) {
   saveState(); renderTripList(); renderSummary(); renderExportPreview();
 }
 
-function deleteTrip(id) {
-  if (!confirm('이 회차를 삭제하시겠습니까?')) return;
-  state.trips = state.trips.filter(t => t.id !== id);
-  saveState(); renderTripList(); renderSummary(); renderExportPreview();
+function deleteTrip(id, btn) {
+  confirmDelete(btn, function() {
+    state.trips = state.trips.filter(t => t.id !== id);
+    saveState(); renderTripList(); renderSummary(); renderExportPreview();
+    showToast('회차가 삭제되었습니다.', 'info');
+  });
 }
 
 function saveCommuteDays(val) {
@@ -1599,7 +1813,7 @@ function renderFuelList() {
 
   if (receipts.length === 0) {
     statsCard.style.display = 'none';
-    container.innerHTML = '<div class="empty-state"><div class="empty-icon">🪣</div><div class="empty-text">등록된 영수증이 없습니다</div></div>';
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">🪣</div><div class="empty-text">등록된 영수증이 없습니다</div><button class="btn btn-outline" style="margin-top:16px;" onclick="openFuelManual()">+ 직접 입력하기</button></div>';
     return;
   }
 
@@ -1624,10 +1838,11 @@ function renderFuelList() {
       </div>
       <div class="receipt-actions">
         <button class="btn btn-gray btn-sm" onclick="editFuelReceipt('${r.id}')">수정</button>
-        <button class="btn btn-danger btn-sm" onclick="deleteFuelReceipt('${r.id}')">삭제</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteFuelReceipt('${r.id}',this)">삭제</button>
       </div>
     </div>`;
   }).join('');
+  updateNavBadges();
 }
 
 function renderTransitList() {
@@ -1635,7 +1850,7 @@ function renderTransitList() {
   const receipts  = [...state.transitReceipts].sort((a, b) => a.date.localeCompare(b.date));
 
   if (receipts.length === 0) {
-    container.innerHTML = '<div style="color:#bbb;font-size:13px;text-align:center;padding:10px;">등록된 교통비 없음</div>';
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">🚌</div><div class="empty-text">등록된 교통비 없음</div><button class="btn btn-outline" style="margin-top:16px;" onclick="openTransitManual()">+ 직접 입력하기</button></div>';
     return;
   }
 
@@ -1655,7 +1870,7 @@ function renderTransitList() {
       </div>
       <div class="receipt-actions">
         <button class="btn btn-gray btn-sm" onclick="editTransitReceipt('${r.id}')">수정</button>
-        <button class="btn btn-danger btn-sm" onclick="deleteTransitReceipt('${r.id}')">삭제</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteTransitReceipt('${r.id}',this)">삭제</button>
       </div>
     </div>`;
   }).join('');
@@ -1666,7 +1881,7 @@ function renderTollList() {
   const tolls     = [...state.tollReceipts].sort((a, b) => a.date.localeCompare(b.date));
 
   if (tolls.length === 0) {
-    container.innerHTML = '<div style="color:#bbb;font-size:13px;text-align:center;padding:10px;">등록된 통행료 없음</div>';
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">🛣️</div><div class="empty-text">등록된 통행료 없음</div><button class="btn btn-outline" style="margin-top:16px;" onclick="openTollManual()">+ 직접 입력하기</button></div>';
     return;
   }
 
@@ -1682,10 +1897,11 @@ function renderTollList() {
       </div>
       <div class="receipt-actions">
         <button class="btn btn-gray btn-sm" onclick="editTollReceipt('${t.id}')">수정</button>
-        <button class="btn btn-danger btn-sm" onclick="deleteTollReceipt('${t.id}')">삭제</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteTollReceipt('${t.id}',this)">삭제</button>
       </div>
     </div>`;
   }).join('');
+  updateNavBadges();
 }
 
 function renderTripList() {
@@ -1752,7 +1968,7 @@ function renderTripList() {
     <div class="trip-item">
       <div class="trip-header">
         <div class="trip-round"><span class="trip-badge">${idx + 1}회차</span></div>
-        <button class="btn btn-danger btn-sm" onclick="deleteTrip('${trip.id}')">삭제</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteTrip('${trip.id}',this)">삭제</button>
       </div>
       <div class="input-row">
         <div class="form-group"><label>출발일 (현장출발)</label>
@@ -1858,9 +2074,16 @@ function renderExportPreview() {
     else checks.push({ ok: true, label: `대중교통 영수증 ${state.transitReceipts.length}건 (시외 ${express.length}, 시내 ${local.length})` });
   }
 
+  const hasError = checks.some(c => c.ok === false);
+  const exportWarning = document.getElementById('exportWarning');
+  if (exportWarning) exportWarning.style.display = hasError ? '' : 'none';
+
   document.getElementById('checklistContent').innerHTML = checks.map(c => {
-    const icon = c.ok === true ? '✅' : c.ok === false ? '❌' : '⚪';
-    return `<div style="padding:7px 0;border-bottom:1px solid #f0f0f0;font-size:14px;">${icon} ${c.label}</div>`;
+    const icon  = c.ok === true ? '✅' : c.ok === false ? '❌' : '⚪';
+    const style = c.ok === false
+      ? 'padding:10px 12px;border-radius:8px;background:rgba(255,59,48,.07);border-bottom:1px solid rgba(255,59,48,.12);font-size:14px;color:#FF3B30;font-weight:600;margin-bottom:4px;'
+      : 'padding:7px 0;border-bottom:1px solid #f0f0f0;font-size:14px;';
+    return `<div style="${style}">${icon} ${c.label}</div>`;
   }).join('');
 }
 
@@ -2019,7 +2242,18 @@ function openLb(idx){lbIdx=idx;var d=lbImgs[idx];document.getElementById('lb-img
 function closeLb(){document.getElementById('lb').style.display='none';}
 function lbClose(e){if(e.target===document.getElementById('lb'))closeLb();}
 function lbMove(dir){openLb((lbIdx+dir+lbImgs.length)%lbImgs.length);}
-document.addEventListener('keydown',function(e){var lb=document.getElementById('lb');if(lb.style.display==='flex'){if(e.key==='Escape')closeLb();else if(e.key==='ArrowLeft')lbMove(-1);else if(e.key==='ArrowRight')lbMove(1);}});
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){
+    var lb=document.getElementById('lb');
+    if(lb&&lb.style.display==='flex'){closeLb();return;}
+    if(document.getElementById('fuelModal').classList.contains('show')){closeFuelModal();return;}
+    if(document.getElementById('transitModal').classList.contains('show')){closeTransitModal();return;}
+    if(document.getElementById('tollModal').classList.contains('show')){closeTollModal();return;}
+    if(document.getElementById('dangerOverlay').classList.contains('show')){closeDangerDialog();return;}
+  }
+  var lb=document.getElementById('lb');
+  if(lb&&lb.style.display==='flex'){if(e.key==='ArrowLeft')lbMove(-1);else if(e.key==='ArrowRight')lbMove(1);}
+});
 <\/script>
 <div class="page">
   <div class="header">
@@ -2085,7 +2319,7 @@ document.addEventListener('keydown',function(e){var lb=document.getElementById('
 }
 
 function exportToHTML() {
-  if (!state.settings.name) { alert('설정에서 신청자 이름을 입력해주세요.'); showTab('settings'); return; }
+  if (!state.settings.name) { showToast('신청자 이름을 먼저 입력해주세요.', 'warn'); showTab('settings'); return; }
   const [, mo] = state.month.split('-').map(Number);
   const blob   = new Blob([buildExportHTML()], { type: 'text/html;charset=utf-8' });
   const a      = Object.assign(document.createElement('a'), {
@@ -2096,7 +2330,7 @@ function exportToHTML() {
 }
 
 async function exportAndEmail() {
-  if (!state.settings.name) { alert('설정에서 신청자 이름을 입력해주세요.'); showTab('settings'); return; }
+  if (!state.settings.name) { showToast('신청자 이름을 먼저 입력해주세요.', 'warn'); showTab('settings'); return; }
   const [yr, mo] = state.month.split('-').map(Number);
   const fileName = `교통비증빙_${state.settings.name}_${String(mo).padStart(2,'0')}월.html`;
   const blob     = new Blob([buildExportHTML()], { type: 'text/html;charset=utf-8' });
@@ -2111,7 +2345,7 @@ async function exportAndEmail() {
         text:  `${state.settings.name}님의 ${yr}년 ${mo}월 교통비 정산 증빙서류입니다.`
       });
     } catch (e) {
-      if (e.name !== 'AbortError') alert(`공유 실패: ${e.message}`);
+      if (e.name !== 'AbortError') showToast('공유 실패: ' + e.message, 'error');
     }
     return;
   }
@@ -2119,7 +2353,7 @@ async function exportAndEmail() {
   const url = URL.createObjectURL(blob);
   const a   = Object.assign(document.createElement('a'), { href: url, download: fileName });
   a.click(); URL.revokeObjectURL(url);
-  alert('파일이 다운로드되었습니다.\n이메일에 직접 첨부하여 전송해주세요.');
+  showToast('파일 다운로드 완료. 이메일에 직접 첨부하세요.', 'success');
 }
 
 // ==================== BACKUP / RESTORE ====================
@@ -2162,9 +2396,9 @@ function handleImport(input) {
         state.commuteDays     = data.monthData.commuteDays     || 0;
       }
       saveState(); renderAll();
-      alert('백업 파일을 불러왔습니다.');
+      showToast('백업 파일을 불러왔습니다.', 'success');
     } catch (err) {
-      alert('파일을 읽을 수 없습니다: ' + err.message);
+      showToast('파일을 읽을 수 없습니다.', 'error');
     }
   };
   reader.readAsText(file);
@@ -2172,10 +2406,16 @@ function handleImport(input) {
 }
 
 function resetMonthData() {
-  if (!confirm(`${state.month} 데이터를 모두 삭제하시겠습니까? 설정은 유지됩니다.`)) return;
-  state.fuelReceipts = []; state.tollReceipts = [];
-  state.transitReceipts = []; state.trips = []; state.commuteDays = 0;
-  saveState(); renderAll();
+  showDangerDialog(
+    state.month + ' 데이터 초기화',
+    '주유·통행료·대중교통·회차 데이터가 모두 삭제됩니다. 설정은 유지됩니다.',
+    function() {
+      state.fuelReceipts = []; state.tollReceipts = [];
+      state.transitReceipts = []; state.trips = []; state.commuteDays = 0;
+      saveState(); renderAll();
+      showToast('이번 달 데이터가 초기화되었습니다.', 'info');
+    }
+  );
 }
 
 
@@ -2229,7 +2469,7 @@ function toggleAdminMode() {
   const card      = document.getElementById('aiApiCard');
   const isVisible = card.style.display !== 'none';
   card.style.display = isVisible ? 'none' : '';
-  alert(isVisible ? '관리자 모드 종료' : '관리자 모드 진입\nAPI 키 설정이 표시됩니다');
+  showToast(isVisible ? '관리자 모드 종료' : '관리자 모드 진입 — API 키 설정이 표시됩니다.', 'info');
 }
 
 // ==================== MONTH CHANGE ====================
@@ -2258,6 +2498,8 @@ function initSettingsUI() {
   const resendKeyEl = document.getElementById('s_resendKey');
   if (apiKeyEl)    apiKeyEl.value    = s.apiKey      || DEFAULT_API_KEY;
   if (resendKeyEl) resendKeyEl.value = s.resendApiKey || '';
+  const tmapKeyEl = document.getElementById('s_tmapApiKey');
+  if (tmapKeyEl) tmapKeyEl.value = s.tmapApiKey || DEFAULT_TMAP_API_KEY;
 
   setWorkerType(s.workerType  || 'field');
   setVehicleType(s.vehicleType || 'car');
@@ -2265,10 +2507,19 @@ function initSettingsUI() {
   updateDistInfo();
   updateEfficiencyInfo();
   const preview = document.getElementById('distanceProofPreview');
+  const zone    = document.getElementById('distProofZone');
   if (preview) {
-    preview.innerHTML = s.distanceProofImage
-      ? '<img src="' + s.distanceProofImage + '" style="max-width:100%;max-height:200px;border-radius:8px;margin-top:4px;display:block;">'
-      : '';
+    if (s.distanceProofImage) {
+      if (zone) zone.style.display = 'none';
+      preview.innerHTML =
+        '<div style="position:relative;border-radius:var(--r-lg);overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.10);">' +
+        '<img src="' + s.distanceProofImage + '" style="width:100%;max-height:260px;object-fit:contain;display:block;background:#f0f0f0;">' +
+        '<button onclick="removeDistanceProof()" style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,.55);color:#fff;border:none;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;">✕ 삭제</button>' +
+        '</div>';
+    } else {
+      if (zone) zone.style.display = '';
+      preview.innerHTML = '';
+    }
   }
 }
 
@@ -2280,6 +2531,7 @@ function renderAll() {
   renderTripList();
   renderSummary();
   renderExportPreview();
+  updateNavBadges();
 }
 
 // ==================== STARTUP ====================
