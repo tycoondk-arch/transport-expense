@@ -363,16 +363,19 @@ input[type="file"] { display: none; }
 .modal-box {
   background: var(--card);
   border-radius: var(--r-xl) var(--r-xl) 0 0;
-  padding: 0 20px 20px;
-  padding-bottom: calc(20px + env(safe-area-inset-bottom));
+  padding: 0;
   width: 100%; max-width: 640px; max-height: 92vh;
-  overflow-y: auto; -webkit-overflow-scrolling: touch;
+  display: flex; flex-direction: column;
   animation: slideUp .3s cubic-bezier(.34,1.15,.64,1);
 }
+.modal-body {
+  overflow-y: auto; -webkit-overflow-scrolling: touch;
+  flex: 1; padding: 0 20px;
+}
 @keyframes slideUp { from { transform: translateY(110%); } to { transform: translateY(0); } }
-.modal-handle { width: 38px; height: 4px; background: var(--fill2); border-radius: 2px; margin: 14px auto 18px; }
-.modal-title  { font-size: 18px; font-weight: 700; margin-bottom: 20px; color: var(--label); text-align: center; }
-.modal-footer { display: flex; gap: 10px; position: sticky; bottom: 0; background: var(--card); padding: 16px 0 calc(env(safe-area-inset-bottom) + 4px); margin-top: 12px; }
+.modal-handle { width: 38px; height: 4px; background: var(--fill2); border-radius: 2px; margin: 14px auto 18px; flex-shrink: 0; }
+.modal-title  { font-size: 18px; font-weight: 700; margin-bottom: 20px; color: var(--label); text-align: center; padding: 0 20px; }
+.modal-footer { display: flex; gap: 10px; flex-shrink: 0; padding: 12px 20px calc(env(safe-area-inset-bottom) + 12px); }
 .modal-footer .btn { flex: 1; }
 
 /* ===== IMAGE VIEWER ===== */
@@ -454,7 +457,8 @@ input[type="number"] { text-align: right; }
   .receipt-thumb { width: 48px; height: 48px; }
   .receipt-thumb-placeholder { width: 48px; height: 48px; }
   .receipt-amount { font-size: 16px; }
-  .modal-box { padding: 0 14px 14px; padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
+  .modal-body { padding: 0 14px; }
+  .modal-footer { padding: 10px 14px calc(env(safe-area-inset-bottom) + 10px); }
 }
 
 /* ===== TOAST SYSTEM ===== */
@@ -520,19 +524,21 @@ input[type="number"] { text-align: right; }
   <div class="modal-box">
     <div class="modal-handle"></div>
     <div class="modal-title">⛽ 주유/충전 영수증 입력</div>
-    <div id="fuelModalPreview"></div>
-    <div class="form-group">
-      <label>주유/충전일</label>
-      <input type="date" id="fm_date">
-    </div>
-    <div class="input-row">
+    <div class="modal-body">
+      <div id="fuelModalPreview"></div>
       <div class="form-group">
-        <label id="fm_qty_label">주유량 (L)</label>
-        <input type="number" id="fm_qty" step="0.001" placeholder="0.000">
+        <label>주유/충전일</label>
+        <input type="date" id="fm_date">
       </div>
-      <div class="form-group">
-        <label>결제금액 (원)</label>
-        <input type="number" id="fm_amount" step="1" placeholder="0">
+      <div class="input-row">
+        <div class="form-group">
+          <label id="fm_qty_label">주유량 (L)</label>
+          <input type="number" id="fm_qty" step="0.001" placeholder="0.000">
+        </div>
+        <div class="form-group">
+          <label>결제금액 (원)</label>
+          <input type="number" id="fm_amount" step="1" placeholder="0">
+        </div>
       </div>
     </div>
     <div class="modal-footer">
@@ -547,25 +553,27 @@ input[type="number"] { text-align: right; }
   <div class="modal-box">
     <div class="modal-handle"></div>
     <div class="modal-title">🚌 대중교통 영수증 입력</div>
-    <div id="transitModalPreview"></div>
-    <div class="form-group">
-      <label>이용일</label>
-      <input type="date" id="trm_date">
-    </div>
-    <div class="form-group">
-      <label>금액 (원)</label>
-      <input type="number" id="trm_amount" step="1" placeholder="0">
-    </div>
-    <div class="form-group">
-      <label>교통 유형</label>
-      <div class="radio-group">
-        <div class="radio-opt" id="trm_express" onclick="setTransitType('express')">시외 (급행)</div>
-        <div class="radio-opt" id="trm_local" onclick="setTransitType('local')">시내 (완행)</div>
+    <div class="modal-body">
+      <div id="transitModalPreview"></div>
+      <div class="form-group">
+        <label>이용일</label>
+        <input type="date" id="trm_date">
       </div>
-    </div>
-    <div class="form-group">
-      <label>해당 회차 연결</label>
-      <select id="trm_trip"></select>
+      <div class="form-group">
+        <label>금액 (원)</label>
+        <input type="number" id="trm_amount" step="1" placeholder="0">
+      </div>
+      <div class="form-group">
+        <label>교통 유형</label>
+        <div class="radio-group">
+          <div class="radio-opt" id="trm_express" onclick="setTransitType('express')">시외 (급행)</div>
+          <div class="radio-opt" id="trm_local" onclick="setTransitType('local')">시내 (완행)</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>해당 회차 연결</label>
+        <select id="trm_trip"></select>
+      </div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-gray" onclick="closeTransitModal()">취소</button>
@@ -580,18 +588,20 @@ input[type="number"] { text-align: right; }
   <div class="modal-box">
     <div class="modal-handle"></div>
     <div class="modal-title">🛣️ 통행료 영수증 입력</div>
-    <div id="tollModalPreview"></div>
-    <div class="form-group">
-      <label>납부일</label>
-      <input type="date" id="tm_date">
-    </div>
-    <div class="form-group">
-      <label>통행료 금액 (원)</label>
-      <input type="number" id="tm_amount" step="1" placeholder="0">
-    </div>
-    <div class="form-group">
-      <label>해당 회차 연결</label>
-      <select id="tm_trip"></select>
+    <div class="modal-body">
+      <div id="tollModalPreview"></div>
+      <div class="form-group">
+        <label>납부일</label>
+        <input type="date" id="tm_date">
+      </div>
+      <div class="form-group">
+        <label>통행료 금액 (원)</label>
+        <input type="number" id="tm_amount" step="1" placeholder="0">
+      </div>
+      <div class="form-group">
+        <label>해당 회차 연결</label>
+        <select id="tm_trip"></select>
+      </div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-gray" onclick="closeTollModal()">취소</button>
