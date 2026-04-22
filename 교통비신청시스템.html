@@ -541,6 +541,7 @@ input[type="number"] { text-align: right; }
         </div>
       </div>
     </div>
+    <div id="fuelModalError" style="display:none;color:#ff3b30;font-size:13px;font-weight:600;padding:6px 20px;text-align:center;"></div>
     <div class="modal-footer">
       <button class="btn btn-gray" onclick="closeFuelModal()">취소</button>
       <button class="btn btn-primary" onclick="saveFuelReceipt()">저장</button>
@@ -575,6 +576,7 @@ input[type="number"] { text-align: right; }
         <select id="trm_trip"></select>
       </div>
     </div>
+    <div id="transitModalError" style="display:none;color:#ff3b30;font-size:13px;font-weight:600;padding:6px 20px;text-align:center;"></div>
     <div class="modal-footer">
       <button class="btn btn-gray" onclick="closeTransitModal()">취소</button>
       <button class="btn btn-primary" onclick="saveTransitReceipt()">저장</button>
@@ -603,6 +605,7 @@ input[type="number"] { text-align: right; }
         <select id="tm_trip"></select>
       </div>
     </div>
+    <div id="tollModalError" style="display:none;color:#ff3b30;font-size:13px;font-weight:600;padding:6px 20px;text-align:center;"></div>
     <div class="modal-footer">
       <button class="btn btn-gray" onclick="closeTollModal()">취소</button>
       <button class="btn btn-primary" onclick="saveTollReceipt()">저장</button>
@@ -1576,6 +1579,7 @@ function openFuelModal(extracted, imageData) {
   preview.innerHTML = imageData
     ? `<img src="${imageData}" style="width:100%;max-height:160px;object-fit:contain;border-radius:8px;margin-bottom:12px;">`
     : '';
+  document.getElementById('fuelModalError').style.display = 'none';
   document.getElementById('fuelModal').classList.add('show');
 }
 
@@ -1585,21 +1589,28 @@ function closeFuelModal() {
 }
 
 function saveFuelReceipt() {
+  const err = document.getElementById('fuelModalError');
+  err.style.display = 'none';
   const date   = document.getElementById('fm_date').value;
   const qty    = parseFloat(document.getElementById('fm_qty').value) || 0;
   const amount = parseInt(document.getElementById('fm_amount').value) || 0;
-  if (!date || amount <= 0) { showToast('날짜와 금액을 입력해주세요.', 'warn'); return; }
-  if (qty <= 0) { showToast('주유/충전량을 입력해주세요.', 'warn'); return; }
-
-  if (editingFuelId) {
-    const idx = state.fuelReceipts.findIndex(r => r.id === editingFuelId);
-    if (idx >= 0) state.fuelReceipts[idx] = { ...state.fuelReceipts[idx], date, quantity: qty, amount };
-  } else {
-    state.fuelReceipts.push({ id: uuid(), date, quantity: qty, amount, imageData: pendingFuelImageData });
+  if (!date || amount <= 0) { err.textContent = '날짜와 금액을 입력해주세요.'; err.style.display = 'block'; return; }
+  if (qty <= 0) { err.textContent = '주유/충전량을 입력해주세요.'; err.style.display = 'block'; return; }
+  try {
+    if (editingFuelId) {
+      const idx = state.fuelReceipts.findIndex(r => r.id === editingFuelId);
+      if (idx >= 0) state.fuelReceipts[idx] = { ...state.fuelReceipts[idx], date, quantity: qty, amount };
+    } else {
+      state.fuelReceipts.push({ id: uuid(), date, quantity: qty, amount, imageData: pendingFuelImageData });
+    }
+    saveState(); closeFuelModal();
+    renderFuelList(); renderSummary(); renderExportPreview();
+    showToast('주유 영수증이 저장되었습니다.', 'success');
+  } catch(e) {
+    err.textContent = '저장 오류: ' + e.message;
+    err.style.display = 'block';
+    console.error('saveFuelReceipt error:', e);
   }
-  saveState(); closeFuelModal();
-  renderFuelList(); renderSummary(); renderExportPreview();
-  showToast('주유 영수증이 저장되었습니다.', 'success');
 }
 
 function editFuelReceipt(id) {
@@ -1639,6 +1650,7 @@ function openTollModal(extracted, imageData) {
   preview.innerHTML = imageData
     ? `<img src="${imageData}" style="width:100%;max-height:160px;object-fit:contain;border-radius:8px;margin-bottom:12px;">`
     : '';
+  document.getElementById('tollModalError').style.display = 'none';
   document.getElementById('tollModal').classList.add('show');
 }
 
@@ -1648,20 +1660,27 @@ function closeTollModal() {
 }
 
 function saveTollReceipt() {
+  const err = document.getElementById('tollModalError');
+  err.style.display = 'none';
   const date   = document.getElementById('tm_date').value;
   const amount = parseInt(document.getElementById('tm_amount').value) || 0;
   const tripId = document.getElementById('tm_trip').value;
-  if (!date || amount <= 0) { showToast('날짜와 금액을 입력해주세요.', 'warn'); return; }
-
-  if (editingTollId) {
-    const idx = state.tollReceipts.findIndex(r => r.id === editingTollId);
-    if (idx >= 0) state.tollReceipts[idx] = { ...state.tollReceipts[idx], date, amount, tripId };
-  } else {
-    state.tollReceipts.push({ id: uuid(), date, amount, tripId, imageData: pendingTollImageData });
+  if (!date || amount <= 0) { err.textContent = '날짜와 금액을 입력해주세요.'; err.style.display = 'block'; return; }
+  try {
+    if (editingTollId) {
+      const idx = state.tollReceipts.findIndex(r => r.id === editingTollId);
+      if (idx >= 0) state.tollReceipts[idx] = { ...state.tollReceipts[idx], date, amount, tripId };
+    } else {
+      state.tollReceipts.push({ id: uuid(), date, amount, tripId, imageData: pendingTollImageData });
+    }
+    saveState(); syncTripDatesFromToll(); closeTollModal();
+    renderTollList(); renderTripList(); renderSummary(); renderExportPreview();
+    showToast('통행료 영수증이 저장되었습니다.', 'success');
+  } catch(e) {
+    err.textContent = '저장 오류: ' + e.message;
+    err.style.display = 'block';
+    console.error('saveTollReceipt error:', e);
   }
-  saveState(); syncTripDatesFromToll(); closeTollModal();
-  renderTollList(); renderTripList(); renderSummary(); renderExportPreview();
-  showToast('통행료 영수증이 저장되었습니다.', 'success');
 }
 
 function editTollReceipt(id) {
@@ -1708,6 +1727,7 @@ function openTransitModal(extracted, imageData) {
   preview.innerHTML = imageData
     ? `<img src="${imageData}" style="width:100%;max-height:160px;object-fit:contain;border-radius:8px;margin-bottom:12px;">`
     : '';
+  document.getElementById('transitModalError').style.display = 'none';
   document.getElementById('transitModal').classList.add('show');
 }
 
@@ -1723,21 +1743,28 @@ function closeTransitModal() {
 }
 
 function saveTransitReceipt() {
+  const err = document.getElementById('transitModalError');
+  err.style.display = 'none';
   const date   = document.getElementById('trm_date').value;
   const amount = parseInt(document.getElementById('trm_amount').value) || 0;
   const tripId = document.getElementById('trm_trip').value;
   const type   = currentTransitType;
-  if (!date || amount <= 0) { showToast('날짜와 금액을 입력해주세요.', 'warn'); return; }
-
-  if (editingTransitId) {
-    const idx = state.transitReceipts.findIndex(r => r.id === editingTransitId);
-    if (idx >= 0) state.transitReceipts[idx] = { ...state.transitReceipts[idx], date, amount, type, tripId };
-  } else {
-    state.transitReceipts.push({ id: uuid(), date, amount, type, tripId, imageData: pendingTransitImageData });
+  if (!date || amount <= 0) { err.textContent = '날짜와 금액을 입력해주세요.'; err.style.display = 'block'; return; }
+  try {
+    if (editingTransitId) {
+      const idx = state.transitReceipts.findIndex(r => r.id === editingTransitId);
+      if (idx >= 0) state.transitReceipts[idx] = { ...state.transitReceipts[idx], date, amount, type, tripId };
+    } else {
+      state.transitReceipts.push({ id: uuid(), date, amount, type, tripId, imageData: pendingTransitImageData });
+    }
+    saveState(); closeTransitModal();
+    renderTransitList(); renderTripList(); renderSummary(); renderExportPreview();
+    showToast('교통비 영수증이 저장되었습니다.', 'success');
+  } catch(e) {
+    err.textContent = '저장 오류: ' + e.message;
+    err.style.display = 'block';
+    console.error('saveTransitReceipt error:', e);
   }
-  saveState(); closeTransitModal();
-  renderTransitList(); renderTripList(); renderSummary(); renderExportPreview();
-  showToast('교통비 영수증이 저장되었습니다.', 'success');
 }
 
 function editTransitReceipt(id) {
