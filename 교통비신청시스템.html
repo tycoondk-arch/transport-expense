@@ -1103,10 +1103,12 @@ function loadState() {
 
 function saveState() {
   localStorage.setItem('transport_settings', JSON.stringify(state.settings));
+  // imageData는 base64 이미지라 localStorage 5MB 한도 초과 원인 — 제외하고 저장
+  const noImg = r => { const {imageData, ...rest} = r; return rest; };
   localStorage.setItem(getStorageKey(), JSON.stringify({
-    fuelReceipts:    state.fuelReceipts,
-    tollReceipts:    state.tollReceipts,
-    transitReceipts: state.transitReceipts,
+    fuelReceipts:    state.fuelReceipts.map(noImg),
+    tollReceipts:    state.tollReceipts.map(noImg),
+    transitReceipts: state.transitReceipts.map(noImg),
     trips:           state.trips,
     commuteDays:     state.commuteDays
   }));
