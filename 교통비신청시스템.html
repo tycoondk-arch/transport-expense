@@ -372,7 +372,7 @@ input[type="file"] { display: none; }
 @keyframes slideUp { from { transform: translateY(110%); } to { transform: translateY(0); } }
 .modal-handle { width: 38px; height: 4px; background: var(--fill2); border-radius: 2px; margin: 14px auto 18px; }
 .modal-title  { font-size: 18px; font-weight: 700; margin-bottom: 20px; color: var(--label); text-align: center; }
-.modal-footer { display: flex; gap: 10px; margin-top: 20px; }
+.modal-footer { display: flex; gap: 10px; position: sticky; bottom: 0; background: var(--card); padding: 16px 0 calc(env(safe-area-inset-bottom) + 4px); margin-top: 12px; }
 .modal-footer .btn { flex: 1; }
 
 /* ===== IMAGE VIEWER ===== */
@@ -1554,9 +1554,10 @@ function openFuelManual() {
 
 function openFuelModal(extracted, imageData) {
   const e = extracted || {};
-  document.getElementById('fm_date').value   = !isNA(e.date)     ? e.date     : todayStr();
-  document.getElementById('fm_qty').value    = !isNA(e.quantity) ? e.quantity : '';
-  document.getElementById('fm_amount').value = !isNA(e.amount)   ? e.amount   : '';
+  const cleanNum = v => isNA(v) ? '' : String(v).replace(/[^\d.]/g, '');
+  document.getElementById('fm_date').value   = !isNA(e.date) ? e.date : todayStr();
+  document.getElementById('fm_qty').value    = cleanNum(e.quantity);
+  document.getElementById('fm_amount').value = cleanNum(e.amount);
 
   const unit = FUEL_UNIT_LABEL[state.settings.fuelType];
   document.getElementById('fm_qty_label').textContent = `주유/충전량 (${unit})`;
@@ -1614,8 +1615,9 @@ function openTollManual() {
 
 function openTollModal(extracted, imageData) {
   const e = extracted || {};
-  document.getElementById('tm_date').value   = !isNA(e.date)   ? e.date   : todayStr();
-  document.getElementById('tm_amount').value = !isNA(e.amount) ? e.amount : '';
+  const cleanNum = v => isNA(v) ? '' : String(v).replace(/[^\d.]/g, '');
+  document.getElementById('tm_date').value   = !isNA(e.date) ? e.date : todayStr();
+  document.getElementById('tm_amount').value = cleanNum(e.amount);
 
   const sel = document.getElementById('tm_trip');
   sel.innerHTML = '<option value="">-- 회차 선택 --</option>' +
@@ -1678,8 +1680,9 @@ function openTransitManual() {
 
 function openTransitModal(extracted, imageData) {
   const e = extracted || {};
-  document.getElementById('trm_date').value   = !isNA(e.date)   ? e.date   : todayStr();
-  document.getElementById('trm_amount').value = !isNA(e.amount) ? e.amount : '';
+  const cleanNum = v => isNA(v) ? '' : String(v).replace(/[^\d.]/g, '');
+  document.getElementById('trm_date').value   = !isNA(e.date) ? e.date : todayStr();
+  document.getElementById('trm_amount').value = cleanNum(e.amount);
 
   if      (e.express_or_local === '시외') setTransitType('express');
   else if (e.express_or_local === '시내') setTransitType('local');
